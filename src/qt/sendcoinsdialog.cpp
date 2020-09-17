@@ -59,7 +59,11 @@ SendCoinsDialog::SendCoinsDialog(QWidget* parent) : QDialog(parent, Qt::WindowSy
 
     // UTXO Splitter
     connect(ui->splitBlockCheckBox, SIGNAL(stateChanged(int)), this, SLOT(splitBlockChecked(int)));
+    connect(ui->splitBlockCheckBox, SIGNAL(stateChanged(int)), this, SLOT(splitBlockChecked(int)));
     connect(ui->splitBlockLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(splitBlockLineEditChanged(const QString&)));
+
+    // FN Create Toggle
+    connect(ui->checkBoxFnPayment, SIGNAL(stateChanged(int)), this, SLOT(ffnPaymentChecked(int)));
 
     // AXIV specific
     QSettings settings;
@@ -219,6 +223,8 @@ void SendCoinsDialog::on_sendButton_clicked()
     if (!model || !model->getOptionsModel())
         return;
 
+    IsFundamentalNodePayment = ui->checkBoxFnPayment->checkState() == Qt::Checked;
+
     QList<SendCoinsRecipient> recipients;
     bool valid = true;
 
@@ -249,7 +255,7 @@ void SendCoinsDialog::on_sendButton_clicked()
         return;
     }
 
-    
+
 
     //set split block in model
     CoinControlDialog::coinControl->fSplitBlock = ui->splitBlockCheckBox->checkState() == Qt::Checked;
@@ -570,10 +576,6 @@ void SendCoinsDialog::updateDisplayUnit()
 
     setBalance(model->getBalance(), model->getUnconfirmedBalance(), model->getImmatureBalance(), 
                model->getWatchBalance(), model->getWatchUnconfirmedBalance(), model->getWatchImmatureBalance());
-    coinControlUpdateLabels();
-    ui->customFee->setDisplayUnit(model->getOptionsModel()->getDisplayUnit());
-    updateMinFeeLabel();
-    updateSmartFeeLabel();
 }
 
 void SendCoinsDialog::updateSwiftTX()
@@ -587,7 +589,7 @@ void SendCoinsDialog::updateSwiftTX()
 void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn& sendCoinsReturn, const QString& msgArg, bool fPrepare)
 {
     bool fAskForUnlock = false;
-    
+
     QPair<QString, CClientUIInterface::MessageBoxFlags> msgParams;
     // Default to a warning message, override if error message is needed
     msgParams.second = CClientUIInterface::MSG_WARNING;
@@ -746,6 +748,12 @@ void SendCoinsDialog::updateSmartFeeLabel()
     }
 
     updateFeeMinimizedLabel();
+}
+
+// FN checkbox
+void SendCoinsDialog::ffnPaymentChecked(int state)
+{
+	// TODO: display warning-disclaimer message about burn
 }
 
 // UTXO splitter
