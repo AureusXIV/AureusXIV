@@ -293,7 +293,7 @@ RPCConsole::RPCConsole(QWidget* parent) : QDialog(parent, Qt::WindowSystemMenuHi
     ui->openSSLVersion->setText(SSLeay_version(SSLEAY_VERSION));
 #ifdef ENABLE_WALLET
     std::string strPathCustom = GetArg("-backuppath", "");
-    std::string strzPIVPathCustom = GetArg("zvitaebackuppath", "");
+    std::string strzPIVPathCustom = GetArg("zaureusxivbackuppath", "");
     int nCustomBackupThreshold = GetArg("-custombackupthreshold", DEFAULT_CUSTOMBACKUPTHRESHOLD);
 
     if(!strPathCustom.empty()) {
@@ -303,9 +303,9 @@ RPCConsole::RPCConsole(QWidget* parent) : QDialog(parent, Qt::WindowSystemMenuHi
     }
 
     if(!strzPIVPathCustom.empty()) {
-        ui->wallet_customzvitaebackuppath->setText(QString::fromStdString(strzPIVPathCustom));
-        ui->wallet_customzvitaebackuppath_label->setVisible(true);
-        ui->wallet_customzvitaebackuppath->setVisible(true);
+        ui->wallet_customzaureusxivbackuppath->setText(QString::fromStdString(strzPIVPathCustom));
+        ui->wallet_customzaureusxivbackuppath_label->setVisible(true);
+        ui->wallet_customzaureusxivbackuppath->setVisible(true);
     }
 
     if((!strPathCustom.empty() || !strzPIVPathCustom.empty()) && nCustomBackupThreshold > 0) {
@@ -637,7 +637,7 @@ void RPCConsole::clear()
         "td.cmd-error { color: red; } "
         "b { color: #006060; } ");
 
-    message(CMD_REPLY, (tr("Welcome to the VITAE RPC console.") + "<br>" +
+    message(CMD_REPLY, (tr("Welcome to the AureusXIV RPC console.") + "<br>" +
                            tr("Use up and down arrows to navigate history, and <b>Ctrl-L</b> to clear screen.") + "<br>" +
                            tr("Type <b>help</b> for an overview of available commands.")),
         true);

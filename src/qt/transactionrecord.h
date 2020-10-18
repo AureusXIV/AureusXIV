@@ -86,7 +86,7 @@ public:
         ZerocoinMint,
         ZerocoinSpend,
         RecvFromZerocoinSpend,
-        ZerocoinSpend_Change_zVITAE,
+        ZerocoinSpend_Change_zAureusXIV,
         ZerocoinSpend_FromMe
     };
 

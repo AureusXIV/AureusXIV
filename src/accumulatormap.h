@@ -1,8 +1,8 @@
 // Copyright (c) 2017 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef VITAE_ACCUMULATORMAP_H
-#define VITAE_ACCUMULATORMAP_H
+#ifndef AUREUSXIV_ACCUMULATORMAP_H
+#define AUREUSXIV_ACCUMULATORMAP_H
 
 #include "libzerocoin/Accumulator.h"
 #include "libzerocoin/Coin.h"
@@ -24,4 +24,4 @@ public:
     void Reset();
     void Reset(libzerocoin::ZerocoinParams* params2);
 };
-#endif //VITAE_ACCUMULATORMAP_H
+#endif //AUREUSXIV_ACCUMULATORMAP_H

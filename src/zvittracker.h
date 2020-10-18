@@ -1,12 +1,12 @@
-#ifndef VITAE_ZPIVTRACKER_H
-#define VITAE_ZPIVTRACKER_H
+#ifndef AUREUSXIV_ZPIVTRACKER_H
+#define AUREUSXIV_ZPIVTRACKER_H
 
 #include "primitives/zerocoin.h"
 #include <list>
 
 class CDeterministicMint;
 
-class CzVITAETracker
+class CzAureusXIVTracker
 {
 private:
     bool fInitialized;
@@ -15,8 +15,8 @@ private:
     std::map<uint256, uint256> mapPendingSpends; //serialhash, txid of spend
     bool UpdateStatusInternal(const std::set<uint256>& setMempool, CMintMeta& mint);
 public:
-    CzVITAETracker(std::string strWalletFile);
-    ~CzVITAETracker();
+    CzAureusXIVTracker(std::string strWalletFile);
+    ~CzAureusXIVTracker();
     void Add(const CDeterministicMint& dMint, bool isNew = false, bool isArchived = false);
     void Add(const CZerocoinMint& mint, bool isNew = false, bool isArchived = false);
     bool Archive(CMintMeta& meta);
@@ -44,4 +44,4 @@ public:
     void Clear();
 };
 
-#endif //VITAE_ZPIVTRACKER_H
+#endif //AUREUSXIV_ZPIVTRACKER_H

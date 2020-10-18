@@ -33,8 +33,8 @@
  *
  * \section intro_sec Introduction
  *
- * This is the developer documentation of the reference client for an experimental new digital currency called VITAE (http://www.vitae.org),
- * which enables instant payments to anyone, anywhere in the world. VITAE uses peer-to-peer technology to operate
+ * This is the developer documentation of the reference client for an experimental new digital currency called AureusXIV (http://www.aureusxiv.org),
+ * which enables instant payments to anyone, anywhere in the world. AureusXIV uses peer-to-peer technology to operate
  * with no central authority: managing transactions and issuing money are carried out collectively by the network.
  *
  * The software is a community-driven open source project, released under the MIT license.
@@ -73,18 +73,18 @@ bool AppInit(int argc, char* argv[])
     //
     // Parameters
     //
-    // If Qt is used, parameters/vitae.conf are parsed in qt/vitae.cpp's main()
+    // If Qt is used, parameters/aureusxiv.conf are parsed in qt/aureusxiv.cpp's main()
     ParseParameters(argc, argv);
 
     // Process help and version before taking care about datadir
     if (mapArgs.count("-?") || mapArgs.count("-help") || mapArgs.count("-version")) {
-        std::string strUsage = _("Vitae Core Daemon") + " " + _("version") + " " + FormatFullVersion() + "\n";
+        std::string strUsage = _("AureusXIV Core Daemon") + " " + _("version") + " " + FormatFullVersion() + "\n";
 
         if (mapArgs.count("-version")) {
             strUsage += LicenseInfo();
         } else {
             strUsage += "\n" + _("Usage:") + "\n" +
-                        "  vitaed [options]                     " + _("Start Vitae Core Daemon") + "\n";
+                        "  aureusxivd [options]                     " + _("Start AureusXIV Core Daemon") + "\n";
 
             strUsage += "\n" + HelpMessage(HMM_BITCOIND);
         }
@@ -127,17 +127,17 @@ bool AppInit(int argc, char* argv[])
         // Command-line RPC
         bool fCommandLine = false;
         for (int i = 1; i < argc; i++)
-            if (!IsSwitchChar(argv[i][0]) && !boost::algorithm::istarts_with(argv[i], "vitae:"))
+            if (!IsSwitchChar(argv[i][0]) && !boost::algorithm::istarts_with(argv[i], "aureusxiv:"))
                 fCommandLine = true;
 
         if (fCommandLine) {
-            fprintf(stderr, "Error: There is no RPC client functionality in vitaed anymore. Use the vitae-cli utility instead.\n");
+            fprintf(stderr, "Error: There is no RPC client functionality in aureusxivd anymore. Use the aureusxiv-cli utility instead.\n");
             exit(1);
         }
 #ifndef WIN32
         fDaemon = GetBoolArg("-daemon", false);
         if (fDaemon) {
-            fprintf(stdout, "VITAE server starting\n");
+            fprintf(stdout, "AureusXIV server starting\n");
 
             // Daemonize
             pid_t pid = fork();
@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
 {
     SetupEnvironment();
 
-    // Connect vitaed signal handlers
+    // Connect aureusxivd signal handlers
     noui_connect();
 
     return (AppInit(argc, argv) ? 0 : 1);

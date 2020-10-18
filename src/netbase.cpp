@@ -7,7 +7,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifdef HAVE_CONFIG_H
-#include "config/vitae-config.h"
+#include "config/aureusxiv-config.h"
 #endif
 
 #include "netbase.h"

@@ -264,11 +264,11 @@ UniValue stop(const UniValue& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "stop\n"
-            "\nStop VITAE server.");
+            "\nStop AureusXIV server.");
     // Event loop will exit after current HTTP requests have been handled, so
     // this reply will get back to the client.
     StartShutdown();
-    return "VITAE server stopping";
+    return "AureusXIV server stopping";
 }
 
 
@@ -351,7 +351,7 @@ static const CRPCCommand vRPCCommands[] =
         {"hidden", "invalidateblock", &invalidateblock, true, true, false},
         {"hidden", "reconsiderblock", &reconsiderblock, true, true, false},
         {"hidden", "setmocktime", &setmocktime, true, false, false},
-        /* VITAE features */
+        /* AureusXIV features */
         {"fundamentalnode", "listfundamentalnodes", &listfundamentalnodes, true, true, false},
         {"fundamentalnode", "getfundamentalnodecount", &getfundamentalnodecount, true, true, false},
         {"fundamentalnode", "createfundamentalnodebroadcast", &createfundamentalnodebroadcast, true, true, false},
@@ -397,8 +397,8 @@ static const CRPCCommand vRPCCommands[] =
         {"masternode", "getmasternodescores", &getmasternodescores, true, true, false },
         {"masternode", "mnsync", &mnsync, true, true, false },
 
-        {"vitae", "spork", &spork, true, true, false},
-        {"vitae", "makekeypair", &makekeypair, true, true, false},
+        {"aureusxiv", "spork", &spork, true, true, false},
+        {"aureusxiv", "makekeypair", &makekeypair, true, true, false},
 #ifdef ENABLE_WALLET
         /* Wallet */
         {"wallet", "addmultisigaddress", &addmultisigaddress, true, false, true},
@@ -630,7 +630,7 @@ std::vector<std::string> CRPCTable::listCommands() const
 
 std::string HelpExampleCli(string methodname, string args)
 {
-    return "> vitae-cli " + methodname + " " + args + "\n";
+    return "> aureusxiv-cli " + methodname + " " + args + "\n";
 }
 
 std::string HelpExampleRpc(string methodname, string args)

@@ -124,7 +124,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
         zVitObj.push_back(Pair(to_string(denom), ValueFromAmount(blockindex->mapZerocoinSupply.at(denom) * (denom*COIN))));
     }
     zVitObj.push_back(Pair("total", ValueFromAmount(blockindex->GetZerocoinSupply())));
-    result.push_back(Pair("zVITAEsupply", zVitObj));
+    result.push_back(Pair("zAureusXIVsupply", zVitObj));
 
     return result;
 }
@@ -244,7 +244,7 @@ UniValue getrawmempool(const UniValue& params, bool fHelp)
             "{                           (json object)\n"
             "  \"transactionid\" : {       (json object)\n"
             "    \"size\" : n,             (numeric) transaction size in bytes\n"
-            "    \"fee\" : n,              (numeric) transaction fee in vitae\n"
+            "    \"fee\" : n,              (numeric) transaction fee in aureusxiv\n"
             "    \"time\" : n,             (numeric) local time transaction entered pool in seconds since 1 Jan 1970 GMT\n"
             "    \"height\" : n,           (numeric) block height when transaction entered pool\n"
             "    \"startingpriority\" : n, (numeric) priority when transaction entered pool\n"
@@ -324,17 +324,17 @@ UniValue getblock(const UniValue& params, bool fHelp)
             "  \"previousblockhash\" : \"hash\",  (string) The hash of the previous block\n"
             "  \"nextblockhash\" : \"hash\"       (string) The hash of the next block\n"
             "  \"moneysupply\" : \"supply\"       (numeric) The money supply when this block was added to the blockchain\n"
-            "  \"zVITAEsupply\" :\n"
+            "  \"zAureusXIVsupply\" :\n"
             "  {\n"
-            "     \"1\" : n,            (numeric) supply of 1 zVITAE denomination\n"
-            "     \"5\" : n,            (numeric) supply of 5 zVITAE denomination\n"
-            "     \"10\" : n,           (numeric) supply of 10 zVITAE denomination\n"
-            "     \"50\" : n,           (numeric) supply of 50 zVITAE denomination\n"
-            "     \"100\" : n,          (numeric) supply of 100 zVITAE denomination\n"
-            "     \"500\" : n,          (numeric) supply of 500 zVITAE denomination\n"
-            "     \"1000\" : n,         (numeric) supply of 1000 zVITAE denomination\n"
-            "     \"5000\" : n,         (numeric) supply of 5000 zVITAE denomination\n"
-            "     \"total\" : n,        (numeric) The total supply of all zVITAE denominations\n"
+            "     \"1\" : n,            (numeric) supply of 1 zAureusXIV denomination\n"
+            "     \"5\" : n,            (numeric) supply of 5 zAureusXIV denomination\n"
+            "     \"10\" : n,           (numeric) supply of 10 zAureusXIV denomination\n"
+            "     \"50\" : n,           (numeric) supply of 50 zAureusXIV denomination\n"
+            "     \"100\" : n,          (numeric) supply of 100 zAureusXIV denomination\n"
+            "     \"500\" : n,          (numeric) supply of 500 zAureusXIV denomination\n"
+            "     \"1000\" : n,         (numeric) supply of 1000 zAureusXIV denomination\n"
+            "     \"5000\" : n,         (numeric) supply of 5000 zAureusXIV denomination\n"
+            "     \"total\" : n,        (numeric) The total supply of all zAureusXIV denominations\n"
             "  }\n"
             "}\n"
 
@@ -486,8 +486,8 @@ UniValue gettxout(const UniValue& params, bool fHelp)
             "     \"hex\" : \"hex\",        (string) \n"
             "     \"reqSigs\" : n,          (numeric) Number of required signatures\n"
             "     \"type\" : \"pubkeyhash\", (string) The type, eg pubkeyhash\n"
-            "     \"addresses\" : [          (array of string) array of vitae addresses\n"
-            "     \"vitaeaddress\"   	 	(string) vitae address\n"
+            "     \"addresses\" : [          (array of string) array of aureusxiv addresses\n"
+            "     \"aureusxivaddress\"   	 	(string) aureusxiv address\n"
             "        ,...\n"
             "     ]\n"
             "  },\n"

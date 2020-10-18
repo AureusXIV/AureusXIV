@@ -55,7 +55,7 @@ bool fSendFreeTransactions = false;
 bool fPayAtLeastCustomFee = true;
 
 /**
- * Fees smaller than this (in uVITAE) are considered zero fee (for transaction creation)
+ * Fees smaller than this (in uAureusXIV) are considered zero fee (for transaction creation)
  * We are ~100 times smaller then bitcoin now (2015-06-23), set minTxFee 10 times higher
  * so it's still 10 times lower comparing to bitcoin.
  * Override with -mintxfee
@@ -1843,9 +1843,9 @@ bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInp
         }
     }
 
-    //zVITAE
+    //zAureusXIV
     if (GetBoolArg("-zvitstake", true) && chainActive.Height() > Params().Zerocoin_Block_V2_Start() && !sporkManager.IsSporkActive(SPORK_INVALID)) {
-        //Only update zVITAE set once per update interval
+        //Only update zAureusXIV set once per update interval
         bool fUpdate = false;
         static int64_t nTimeLastUpdate = 0;
         if (GetAdjustedTime() - nTimeLastUpdate > nStakeSetUpdateTime) {
@@ -1905,7 +1905,7 @@ bool CWallet::MintableCoins()
         }
     }
 
-    // zVITAE
+    // zAureusXIV
     if (nZpivBalance > 0) {
         set<CMintMeta> setMints = zvitTracker->ListMints(true, true, true);
         for (auto mint : setMints) {
@@ -2215,7 +2215,7 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, CAmount> >& vecSend,
                 if (nChange > 0) {
                     // Fill a vout to ourself
                     // TODO: pass in scriptChange instead of reservekey so
-                    // change transaction isn't always pay-to-vitae-address
+                    // change transaction isn't always pay-to-aureusxiv-address
                     CScript scriptChange;
                     bool combineChange = false;
 
@@ -3702,7 +3702,7 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransa
     }
 
     //any change that is less than 0.0100000 will be ignored and given as an extra fee
-    //also assume that a zerocoinspend that is minting the change will not have any change that goes to VITAE
+    //also assume that a zerocoinspend that is minting the change will not have any change that goes to AureusXIV
     CAmount nChange = nValueIn - nTotalValue; // Fee already accounted for in nTotalValue
     if (nChange > 1 * CENT && !isZCSpendChange) {
         // Fill a vout to ourself using the largest contributing address
@@ -3716,7 +3716,7 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransa
             reservekey->ReturnKey();
     }
 
-    // Sign if these are vitae outputs - NOTE that zVITAE outputs are signed later in SoK
+    // Sign if these are aureusxiv outputs - NOTE that zAureusXIV outputs are signed later in SoK
     if (!isZCSpendChange) {
         int nIn = 0;
         for (const std::pair<const CWalletTx*, unsigned int>& coin : setCoins) {
@@ -3773,7 +3773,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
     if (nVersion >= libzerocoin::PrivateCoin::PUBKEY_VERSION) {
         CKey key;
         if (!zerocoinSelected.GetKeyPair(key))
-            return error("%s: failed to set zVITAE privkey mint version=%d", __func__, nVersion);
+            return error("%s: failed to set zAureusXIV privkey mint version=%d", __func__, nVersion);
 
         privateCoin.setPrivKey(key.GetPrivKey());
     }
@@ -3805,7 +3805,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
         serializedCoinSpend << spend;
         std::vector<unsigned char> data(serializedCoinSpend.begin(), serializedCoinSpend.end());
 
-        //Add the coin spend into a VITAE transaction
+        //Add the coin spend into a AureusXIV transaction
         newTxIn.scriptSig = CScript() << OP_ZEROCOINSPEND << data.size();
         newTxIn.scriptSig.insert(newTxIn.scriptSig.end(), data.begin(), data.end());
         newTxIn.prevout.SetNull();
@@ -3831,7 +3831,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
         }
 
         if (IsSerialKnown(spend.getCoinSerialNumber())) {
-            //Tried to spend an already spent zVITAE
+            //Tried to spend an already spent zAureusXIV
             receipt.SetStatus(_("The coin spend has been used"), ZVIT_SPENT_USED_ZVIT);
 
             uint256 hashSerial = GetSerialHash(spend.getCoinSerialNumber());
@@ -3872,7 +3872,7 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, int nSecurityLevel,
     }
 
     if (nValue < 1) {
-        receipt.SetStatus(_("Value is below the the smallest available denomination (= 1) of zVITAE"), nStatus);
+        receipt.SetStatus(_("Value is below the the smallest available denomination (= 1) of zAureusXIV"), nStatus);
         return false;
     }
 
@@ -3885,7 +3885,7 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, int nSecurityLevel,
     CAmount nValueSelected = 0;
     int nCoinsReturned = 0; // Number of coins returned in change from function below (for debug)
     int nNeededSpends = 0;  // Number of spends which would be needed if selection failed
-    const int nMaxSpends = Params().Zerocoin_MaxSpendsPerTransaction(); // Maximum possible spends for one zVITAE transaction
+    const int nMaxSpends = Params().Zerocoin_MaxSpendsPerTransaction(); // Maximum possible spends for one zAureusXIV transaction
     vector<CMintMeta> vMintsToFetch;
     if (vSelectedMints.empty()) {
         setMints = zvitTracker->ListMints(true, true, true); // need to find mints to spend
@@ -3901,7 +3901,7 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, int nSecurityLevel,
         if(!fWholeNumber)
             nValueToSelect = static_cast<CAmount>(ceil(dValue) * COIN);
 
-        // Select the zVITAE mints to use in this spend
+        // Select the zAureusXIV mints to use in this spend
         std::map<libzerocoin::CoinDenomination, CAmount> DenomMap = GetMyZerocoinDistribution();
         list<CMintMeta> listMints(setMints.begin(), setMints.end());
         vMintsToFetch = SelectMintsFromList(nValueToSelect, nValueSelected, nMaxSpends, fMinimizeChange,
@@ -3971,7 +3971,7 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, int nSecurityLevel,
         if (mint.GetVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION) {
             if (nSecurityLevel < 100) {
                 nStatus = ZVIT_SPEND_V1_SEC_LEVEL;
-                receipt.SetStatus(_("Version 1 zVITAE require a security level of 100 to successfully spend."), nStatus);
+                receipt.SetStatus(_("Version 1 zAureusXIV require a security level of 100 to successfully spend."), nStatus);
                 return false;
             }
         }
@@ -4039,7 +4039,7 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, int nSecurityLevel,
                 }
             }
 
-            //add output to vitae address to the transaction (the actual primary spend taking place)
+            //add output to aureusxiv address to the transaction (the actual primary spend taking place)
             CTxOut txOutZerocoinSpend(nValue, scriptZerocoinSpend);
             txNew.vout.push_back(txOutZerocoinSpend);
 
@@ -4271,8 +4271,8 @@ void CWallet::ZVitBackupWallet()
 
     BackupWallet(*this, backupPath.string());
 
-    if(!GetArg("-zvitaebackuppath", "").empty()) {
-        boost::filesystem::path customPath(GetArg("-zvitaebackuppath", ""));
+    if(!GetArg("-zaureusxivbackuppath", "").empty()) {
+        boost::filesystem::path customPath(GetArg("-zaureusxivbackuppath", ""));
         boost::filesystem::create_directories(customPath);
 
         if(!customPath.has_extension()) {
@@ -4426,7 +4426,7 @@ bool CWallet::SpendZerocoin(CAmount nAmount, int nSecurityLevel, CWalletTx& wtxN
         zvitTracker->Add(dMint, true);
     }
 
-    receipt.SetStatus("Spend Successful", ZVIT_SPEND_OKAY);  // When we reach this point spending zVITAE was successful
+    receipt.SetStatus("Spend Successful", ZVIT_SPEND_OKAY);  // When we reach this point spending zAureusXIV was successful
 
     return true;
 }

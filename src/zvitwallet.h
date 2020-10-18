@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef VITAE_ZPIVWALLET_H
-#define VITAE_ZPIVWALLET_H
+#ifndef AUREUSXIV_ZPIVWALLET_H
+#define AUREUSXIV_ZPIVWALLET_H
 
 #include <map>
 #include "libzerocoin/Coin.h"
@@ -13,7 +13,7 @@
 
 class CDeterministicMint;
 
-class CzVITAEWallet
+class CzAureusXIVWallet
 {
 private:
     uint256 seedMaster;
@@ -22,7 +22,7 @@ private:
     CMintPool mintPool;
 
 public:
-    CzVITAEWallet(std::string strWalletFile);
+    CzAureusXIVWallet(std::string strWalletFile);
 
     void AddToMintPool(const std::pair<uint256, uint32_t>& pMint, bool fVerbose);
     bool SetMasterSeed(const uint256& seedMaster, bool fResetCount = false);
@@ -45,4 +45,4 @@ private:
     uint512 GetZerocoinSeed(uint32_t n);
 };
 
-#endif //VITAE_ZPIVWALLET_H
+#endif //AUREUSXIV_ZPIVWALLET_H

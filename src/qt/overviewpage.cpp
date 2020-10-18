@@ -33,7 +33,7 @@ class TxViewDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 public:
-    TxViewDelegate() : QAbstractItemDelegate(), unit(BitcoinUnits::VITAE)
+    TxViewDelegate() : QAbstractItemDelegate(), unit(BitcoinUnits::AXIV)
     {
     }
 
@@ -162,7 +162,7 @@ OverviewPage::~OverviewPage()
     delete ui;
 }
 
-void OverviewPage::getPercentage(CAmount nUnlockedBalance, CAmount nZerocoinBalance, QString& sVITPercentage, QString& szVITAEPercentage)
+void OverviewPage::getPercentage(CAmount nUnlockedBalance, CAmount nZerocoinBalance, QString& sVITPercentage, QString& szAureusXIVPercentage)
 {
     int nPrecision = 2;
     double dzPercentage = 0.0;
@@ -181,7 +181,7 @@ void OverviewPage::getPercentage(CAmount nUnlockedBalance, CAmount nZerocoinBala
 
     double dPercentage = 100.0 - dzPercentage;
     
-    szVITAEPercentage = "(" + QLocale(QLocale::system()).toString(dzPercentage, 'f', nPrecision) + " %)";
+    szAureusXIVPercentage = "(" + QLocale(QLocale::system()).toString(dzPercentage, 'f', nPrecision) + " %)";
     sVITPercentage = "(" + QLocale(QLocale::system()).toString(dPercentage, 'f', nPrecision) + " %)";
     
 }
@@ -206,13 +206,13 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
         nLockedBalance = pwalletMain->GetLockedCoins();
         nWatchOnlyLockedBalance = pwalletMain->GetLockedWatchOnlyBalance();
     }
-    // VITAE Balance
+    // AureusXIV Balance
     CAmount nTotalBalance = balance + unconfirmedBalance;
     CAmount vitAvailableBalance = balance - immatureBalance - nLockedBalance;
     CAmount nTotalWatchBalance = watchOnlyBalance + watchUnconfBalance + watchImmatureBalance;    
     CAmount nUnlockedBalance = nTotalBalance - nLockedBalance;
 
-    // zVITAE Balance
+    // zAureusXIV Balance
     CAmount matureZerocoinBalance = zerocoinBalance - unconfirmedZerocoinBalance - immatureZerocoinBalance;
     // Percentages
     QString szPercentage = "";
@@ -222,7 +222,7 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     CAmount availableTotalBalance = vitAvailableBalance + matureZerocoinBalance;
     CAmount sumTotalBalance = nTotalBalance + zerocoinBalance;
 
-    // VITAE labels
+    // AureusXIV labels
     ui->labelBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, vitAvailableBalance, false, BitcoinUnits::separatorAlways));
     ui->labelUnconfirmed->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, unconfirmedBalance, false, BitcoinUnits::separatorAlways));
     ui->labelImmature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, immatureBalance, false, BitcoinUnits::separatorAlways));
@@ -236,7 +236,7 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     ui->labelWatchLocked->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nWatchOnlyLockedBalance, false, BitcoinUnits::separatorAlways));
     ui->labelWatchTotal->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nTotalWatchBalance, false, BitcoinUnits::separatorAlways));
 
-    // zVITAE labels
+    // zAureusXIV labels
     ui->labelzBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, zerocoinBalance, false, BitcoinUnits::separatorAlways));
     ui->labelzBalanceUnconfirmed->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, unconfirmedZerocoinBalance, false, BitcoinUnits::separatorAlways));
     ui->labelzBalanceMature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, matureZerocoinBalance, false, BitcoinUnits::separatorAlways));
@@ -248,7 +248,7 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
 
     // Percentage labels
     ui->labelVITPercent->setText(sPercentage);
-    ui->labelzVITAEPercent->setText(szPercentage);
+    ui->labelzAureusXIVPercent->setText(szPercentage);
 
 
     // Only show most balances if they are non-zero for the sake of simplicity
@@ -278,18 +278,18 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     ui->labelImmature->setVisible(showImmature || showWatchOnlyImmature); // for symmetry reasons also show immature label when the watch-only one is shown
     ui->labelImmatureText->setVisible(showImmature || showWatchOnlyImmature);
     ui->labelWatchImmature->setVisible(showImmature && showWatchOnly); // show watch-only immature balance
-    bool showzVITAEAvailable = settingShowAllBalances || zerocoinBalance != matureZerocoinBalance;
-    bool showzVITAEUnconfirmed = settingShowAllBalances || unconfirmedZerocoinBalance != 0;
-    bool showzVITAEImmature = settingShowAllBalances || immatureZerocoinBalance != 0;
-    ui->labelzBalanceMature->setVisible(showzVITAEAvailable);
-    ui->labelzBalanceMatureText->setVisible(showzVITAEAvailable);
-    ui->labelzBalanceUnconfirmed->setVisible(showzVITAEUnconfirmed);
-    ui->labelzBalanceUnconfirmedText->setVisible(showzVITAEUnconfirmed);
-    ui->labelzBalanceImmature->setVisible(showzVITAEImmature);
-    ui->labelzBalanceImmatureText->setVisible(showzVITAEImmature);
+    bool showzAureusXIVAvailable = settingShowAllBalances || zerocoinBalance != matureZerocoinBalance;
+    bool showzAureusXIVUnconfirmed = settingShowAllBalances || unconfirmedZerocoinBalance != 0;
+    bool showzAureusXIVImmature = settingShowAllBalances || immatureZerocoinBalance != 0;
+    ui->labelzBalanceMature->setVisible(showzAureusXIVAvailable);
+    ui->labelzBalanceMatureText->setVisible(showzAureusXIVAvailable);
+    ui->labelzBalanceUnconfirmed->setVisible(showzAureusXIVUnconfirmed);
+    ui->labelzBalanceUnconfirmedText->setVisible(showzAureusXIVUnconfirmed);
+    ui->labelzBalanceImmature->setVisible(showzAureusXIVImmature);
+    ui->labelzBalanceImmatureText->setVisible(showzAureusXIVImmature);
     bool showPercentages = ! (zerocoinBalance == 0 && nTotalBalance == 0);
     ui->labelVITPercent->setVisible(showPercentages);
-    ui->labelzVITAEPercent->setVisible(showPercentages);
+    ui->labelzAureusXIVPercent->setVisible(showPercentages);
 
     static int cachedTxLocks = 0;
 
@@ -360,7 +360,7 @@ void OverviewPage::setWalletModel(WalletModel* model)
         connect(model, SIGNAL(notifyWatchonlyChanged(bool)), this, SLOT(updateWatchOnlyLabels(bool)));
     }
 
-    // update the display unit, to not use the default ("VITAE")
+    // update the display unit, to not use the default ("AXIV")
     updateDisplayUnit();
 }
 

@@ -6,8 +6,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef VITAE_SERIALIZE_H
-#define VITAE_SERIALIZE_H
+#ifndef AUREUSXIV_SERIALIZE_H
+#define AUREUSXIV_SERIALIZE_H
 
 #include <algorithm>
 #include <assert.h>
@@ -983,4 +983,4 @@ public:
     }
 };
 
-#endif // VITAE_SERIALIZE_H
+#endif // AUREUSXIV_SERIALIZE_H

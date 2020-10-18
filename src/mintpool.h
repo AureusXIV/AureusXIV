@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef VITAE_MINTPOOL_H
-#define VITAE_MINTPOOL_H
+#ifndef AUREUSXIV_MINTPOOL_H
+#define AUREUSXIV_MINTPOOL_H
 
 #include <map>
 #include <list>
@@ -50,4 +50,4 @@ public:
 };
 
 
-#endif //VITAE_MINTPOOL_H
+#endif //AUREUSXIV_MINTPOOL_H

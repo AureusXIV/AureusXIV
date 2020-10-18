@@ -44,7 +44,7 @@ static std::string ValueToString(CAmount nValue, bool AllowNegative = false)
     if (nValue < 0 && !AllowNegative)
         return "<span>" + _("unknown") + "</span>";
 
-    QString Str = BitcoinUnits::formatWithUnit(BitcoinUnits::VITAE, nValue);
+    QString Str = BitcoinUnits::formatWithUnit(BitcoinUnits::AXIV, nValue);
     if (AllowNegative && nValue > 0)
         Str = '+' + Str;
     return std::string("<span>") + Str.toUtf8().data() + "</span>";
@@ -473,8 +473,8 @@ void BlockExplorer::showEvent(QShowEvent*)
         updateNavButtons();
 
         if (!GetBoolArg("-txindex", true)) {
-            QString Warning = tr("Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (vitae.conf).");
-            QMessageBox::warning(this, "VITAE Core Blockchain Explorer", Warning, QMessageBox::Ok);
+            QString Warning = tr("Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (aureusxiv.conf).");
+            QMessageBox::warning(this, "AureusXIV Core Blockchain Explorer", Warning, QMessageBox::Ok);
         }
     }
 }

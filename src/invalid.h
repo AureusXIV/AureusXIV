@@ -1,7 +1,7 @@
-#ifndef VITAE_INVALID_H
-#define VITAE_INVALID_H
+#ifndef AUREUSXIV_INVALID_H
+#define AUREUSXIV_INVALID_H
 
-#endif //VITAE_INVALID_H
+#endif //AUREUSXIV_INVALID_H
 
 #include <libzerocoin/bignum.h>
 #include <univalue/include/univalue.h>

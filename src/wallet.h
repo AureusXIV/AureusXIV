@@ -37,7 +37,7 @@
 #include <vector>
 
 extern CWallet* pwalletMain;
-extern CzVITAEWallet* zwalletMain;
+extern CzAureusXIVWallet* zwalletMain;
 
 /**
  * Settings
@@ -90,7 +90,7 @@ enum AvailableCoinsType {
     STAKABLE_COINS = 6                          // UTXO's that are valid for staking
 };
 
-// Possible states for zVITAE send
+// Possible states for zAureusXIV send
 enum ZerocoinSpendStatus {
     ZVIT_SPEND_OKAY = 0,                            // No error
     ZVIT_SPEND_ERROR = 1,                           // Unspecified class of errors, more details are (hopefully) in the returning text
@@ -230,13 +230,13 @@ public:
      */
     mutable CCriticalSection cs_wallet;
 
-    CzVITAEWallet* zwalletMain;
+    CzAureusXIVWallet* zwalletMain;
 
     bool fFileBacked;
     bool fWalletUnlockAnonymizeOnly;
     std::string strWalletFile;
     bool fBackupMints;
-    std::unique_ptr<CzVITAETracker> zvitTracker;
+    std::unique_ptr<CzAureusXIVTracker> zvitTracker;
 
     std::set<int64_t> setKeyPool;
     std::map<CKeyID, CKeyMetadata> mapKeyMetadata;
@@ -318,13 +318,13 @@ public:
         nAutoCombineThreshold = 0;
     }
 
-    void setZWallet(CzVITAEWallet* zwallet)
+    void setZWallet(CzAureusXIVWallet* zwallet)
     {
         zwalletMain = zwallet;
-        zvitTracker = std::unique_ptr<CzVITAETracker>(new CzVITAETracker(strWalletFile));
+        zvitTracker = std::unique_ptr<CzAureusXIVTracker>(new CzAureusXIVTracker(strWalletFile));
     }
 
-    CzVITAEWallet* getZWallet() { return zwalletMain; }
+    CzAureusXIVWallet* getZWallet() { return zwalletMain; }
 
     void setZVitAutoBackups(bool fEnabled)
     {
@@ -644,7 +644,7 @@ public:
     /** MultiSig address added */
     boost::signals2::signal<void(bool fHaveMultiSig)> NotifyMultiSigChanged;
 
-    /** zVITAE reset */
+    /** zAureusXIV reset */
     boost::signals2::signal<void()> NotifyzPIVReset;
 
     /** notify wallet file backed up */

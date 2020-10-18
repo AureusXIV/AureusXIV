@@ -1,5 +1,5 @@
-#ifndef VITAE_DETERMINISTICMINT_H
-#define VITAE_DETERMINISTICMINT_H
+#ifndef AUREUSXIV_DETERMINISTICMINT_H
+#define AUREUSXIV_DETERMINISTICMINT_H
 
 #include <libzerocoin/Denominations.h>
 #include <uint256.h>
@@ -60,4 +60,4 @@ public:
     };
 };
 
-#endif //VITAE_DETERMINISTICMINT_H
+#endif //AUREUSXIV_DETERMINISTICMINT_H

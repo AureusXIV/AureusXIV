@@ -128,7 +128,7 @@ public:
 };
 
 /**
- * VITAE RPC command dispatcher.
+ * AureusXIV RPC command dispatcher.
  */
 class CRPCTable
 {

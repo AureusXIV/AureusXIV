@@ -13,7 +13,7 @@
 
 using namespace libzerocoin;
 
-CzVITAEWallet::CzVITAEWallet(std::string strWalletFile)
+CzAureusXIVWallet::CzAureusXIVWallet(std::string strWalletFile)
 {
     this->strWalletFile = strWalletFile;
     CWalletDB walletdb(strWalletFile);
@@ -30,10 +30,10 @@ CzVITAEWallet::CzVITAEWallet(std::string strWalletFile)
             hashSeed = Hash(seed.begin(), seed.end());
             if (pwalletMain->AddDeterministicSeed(seed)) {
                 if (walletdb.EraseZVITSeed_deprecated()) {
-                    LogPrintf("%s: Updated zVITAE seed databasing\n", __func__);
+                    LogPrintf("%s: Updated zAureusXIV seed databasing\n", __func__);
                     fFirstRun = false;
                 } else {
-                    LogPrintf("%s: failed to remove old zVITAE seed\n", __func__);
+                    LogPrintf("%s: failed to remove old zAureusXIV seed\n", __func__);
                 }
             }
         }
@@ -55,7 +55,7 @@ CzVITAEWallet::CzVITAEWallet(std::string strWalletFile)
         key.MakeNewKey(true);
         seed = key.GetPrivKey_256();
         seedMaster = seed;
-        LogPrintf("%s: first run of zVITAE wallet detected, new seed generated. Seedhash=%s\n", __func__, Hash(seed.begin(), seed.end()).GetHex());
+        LogPrintf("%s: first run of zAureusXIV wallet detected, new seed generated. Seedhash=%s\n", __func__, Hash(seed.begin(), seed.end()).GetHex());
     } else if (!pwalletMain->GetDeterministicSeed(hashSeed, seed)) {
         LogPrintf("%s: failed to get deterministic seed for hashseed %s\n", __func__, hashSeed.GetHex());
         return;
@@ -68,7 +68,7 @@ CzVITAEWallet::CzVITAEWallet(std::string strWalletFile)
     this->mintPool = CMintPool(nCountLastUsed);
 }
 
-bool CzVITAEWallet::SetMasterSeed(const uint256& seedMaster, bool fResetCount)
+bool CzAureusXIVWallet::SetMasterSeed(const uint256& seedMaster, bool fResetCount)
 {
 
     CWalletDB walletdb(strWalletFile);
@@ -93,18 +93,18 @@ bool CzVITAEWallet::SetMasterSeed(const uint256& seedMaster, bool fResetCount)
     return true;
 }
 
-void CzVITAEWallet::Lock()
+void CzAureusXIVWallet::Lock()
 {
     seedMaster = 0;
 }
 
-void CzVITAEWallet::AddToMintPool(const std::pair<uint256, uint32_t>& pMint, bool fVerbose)
+void CzAureusXIVWallet::AddToMintPool(const std::pair<uint256, uint32_t>& pMint, bool fVerbose)
 {
     mintPool.Add(pMint, fVerbose);
 }
 
 //Add the next 20 mints to the mint pool
-void CzVITAEWallet::GenerateMintPool(uint32_t nCountStart, uint32_t nCountEnd)
+void CzAureusXIVWallet::GenerateMintPool(uint32_t nCountStart, uint32_t nCountEnd)
 {
 
     //Is locked
@@ -155,7 +155,7 @@ void CzVITAEWallet::GenerateMintPool(uint32_t nCountStart, uint32_t nCountEnd)
 }
 
 // pubcoin hashes are stored to db so that a full accounting of mints belonging to the seed can be tracked without regenerating
-bool CzVITAEWallet::LoadMintPoolFromDB()
+bool CzAureusXIVWallet::LoadMintPoolFromDB()
 {
     map<uint256, vector<pair<uint256, uint32_t> > > mapMintPool = CWalletDB(strWalletFile).MapMintPool();
 
@@ -166,20 +166,20 @@ bool CzVITAEWallet::LoadMintPoolFromDB()
     return true;
 }
 
-void CzVITAEWallet::RemoveMintsFromPool(const std::vector<uint256>& vPubcoinHashes)
+void CzAureusXIVWallet::RemoveMintsFromPool(const std::vector<uint256>& vPubcoinHashes)
 {
     for (const uint256& hash : vPubcoinHashes)
         mintPool.Remove(hash);
 }
 
-void CzVITAEWallet::GetState(int& nCount, int& nLastGenerated)
+void CzAureusXIVWallet::GetState(int& nCount, int& nLastGenerated)
 {
     nCount = this->nCountLastUsed + 1;
     nLastGenerated = mintPool.CountOfLastGenerated();
 }
 
 //Catch the counter up with the chain
-void CzVITAEWallet::SyncWithChain(bool fGenerateMintPool)
+void CzAureusXIVWallet::SyncWithChain(bool fGenerateMintPool)
 {
     uint32_t nLastCountUsed = 0;
     bool found = true;
@@ -280,7 +280,7 @@ void CzVITAEWallet::SyncWithChain(bool fGenerateMintPool)
     }
 }
 
-bool CzVITAEWallet::SetMintSeen(const CBigNum& bnValue, const int& nHeight, const uint256& txid, const CoinDenomination& denom)
+bool CzAureusXIVWallet::SetMintSeen(const CBigNum& bnValue, const int& nHeight, const uint256& txid, const CoinDenomination& denom)
 {
     if (!mintPool.Has(bnValue))
         return error("%s: value not in pool", __func__);
@@ -350,7 +350,7 @@ bool IsValidCoinValue(const CBigNum& bnValue)
     bnValue.isPrime();
 }
 
-void CzVITAEWallet::SeedToZPIV(const uint512& seedZerocoin, CBigNum& bnValue, CBigNum& bnSerial, CBigNum& bnRandomness, CKey& key)
+void CzAureusXIVWallet::SeedToZPIV(const uint512& seedZerocoin, CBigNum& bnValue, CBigNum& bnSerial, CBigNum& bnRandomness, CKey& key)
 {
     ZerocoinParams* params = Params().Zerocoin_Params(false);
 
@@ -399,7 +399,7 @@ void CzVITAEWallet::SeedToZPIV(const uint512& seedZerocoin, CBigNum& bnValue, CB
     }
 }
 
-uint512 CzVITAEWallet::GetZerocoinSeed(uint32_t n)
+uint512 CzAureusXIVWallet::GetZerocoinSeed(uint32_t n)
 {
     CDataStream ss(SER_GETHASH, 0);
     ss << seedMaster << n;
@@ -407,14 +407,14 @@ uint512 CzVITAEWallet::GetZerocoinSeed(uint32_t n)
     return zerocoinSeed;
 }
 
-void CzVITAEWallet::UpdateCount()
+void CzAureusXIVWallet::UpdateCount()
 {
     nCountLastUsed++;
     CWalletDB walletdb(strWalletFile);
     walletdb.WriteZVITCount(nCountLastUsed);
 }
 
-void CzVITAEWallet::GenerateDeterministicZPIV(CoinDenomination denom, PrivateCoin& coin, CDeterministicMint& dMint, bool fGenerateOnly)
+void CzAureusXIVWallet::GenerateDeterministicZPIV(CoinDenomination denom, PrivateCoin& coin, CDeterministicMint& dMint, bool fGenerateOnly)
 {
     GenerateMint(nCountLastUsed + 1, denom, coin, dMint);
     if (fGenerateOnly)
@@ -424,7 +424,7 @@ void CzVITAEWallet::GenerateDeterministicZPIV(CoinDenomination denom, PrivateCoi
     //LogPrintf("%s : Generated new deterministic mint. Count=%d pubcoin=%s seed=%s\n", __func__, nCount, coin.getPublicCoin().getValue().GetHex().substr(0,6), seedZerocoin.GetHex().substr(0, 4));
 }
 
-void CzVITAEWallet::GenerateMint(const uint32_t& nCount, const CoinDenomination denom, PrivateCoin& coin, CDeterministicMint& dMint)
+void CzAureusXIVWallet::GenerateMint(const uint32_t& nCount, const CoinDenomination denom, PrivateCoin& coin, CDeterministicMint& dMint)
 {
     uint512 seedZerocoin = GetZerocoinSeed(nCount);
     CBigNum bnValue;
@@ -445,7 +445,7 @@ void CzVITAEWallet::GenerateMint(const uint32_t& nCount, const CoinDenomination 
     dMint.SetDenomination(denom);
 }
 
-bool CzVITAEWallet::RegenerateMint(const CDeterministicMint& dMint, CZerocoinMint& mint)
+bool CzAureusXIVWallet::RegenerateMint(const CDeterministicMint& dMint, CZerocoinMint& mint)
 {
     //Check that the seed is correct    todo:handling of incorrect, or multiple seeds
     uint256 hashSeed = Hash(seedMaster.begin(), seedMaster.end());
