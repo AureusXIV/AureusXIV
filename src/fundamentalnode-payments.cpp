@@ -290,7 +290,7 @@ bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight)
     bool MasternodePayments = false;
 
 
-    if(nBlockHeight > Params().LAST_POW_BLOCK()) MasternodePayments = true;
+    if(block.nTime > START_MASTERNODE_PAYMENTS) MasternodePayments = true;
 
     if(!sporkManager.IsSporkActive(SPORK_9_MASTERNODE_PAYMENT_ENFORCEMENT)){
         MasternodePayments = false; //
@@ -395,7 +395,7 @@ bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight)
 }
 
 
-void FillBlockPayeeFundamentalnode(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake)
+void FillBlockPayeeFundamentalnode(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake, bool IsMasternode)
 {
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (!pindexPrev) return;
@@ -403,7 +403,7 @@ void FillBlockPayeeFundamentalnode(CMutableTransaction& txNew, CAmount nFees, bo
     if (sporkManager.IsSporkActive(SPORK_11_ENABLE_SUPERBLOCKS) && budget.IsBudgetPaymentBlock(pindexPrev->nHeight + 1)) {
         budget.FillBlockPayeeFundamentalnode(txNew, nFees, fProofOfStake);
     } else {
-        fundamentalnodePayments.FillBlockPayeeFundamentalnode(txNew, nFees, fProofOfStake);
+        fundamentalnodePayments.FillBlockPayeeFundamentalnode(txNew, nFees, fProofOfStake, IsMasternode);
     }
 }
 
@@ -416,7 +416,7 @@ std::string GetFundamentalnodeRequiredPaymentsString(int nBlockHeight)
     }
 }
 
-void CFundamentalnodePayments::FillBlockPayeeFundamentalnode(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake)
+void CFundamentalnodePayments::FillBlockPayeeFundamentalnode(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake, bool IsMasternode)
 {
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (!pindexPrev) return;
@@ -474,7 +474,7 @@ void CFundamentalnodePayments::FillBlockPayeeFundamentalnode(CMutableTransaction
     //txNew.vout[0].nValue = blockValue;
 
     if (hasPayment) {
-        if(hasMnPayment){
+        if(IsMasternode && hasMnPayment){
             if (fProofOfStake) {
                 /**For Proof Of Stake vout[0] must be null
                  * Stake reward can be split into many different outputs, so we must
@@ -542,7 +542,7 @@ void CFundamentalnodePayments::FillBlockPayeeFundamentalnode(CMutableTransaction
         }
     } else {
 
-        if(hasMnPayment){
+        if(IsMasternode && hasMnPayment){
             if (fProofOfStake) {
                 /**For Proof Of Stake vout[0] must be null
                  * Stake reward can be split into many different outputs, so we must

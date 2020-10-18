@@ -240,7 +240,7 @@ public:
     bool PropExists(uint256 nHash);
     TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
     std::string GetFundamentalnodeRequiredPaymentsString(int nBlockHeight);
-    void FillBlockPayeeFundamentalnode(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake);
+    void FillBlockPayeeFundamentalnode(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake, bool IsMasternode);
 
     void CheckOrphanVotes();
     void Clear()

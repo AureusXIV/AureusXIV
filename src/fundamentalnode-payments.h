@@ -280,7 +280,7 @@ public:
     int GetMinFundamentalnodePaymentsProto();
     void ProcessMessageFundamentalnodePayments(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
     std::string GetFundamentalnodeRequiredPaymentsString(int nBlockHeight);
-    void FillBlockPayeeFundamentalnode(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake);
+    void FillBlockPayeeFundamentalnode(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake, bool IsMasternode);
     std::string ToString() const;
     int GetOldestBlock();
     int GetNewestBlock();
