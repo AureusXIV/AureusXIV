@@ -1,12 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=VITAE
-Comment=VITAE P2P Cryptocurrency
-Comment[fr]=VITAE, monnaie virtuelle cryptographique pair à pair
-Comment[tr]=VITAE, eşten eşe kriptografik sanal para birimi
-Exec=vitae-qt %u
+Name=AureusXIV
+Comment=AureusXIV P2P Cryptocurrency
+Comment[fr]=AureusXIV, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=AureusXIV, eşten eşe kriptografik sanal para birimi
+Exec=aureusxiv-qt %u
 Terminal=false
 Type=Application
-Icon=vitae128
-MimeType=x-scheme-handler/vitae;
+Icon=aureusxiv128
+MimeType=x-scheme-handler/aureusxiv;
 Categories=Office;Finance;

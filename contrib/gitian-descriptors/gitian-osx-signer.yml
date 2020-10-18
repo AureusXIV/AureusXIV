@@ -1,5 +1,5 @@
 ---
-name: "vitae-dmg-signer"
+name: "aureusxiv-dmg-signer"
 suites:
 - "trusty"
 architectures:
@@ -7,10 +7,10 @@ architectures:
 packages:
 - "faketime"
 remotes:
-- "url": "https://github.com/vitaeteam/vitae-detached-sigs.git"
+- "url": "https://github.com/aureusxivteam/aureusxiv-detached-sigs.git"
   "dir": "signature"
 files:
-- "vitae-osx-unsigned.tar.gz"
+- "aureusxiv-osx-unsigned.tar.gz"
 script: |
   WRAP_DIR=$HOME/wrapped
   mkdir -p ${WRAP_DIR}
@@ -27,11 +27,11 @@ script: |
     chmod +x ${WRAP_DIR}/${prog}
   done
 
-  UNSIGNED=vitae-osx-unsigned.tar.gz
-  SIGNED=vitae-osx-signed.dmg
+  UNSIGNED=aureusxiv-osx-unsigned.tar.gz
+  SIGNED=aureusxiv-osx-signed.dmg
 
   tar -xf ${UNSIGNED}
   OSX_VOLNAME="$(cat osx_volname)"
   ./detached-sig-apply.sh ${UNSIGNED} signature/osx
-  ${WRAP_DIR}/genisoimage -no-cache-inodes -D -l -probe -V "Vitae-Qt" -no-pad -r -dir-mode 0755 -apple -o uncompressed.dmg signed-app
+  ${WRAP_DIR}/genisoimage -no-cache-inodes -D -l -probe -V "AureusXIV-Qt" -no-pad -r -dir-mode 0755 -apple -o uncompressed.dmg signed-app
   ${WRAP_DIR}/dmg dmg uncompressed.dmg ${OUTDIR}/${SIGNED}

@@ -1,10 +1,10 @@
 Sample configuration files for:
 
-SystemD: vitaed.service
-Upstart: vitaed.conf
-OpenRC:  vitaed.openrc
-         vitaed.openrcconf
-CentOS:  vitaed.init
+SystemD: aureusxivd.service
+Upstart: aureusxivd.conf
+OpenRC:  aureusxivd.openrc
+         aureusxivd.openrcconf
+CentOS:  aureusxivd.init
 
 have been made available to assist packagers in creating node packages here.
 

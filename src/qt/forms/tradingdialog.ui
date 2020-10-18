@@ -442,10 +442,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>Buy VITAE</string>
+      <string>Buy AureusXIV</string>
      </property>
      <property name="icon">
-      <iconset resource="../vitae.qrc">
+      <iconset resource="../aureusxiv.qrc">
        <normaloff>:/icons/bitcoin</normaloff>:/icons/bitcoin</iconset>
      </property>
     </widget>
@@ -512,7 +512,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>VITAE</string>
+      <string>AureusXIV</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_5">
@@ -1704,7 +1704,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>VITAE</string>
+      <string>AureusXIV</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="UnitsInputVIT">
@@ -1751,10 +1751,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>Sell VITAE</string>
+      <string>Sell AureusXIV</string>
      </property>
      <property name="icon">
-      <iconset resource="../vitae">
+      <iconset resource="../aureusxiv">
        <normaloff>:/icons/bitcoin</normaloff>:/icons/bitcoin</iconset>
      </property>
     </widget>
@@ -1777,7 +1777,7 @@
          </font>
         </property>
         <property name="text">
-         <string>VITAE Available:</string>
+         <string>AureusXIV Available:</string>
         </property>
        </widget>
       </item>
@@ -2221,7 +2221,7 @@
          </font>
         </property>
         <property name="text">
-         <string>VITAE</string>
+         <string>AureusXIV</string>
         </property>
        </widget>
       </item>
@@ -2762,7 +2762,7 @@
       </font>
      </property>
      <property name="text">
-      <string>VITAE Balance:</string>
+      <string>AureusXIV Balance:</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_12">
@@ -2813,7 +2813,7 @@
       </font>
      </property>
      <property name="text">
-      <string>VITAE Available:</string>
+      <string>AureusXIV Available:</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_14">
@@ -2832,7 +2832,7 @@
       </font>
      </property>
      <property name="text">
-      <string>VITAE Pending:</string>
+      <string>AureusXIV Pending:</string>
      </property>
     </widget>
     <widget class="QLabel" name="VITPendingLabel">
@@ -2928,7 +2928,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Bittrex VITAE Deposit Address:</string>
+      <string>Bittrex AureusXIV Deposit Address:</string>
      </property>
     </widget>
     <widget class="QPushButton" name="GenDepositBTN">
@@ -2941,10 +2941,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>Generate VITAE Deposit Address</string>
+      <string>Generate AureusXIV Deposit Address</string>
      </property>
      <property name="icon">
-      <iconset resource="../vitae.qrc">
+      <iconset resource="../aureusxiv.qrc">
        <normaloff>:/icons/bitcoin</normaloff>:/icons/bitcoin</iconset>
      </property>
     </widget>
@@ -3155,7 +3155,7 @@
        <string notr="true">border: 1px solid #61696c;margin-left:4px;</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnConvertVitae">
+     <widget class="QPushButton" name="btnConvertAureusXIV">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -3206,7 +3206,7 @@
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap resource="../vitae.qrc">:/icons/transaction_1</pixmap>
+       <pixmap resource="../aureusxiv.qrc">:/icons/transaction_1</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -3253,7 +3253,7 @@
       <string>Update API Keys</string>
      </property>
      <property name="icon">
-      <iconset resource="../vitae.qrc">
+      <iconset resource="../aureusxiv.qrc">
        <normaloff>:/icons/bitcoin</normaloff>:/icons/bitcoin</iconset>
      </property>
     </widget>
@@ -3408,7 +3408,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="../vitae.qrc"/>
+  <include location="../aureusxiv.qrc"/>
  </resources>
  <connections/>
 </ui>
