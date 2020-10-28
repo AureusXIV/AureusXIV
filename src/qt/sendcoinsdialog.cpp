@@ -59,7 +59,11 @@ SendCoinsDialog::SendCoinsDialog(QWidget* parent) : QDialog(parent, Qt::WindowSy
 
     // UTXO Splitter
     connect(ui->splitBlockCheckBox, SIGNAL(stateChanged(int)), this, SLOT(splitBlockChecked(int)));
+    connect(ui->splitBlockCheckBox, SIGNAL(stateChanged(int)), this, SLOT(splitBlockChecked(int)));
     connect(ui->splitBlockLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(splitBlockLineEditChanged(const QString&)));
+
+    // FN Create Toggle
+    connect(ui->checkBoxFnPayment, SIGNAL(stateChanged(int)), this, SLOT(ffnPaymentChecked(int)));
 
     // VITAE specific
     QSettings settings;
@@ -164,7 +168,7 @@ void SendCoinsDialog::setModel(WalletModel* model)
         setBalance(model->getBalance(), model->getUnconfirmedBalance(), model->getImmatureBalance(),
                    model->getZerocoinBalance (), model->getUnconfirmedZerocoinBalance (), model->getImmatureZerocoinBalance (),
                    model->getWatchBalance(), model->getWatchUnconfirmedBalance(), model->getWatchImmatureBalance());
-        connect(model, SIGNAL(balanceChanged(CAmount, CAmount,  CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this, 
+        connect(model, SIGNAL(balanceChanged(CAmount, CAmount,  CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this,
                          SLOT(setBalance(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
         connect(model->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
         updateDisplayUnit();
@@ -221,6 +225,8 @@ void SendCoinsDialog::on_sendButton_clicked()
     if (!model || !model->getOptionsModel())
         return;
 
+    IsFundamentalNodePayment = ui->checkBoxFnPayment->checkState() == Qt::Checked;
+
     QList<SendCoinsRecipient> recipients;
     bool valid = true;
 
@@ -251,7 +257,7 @@ void SendCoinsDialog::on_sendButton_clicked()
         return;
     }
 
-    
+
 
     //set split block in model
     CoinControlDialog::coinControl->fSplitBlock = ui->splitBlockCheckBox->checkState() == Qt::Checked;
@@ -549,7 +555,7 @@ bool SendCoinsDialog::handlePaymentRequest(const SendCoinsRecipient& rv)
     return true;
 }
 
-void SendCoinsDialog::setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, 
+void SendCoinsDialog::setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
                                  const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
                                  const CAmount& watchBalance, const CAmount& watchUnconfirmedBalance, const CAmount& watchImmatureBalance)
 {
@@ -574,7 +580,7 @@ void SendCoinsDialog::updateDisplayUnit()
     TRY_LOCK(cs_main, lockMain);
     if (!lockMain) return;
 
-    setBalance(model->getBalance(), model->getUnconfirmedBalance(), model->getImmatureBalance(), 
+    setBalance(model->getBalance(), model->getUnconfirmedBalance(), model->getImmatureBalance(),
                model->getZerocoinBalance (), model->getUnconfirmedZerocoinBalance (), model->getImmatureZerocoinBalance (),
                model->getWatchBalance(), model->getWatchUnconfirmedBalance(), model->getWatchImmatureBalance());
     coinControlUpdateLabels();
@@ -594,7 +600,7 @@ void SendCoinsDialog::updateSwiftTX()
 void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn& sendCoinsReturn, const QString& msgArg, bool fPrepare)
 {
     bool fAskForUnlock = false;
-    
+
     QPair<QString, CClientUIInterface::MessageBoxFlags> msgParams;
     // Default to a warning message, override if error message is needed
     msgParams.second = CClientUIInterface::MSG_WARNING;
@@ -753,6 +759,12 @@ void SendCoinsDialog::updateSmartFeeLabel()
     }
 
     updateFeeMinimizedLabel();
+}
+
+// FN checkbox
+void SendCoinsDialog::ffnPaymentChecked(int state)
+{
+	// TODO: display warning-disclaimer message about burn
 }
 
 // UTXO splitter
