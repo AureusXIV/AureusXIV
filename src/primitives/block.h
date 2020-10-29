@@ -34,7 +34,6 @@ public:
     uint32_t nTime;
     uint32_t nBits;
     uint32_t nNonce;
-    uint256 nAccumulatorCheckpoint;
 
     CBlockHeader()
     {
@@ -52,10 +51,6 @@ public:
         READWRITE(nTime);
         READWRITE(nBits);
         READWRITE(nNonce);
-
-        //zerocoin active, header changes to include accumulator checksum
-        if(nVersion > 3)
-            READWRITE(nAccumulatorCheckpoint);
     }
 
     void SetNull()
@@ -66,7 +61,6 @@ public:
         nTime = 0;
         nBits = 0;
         nNonce = 0;
-        nAccumulatorCheckpoint = 0;
     }
 
     bool IsNull() const
@@ -135,7 +129,6 @@ public:
         block.nTime          = nTime;
         block.nBits          = nBits;
         block.nNonce         = nNonce;
-        block.nAccumulatorCheckpoint = nAccumulatorCheckpoint;
         return block;
     }
 
@@ -149,8 +142,6 @@ public:
     {
         return !IsProofOfStake();
     }
-
-    bool IsZerocoinStake() const;
 
     std::pair<COutPoint, unsigned int> GetProofOfStake() const
     {

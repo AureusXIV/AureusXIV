@@ -10,6 +10,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 using namespace std;
 
 BOOST_AUTO_TEST_SUITE(netbase_tests)
@@ -62,35 +64,33 @@ BOOST_AUTO_TEST_CASE(netbase_splithost)
     BOOST_CHECK(TestSplitHost("www.bitcoin.org:80", "www.bitcoin.org", 80));
     BOOST_CHECK(TestSplitHost("[www.bitcoin.org]:80", "www.bitcoin.org", 80));
     BOOST_CHECK(TestSplitHost("127.0.0.1", "127.0.0.1", -1));
-    BOOST_CHECK(TestSplitHost("127.0.0.1:8765", "127.0.0.1", 8765));
+    BOOST_CHECK(TestSplitHost("127.0.0.1:10135", "127.0.0.1", 10135));
     BOOST_CHECK(TestSplitHost("[127.0.0.1]", "127.0.0.1", -1));
-    BOOST_CHECK(TestSplitHost("[127.0.0.1]:8765", "127.0.0.1", 8765));
+    BOOST_CHECK(TestSplitHost("[127.0.0.1]:10135", "127.0.0.1", 10135));
     BOOST_CHECK(TestSplitHost("::ffff:127.0.0.1", "::ffff:127.0.0.1", -1));
-    BOOST_CHECK(TestSplitHost("[::ffff:127.0.0.1]:8765", "::ffff:127.0.0.1", 8765));
-    BOOST_CHECK(TestSplitHost("[::]:8765", "::", 8765));
-    BOOST_CHECK(TestSplitHost("::8765", "::8765", -1));
-    BOOST_CHECK(TestSplitHost(":8765", "", 8765));
-    BOOST_CHECK(TestSplitHost("[]:8765", "", 8765));
+    BOOST_CHECK(TestSplitHost("[::ffff:127.0.0.1]:10135", "::ffff:127.0.0.1", 10135));
+    BOOST_CHECK(TestSplitHost("[::]:10135", "::", 10135));
+    BOOST_CHECK(TestSplitHost("::10135", "::10135", -1));
+    BOOST_CHECK(TestSplitHost(":10135", "", 10135));
+    BOOST_CHECK(TestSplitHost("[]:10135", "", 10135));
     BOOST_CHECK(TestSplitHost("", "", -1));
 }
 
 bool static TestParse(string src, string canon)
 {
-    CService addr;
-    if (!LookupNumeric(src.c_str(), addr, 65535))
-        return canon == "";
+    CService addr(LookupNumeric(src.c_str(), 65535));
     return canon == addr.ToString();
 }
 
 BOOST_AUTO_TEST_CASE(netbase_lookupnumeric)
 {
     BOOST_CHECK(TestParse("127.0.0.1", "127.0.0.1:65535"));
-    BOOST_CHECK(TestParse("127.0.0.1:8765", "127.0.0.1:8765"));
+    BOOST_CHECK(TestParse("127.0.0.1:10135", "127.0.0.1:10135"));
     BOOST_CHECK(TestParse("::ffff:127.0.0.1", "127.0.0.1:65535"));
     BOOST_CHECK(TestParse("::", "[::]:65535"));
-    BOOST_CHECK(TestParse("[::]:8765", "[::]:8765"));
+    BOOST_CHECK(TestParse("[::]:10135", "[::]:10135"));
     BOOST_CHECK(TestParse("[127.0.0.1]", "127.0.0.1:65535"));
-    BOOST_CHECK(TestParse(":::", ""));
+    BOOST_CHECK(TestParse(":::", "[::]:0"));
 }
 
 BOOST_AUTO_TEST_CASE(onioncat_test)

@@ -3,7 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/vitae-config.h"
+#include "config/aureusxiv-config.h"
 #endif
 
 #include "optionsdialog.h"
@@ -11,7 +11,6 @@
 
 #include "bitcoinunits.h"
 #include "guiutil.h"
-#include "obfuscation.h"
 #include "optionsmodel.h"
 
 #include "main.h" // for MAX_SCRIPTCHECK_THREADS
@@ -69,8 +68,6 @@ OptionsDialog::OptionsDialog(QWidget* parent, bool enableWallet) : QDialog(paren
     ui->bitcoinAtStartup->setAttribute(Qt::WA_MacShowFocusRect, 0);
     ui->databaseCache->setAttribute(Qt::WA_MacShowFocusRect, 0);
     ui->threadsScriptVerif->setAttribute(Qt::WA_MacShowFocusRect, 0);
-    //ui->zeromintPercentage->setAttribute(Qt::WA_MacShowFocusRect, 0);
-    ui->preferredDenom->setAttribute(Qt::WA_MacShowFocusRect, 0);
 
     ui->spinBoxStakeSplitThreshold->setAttribute(Qt::WA_MacShowFocusRect, 0);
     ui->coinControlFeatures->setAttribute(Qt::WA_MacShowFocusRect, 0);
@@ -103,17 +100,6 @@ OptionsDialog::OptionsDialog(QWidget* parent, bool enableWallet) : QDialog(paren
     
     /* Theme selector static themes */
     ui->theme->addItem(QString("Default"), QVariant("default"));
-
-    /* Preferred Zerocoin Denominations */
-    ui->preferredDenom->addItem(QString(tr("Any")), QVariant("0"));
-    ui->preferredDenom->addItem(QString("1"), QVariant("1"));
-    ui->preferredDenom->addItem(QString("5"), QVariant("5"));
-    ui->preferredDenom->addItem(QString("10"), QVariant("10"));
-    ui->preferredDenom->addItem(QString("50"), QVariant("50"));
-    ui->preferredDenom->addItem(QString("100"), QVariant("100"));
-    ui->preferredDenom->addItem(QString("500"), QVariant("500"));
-    ui->preferredDenom->addItem(QString("1000"), QVariant("1000"));
-    ui->preferredDenom->addItem(QString("5000"), QVariant("5000"));
 
     /* Theme selector external themes */
     boost::filesystem::path pathAddr = GetDataDir() / "themes";
@@ -215,12 +201,6 @@ void OptionsDialog::setMapper()
     mapper->addMapping(ui->bitcoinAtStartup, OptionsModel::StartAtStartup);
     mapper->addMapping(ui->threadsScriptVerif, OptionsModel::ThreadsScriptVerif);
     mapper->addMapping(ui->databaseCache, OptionsModel::DatabaseCache);
-    // Zeromint Enabled
-    //mapper->addMapping(ui->checkBoxZeromintEnable, OptionsModel::ZeromintEnable);
-    // Zerocoin mint percentage
-    //mapper->addMapping(ui->zeromintPercentage, OptionsModel::ZeromintPercentage);
-    // Zerocoin preferred denomination
-    mapper->addMapping(ui->preferredDenom, OptionsModel::ZeromintPrefDenom);
 
     /* Wallet */
     mapper->addMapping(ui->spendZeroConfChange, OptionsModel::SpendZeroConfChange);
@@ -291,7 +271,6 @@ void OptionsDialog::on_resetButton_clicked()
 void OptionsDialog::on_okButton_clicked()
 {
     mapper->submit();
-    obfuScationPool.cachedNumBlocks = std::numeric_limits<int>::max();
     pwalletMain->MarkDirty();
     accept();
 }
@@ -323,10 +302,11 @@ void OptionsDialog::clearStatusLabel()
 void OptionsDialog::doProxyIpChecks(QValidatedLineEdit* pUiProxyIp, QLineEdit* pUiProxyPort)
 {
     const std::string strAddrProxy = pUiProxyIp->text().toStdString();
-    CService addrProxy;
+    const int nProxyPort = pUiProxyPort->text().toInt();
+    CService addrProxy(LookupNumeric(strAddrProxy.c_str(), nProxyPort));
 
     // Check for a valid IPv4 / IPv6 address
-    if (!(fProxyIpValid = LookupNumeric(strAddrProxy.c_str(), addrProxy))) {
+    if (!(fProxyIpValid = addrProxy.IsValid())) {
         disableOkButton();
         pUiProxyIp->setValid(false);
         ui->statusLabel->setStyleSheet("QLabel { color: red; }");

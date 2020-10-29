@@ -128,7 +128,7 @@ public:
 };
 
 /**
- * VITAE RPC command dispatcher.
+ * AureusXIV RPC command dispatcher.
  */
 class CRPCTable
 {
@@ -247,25 +247,7 @@ extern UniValue setstakesplitthreshold(const UniValue& params, bool fHelp);
 extern UniValue getstakesplitthreshold(const UniValue& params, bool fHelp);
 extern UniValue multisend(const UniValue& params, bool fHelp);
 extern UniValue autocombinerewards(const UniValue& params, bool fHelp);
-extern UniValue getzerocoinbalance(const UniValue& params, bool fHelp);
-extern UniValue listmintedzerocoins(const UniValue& params, bool fHelp);
-extern UniValue listspentzerocoins(const UniValue& params, bool fHelp);
-extern UniValue listzerocoinamounts(const UniValue& params, bool fHelp);
-extern UniValue mintzerocoin(const UniValue& params, bool fHelp);
-extern UniValue spendzerocoin(const UniValue& params, bool fHelp);
-extern UniValue resetmintzerocoin(const UniValue& params, bool fHelp);
-extern UniValue resetspentzerocoin(const UniValue& params, bool fHelp);
-extern UniValue getarchivedzerocoin(const UniValue& params, bool fHelp);
-extern UniValue importzerocoins(const UniValue& params, bool fHelp);
-extern UniValue exportzerocoins(const UniValue& params, bool fHelp);
-extern UniValue reconsiderzerocoins(const UniValue& params, bool fHelp);
-extern UniValue getspentzerocoinamount(const UniValue& params, bool fHelp);
 extern UniValue makekeypair(const UniValue& params, bool fHelp);
-extern UniValue sezvitseed(const UniValue& params, bool fHelp);
-extern UniValue gezvitseed(const UniValue& params, bool fHelp);
-extern UniValue generatemintlist(const UniValue& params, bool fHelp);
-extern UniValue searchdzvit(const UniValue& params, bool fHelp);
-extern UniValue dzvitstate(const UniValue& params, bool fHelp);
 
 extern UniValue getrawtransaction(const UniValue& params, bool fHelp); // in rcprawtransaction.cpp
 extern UniValue listunspent(const UniValue& params, bool fHelp);
@@ -277,7 +259,6 @@ extern UniValue decodescript(const UniValue& params, bool fHelp);
 extern UniValue signrawtransaction(const UniValue& params, bool fHelp);
 extern UniValue sendrawtransaction(const UniValue& params, bool fHelp);
 
-extern UniValue findserial(const UniValue& params, bool fHelp); // in rpcblockchain.cpp
 extern UniValue getblockcount(const UniValue& params, bool fHelp);
 extern UniValue getbestblockhash(const UniValue& params, bool fHelp);
 extern UniValue getdifficulty(const UniValue& params, bool fHelp);
@@ -294,19 +275,13 @@ extern UniValue verifychain(const UniValue& params, bool fHelp);
 extern UniValue getchaintips(const UniValue& params, bool fHelp);
 extern UniValue invalidateblock(const UniValue& params, bool fHelp);
 extern UniValue reconsiderblock(const UniValue& params, bool fHelp);
-extern UniValue getaccumulatorvalues(const UniValue& params, bool fHelp);
 
-extern UniValue obfuscation(const UniValue& params, bool fHelp); // in rpcfundamentalnode.cpp
-extern UniValue getpoolinfo(const UniValue& params, bool fHelp);
-extern UniValue fundamentalnode(const UniValue& params, bool fHelp);
 extern UniValue listfundamentalnodes(const UniValue& params, bool fHelp);
 extern UniValue getfundamentalnodecount(const UniValue& params, bool fHelp);
 extern UniValue createfundamentalnodebroadcast(const UniValue& params, bool fHelp);
 extern UniValue decodefundamentalnodebroadcast(const UniValue& params, bool fHelp);
 extern UniValue relayfundamentalnodebroadcast(const UniValue& params, bool fHelp);
-extern UniValue fundamentalnodeconnect(const UniValue& params, bool fHelp);
 extern UniValue fundamentalnodecurrent(const UniValue& params, bool fHelp);
-extern UniValue fundamentalnodedebug(const UniValue& params, bool fHelp);
 extern UniValue startfundamentalnode(const UniValue& params, bool fHelp);
 extern UniValue createfundamentalnodekey(const UniValue& params, bool fHelp);
 extern UniValue getfundamentalnodeoutputs(const UniValue& params, bool fHelp);
@@ -336,10 +311,20 @@ extern UniValue verifymessage(const UniValue& params, bool fHelp);
 extern UniValue setmocktime(const UniValue& params, bool fHelp);
 extern UniValue getstakingstatus(const UniValue& params, bool fHelp);
 
-extern UniValue mnspork(const UniValue& params, bool fHelp);
-extern UniValue masternode(const UniValue& params, bool fHelp);
-extern UniValue masternodelist(const UniValue& params, bool fHelp);
+extern UniValue listmasternodes(const UniValue& params, bool fHelp);
+extern UniValue getmasternodecount(const UniValue& params, bool fHelp);
+extern UniValue createmasternodebroadcast(const UniValue& params, bool fHelp);
+extern UniValue decodemasternodebroadcast(const UniValue& params, bool fHelp);
+extern UniValue relaymasternodebroadcast(const UniValue& params, bool fHelp);
+extern UniValue masternodecurrent(const UniValue& params, bool fHelp);
+extern UniValue startmasternode(const UniValue& params, bool fHelp);
+extern UniValue createmasternodekey(const UniValue& params, bool fHelp);
+extern UniValue getmasternodeoutputs(const UniValue& params, bool fHelp);
+extern UniValue listmasternodeconf(const UniValue& params, bool fHelp);
 extern UniValue getmasternodestatus(const UniValue& params, bool fHelp);
+extern UniValue getmasternodewinners(const UniValue& params, bool fHelp);
+extern UniValue getmasternodescores(const UniValue& params, bool fHelp);
+extern UniValue mnsync(const UniValue& params, bool fHelp);
 
 bool StartRPC();
 void InterruptRPC();

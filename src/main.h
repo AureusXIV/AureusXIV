@@ -3,6 +3,7 @@
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2017 The PIVX developers
 // Copyright (c) 2018-2018 The VITAE developers
+// Copyright (c) 2020 Bitcoin Builders
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +11,7 @@
 #define BITCOIN_MAIN_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/vitae-config.h"
+#include "config/aureusxiv-config.h"
 #endif
 
 #include "amount.h"
@@ -21,7 +22,6 @@
 #include "pow.h"
 #include "primitives/block.h"
 #include "primitives/transaction.h"
-#include "primitives/zerocoin.h"
 #include "script/script.h"
 #include "script/sigcache.h"
 #include "script/standard.h"
@@ -40,13 +40,10 @@
 #include <utility>
 #include <vector>
 
-#include "libzerocoin/CoinSpend.h"
-
 #include <boost/unordered_map.hpp>
 
 class CBlockIndex;
 class CBlockTreeDB;
-class CZerocoinDB;
 class CSporkDB;
 class CBloomFilter;
 class CInv;
@@ -66,7 +63,6 @@ static const unsigned int DEFAULT_BLOCK_PRIORITY_SIZE = 50000;
 static const bool DEFAULT_ALERTS = true;
 /** The maximum size for transactions we're willing to relay/mine */
 static const unsigned int MAX_STANDARD_TX_SIZE = 100000;
-static const unsigned int MAX_ZEROCOIN_TX_SIZE = 150000;
 /** The maximum allowed number of signature check operations in a block (network rule) */
 static const unsigned int MAX_BLOCK_SIGOPS_CURRENT = MAX_BLOCK_SIZE_CURRENT / 50;
 static const unsigned int MAX_BLOCK_SIGOPS_LEGACY = MAX_BLOCK_SIZE_LEGACY / 50;
@@ -156,7 +152,6 @@ extern int64_t nReserveBalance;
 extern std::map<uint256, int64_t> mapRejectedBlocks;
 extern std::map<unsigned int, unsigned int> mapHashedBlocks;
 extern std::set<std::pair<COutPoint, unsigned int> > setStakeSeen;
-extern std::map<uint256, int64_t> mapZerocoinspends; //txid, time received
 
 /** Best header we've seen so far (used for getheaders queries' starting points). */
 extern CBlockIndex* pindexBestHeader;
@@ -236,8 +231,8 @@ bool DisconnectBlocksAndReprocess(int blocks);
 
 // ***TODO***
 double ConvertBitsToDouble(unsigned int nBits);
-int64_t GetFundamentalnodePayment(int nHeight, int64_t blockValue, int nFundamentalnodeCount = 0);
-int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount, bool isZVITAEStake);
+int64_t GetFundamentalnodePayment(int nHeight, int64_t blockValue);
+int64_t GetMasternodePayment(int nHeight, int64_t blockValue);
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock, bool fProofOfStake);
 
@@ -263,6 +258,7 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
 
 bool AcceptableFundamentalTxn(CTxMemPool& pool, CValidationState& state, const CTransaction& tx);
 
+int GetInputHeight(CTxIn& vin);
 int GetInputAge(CTxIn& vin);
 int GetInputAgeIX(uint256 nTXHash, CTxIn& vin);
 bool GetCoinAge(const CTransaction& tx, unsigned int nTxTime, uint64_t& nCoinAge);
@@ -354,18 +350,12 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
 void UpdateCoins(const CTransaction& tx, CValidationState& state, CCoinsViewCache& inputs, CTxUndo& txundo, int nHeight);
 
 /** Context-independent validity checks */
-bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fRejectBadUTXO, CValidationState& state);
-bool CheckZerocoinMint(const uint256& txHash, const CTxOut& txout, CValidationState& state, bool fCheckOnly = false);
-bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidationState& state);
-bool ContextualCheckZerocoinSpend(const CTransaction& tx, const libzerocoin::CoinSpend& spend, CBlockIndex* pindex);
+bool CheckTransaction(const CTransaction& tx, bool fRejectBadUTXO, CValidationState& state);
 bool IsTransactionInChain(const uint256& txId, int& nHeightTx, CTransaction& tx);
 bool IsTransactionInChain(const uint256& txId, int& nHeightTx);
 bool IsBlockHashInChain(const uint256& hashBlock);
 bool ValidOutPoint(const COutPoint out, int nHeight);
-void RecalculateZVITSpent();
-void RecalculateZVITMinted();
 bool RecalculateVITSupply(int nHeightStart);
-bool ReindexAccumulators(list<uint256>& listMissingCheckpoints, string& strError);
 
 
 /**
@@ -454,6 +444,7 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
 
 /** Reprocess a number of blocks to try and get on the correct chain again **/
 bool DisconnectBlocksAndReprocess(int blocks);
+void ReprocessBlocks(int nBlocks);
 
 /** Apply the effects of this block (with given index) on the UTXO set represented by coins */
 bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pindex, CCoinsViewCache& coins, bool fJustCheck, bool fAlreadyChecked = false);
@@ -632,9 +623,6 @@ extern CCoinsViewCache* pcoinsTip;
 
 /** Global variable that points to the active block tree (protected by cs_main) */
 extern CBlockTreeDB* pblocktree;
-
-/** Global variable that points to the zerocoin database (protected by cs_main) */
-extern CZerocoinDB* zerocoinDB;
 
 /** Global variable that points to the spork database (protected by cs_main) */
 extern CSporkDB* pSporkDB;

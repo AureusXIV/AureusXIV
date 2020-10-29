@@ -1,6 +1,6 @@
-usr/local/bin/vitae-qt usr/bin
+usr/local/bin/aureusxiv-qt usr/bin
 share/pixmaps/bitcoin32.xpm usr/share/pixmaps
 share/pixmaps/bitcoin16.xpm usr/share/pixmaps
 share/pixmaps/bitcoin128.png usr/share/pixmaps
-debian/vitae-qt.desktop usr/share/applications
-debian/vitae-qt.protocol usr/share/kde4/services/
+debian/aureusxiv-qt.desktop usr/share/applications
+debian/aureusxiv-qt.protocol usr/share/kde4/services/

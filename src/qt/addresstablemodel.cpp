@@ -18,13 +18,11 @@
 
 const QString AddressTableModel::Send = "S";
 const QString AddressTableModel::Receive = "R";
-const QString AddressTableModel::Zerocoin = "X";
 
 struct AddressTableEntry {
     enum Type {
         Sending,
         Receiving,
-        Zerocoin,
         Hidden /* QSortFilterProxyModel will filter these out */
     };
 
@@ -151,7 +149,7 @@ public:
                                                                cachedAddressTable.begin(), cachedAddressTable.end(), pubCoin, AddressTableEntryLessThan());
         int lowerIndex = (lower - cachedAddressTable.begin());
         bool inModel = (lower != upper);
-        AddressTableEntry::Type newEntryType = AddressTableEntry::Zerocoin;
+        AddressTableEntry::Type newEntryType = AddressTableEntry::Hidden;
         
         switch(status)
         {
@@ -347,7 +345,7 @@ void AddressTableModel::updateEntry(const QString& address,
     const QString& purpose,
     int status)
 {
-    // Update address book model from Vitae core
+    // Update address book model from AureusXIV core
     priv->updateEntry(address, label, isMine, purpose, status);
 }
 

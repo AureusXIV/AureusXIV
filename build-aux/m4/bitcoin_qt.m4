@@ -7,7 +7,7 @@ dnl Output: If qt version is auto, set bitcoin_enable_qt to false. Else, exit.
 AC_DEFUN([BITCOIN_QT_FAIL],[
   if test "x$bitcoin_qt_want_version" = "xauto" && test x$bitcoin_qt_force != xyes; then
     if test x$bitcoin_enable_qt != xno; then
-      AC_MSG_WARN([$1; vitae-qt frontend will not be built])
+      AC_MSG_WARN([$1; aureusxiv-qt frontend will not be built])
     fi
     bitcoin_enable_qt=no
     bitcoin_enable_qt_test=no
@@ -54,7 +54,7 @@ AC_DEFUN([BITCOIN_QT_INIT],[
   dnl enable qt support
   AC_ARG_WITH([gui],
     [AS_HELP_STRING([--with-gui@<:@=no|qt4|qt5|auto@:>@],
-    [build vitae-qt GUI (default=auto, qt5 tried first)])],
+    [build aureusxiv-qt GUI (default=auto, qt5 tried first)])],
     [
      bitcoin_qt_want_version=$withval
      if test x$bitcoin_qt_want_version = xyes; then
@@ -68,6 +68,7 @@ AC_DEFUN([BITCOIN_QT_INIT],[
   AC_ARG_WITH([qt-libdir],[AS_HELP_STRING([--with-qt-libdir=LIB_DIR],[specify qt lib path (overridden by pkgconfig)])], [qt_lib_path=$withval], [])
   AC_ARG_WITH([qt-plugindir],[AS_HELP_STRING([--with-qt-plugindir=PLUGIN_DIR],[specify qt plugin path (overridden by pkgconfig)])], [qt_plugin_path=$withval], [])
   AC_ARG_WITH([qt-translationdir],[AS_HELP_STRING([--with-qt-translationdir=PLUGIN_DIR],[specify qt translation path (overridden by pkgconfig)])], [qt_translation_path=$withval], [])
+  AC_ARG_WITH([qt-svgdir],[AS_HELP_STRING([--with-qt-svgdir=PLUGIN_DIR],[specify qt svg path (overridden by pkgconfig)])], [qt_svg_path=$withval], [])
   AC_ARG_WITH([qt-bindir],[AS_HELP_STRING([--with-qt-bindir=BIN_DIR],[specify qt bin path])], [qt_bin_path=$withval], [])
 
   AC_ARG_WITH([qtdbus],
@@ -131,6 +132,10 @@ AC_DEFUN([BITCOIN_QT_CONFIGURE],[
       if test "x$bitcoin_cv_need_acc_widget" = "xyes"; then
         _BITCOIN_QT_CHECK_STATIC_PLUGINS([Q_IMPORT_PLUGIN(AccessibleFactory)], [-lqtaccessiblewidgets])
       fi
+      _BITCOIN_QT_CHECK_STATIC_PLUGINS([Q_IMPORT_PLUGIN(QMinimalIntegrationPlugin)],[-lqminimal])
+      AC_DEFINE(QT_QPA_PLATFORM_MINIMAL, 1, [Define this symbol if the minimal qt platform exists])
+      _BITCOIN_QT_CHECK_STATIC_PLUGINS([Q_IMPORT_PLUGIN(QSvgPlugin)],[-lqsvg])
+      _BITCOIN_QT_CHECK_STATIC_PLUGINS([Q_IMPORT_PLUGIN(QSvgIconPlugin)],[-lqsvgicon])
       if test x$TARGET_OS = xwindows; then
         _BITCOIN_QT_CHECK_STATIC_PLUGINS([Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)],[-lqwindows])
         AC_DEFINE(QT_QPA_PLATFORM_WINDOWS, 1, [Define this symbol if the qt platform is windows])
@@ -331,7 +336,7 @@ dnl Outputs: QT_LIBS is appended
 AC_DEFUN([_BITCOIN_QT_FIND_STATIC_PLUGINS],[
   if test x$bitcoin_qt_got_major_vers = x5; then
       if test x$qt_plugin_path != x; then
-        QT_LIBS="$QT_LIBS -L$qt_plugin_path/platforms"
+        QT_LIBS="$QT_LIBS -L$qt_plugin_path/platforms -L$qt_plugin_path/iconengines"
         if test -d "$qt_plugin_path/accessible"; then
           QT_LIBS="$QT_LIBS -L$qt_plugin_path/accessible"
         fi
@@ -394,7 +399,7 @@ AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITH_PKGCONFIG],[
       QT_LIB_PREFIX=Qt
       bitcoin_qt_got_major_vers=4
     fi
-    qt5_modules="Qt5Core Qt5Gui Qt5Network Qt5Widgets"
+    qt5_modules="Qt5Core Qt5Gui Qt5Network Qt5Widgets Qt5Svg"
     qt4_modules="QtCore QtGui QtNetwork"
     BITCOIN_QT_CHECK([
       if test x$bitcoin_qt_want_version = xqt5 || ( test x$bitcoin_qt_want_version = xauto && test x$auto_priority_version = xqt5 ); then
@@ -440,7 +445,7 @@ AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITHOUT_PKGCONFIG],[
   TEMP_LIBS="$LIBS"
   BITCOIN_QT_CHECK([
     if test x$qt_include_path != x; then
-      QT_INCLUDES="-I$qt_include_path -I$qt_include_path/QtCore -I$qt_include_path/QtGui -I$qt_include_path/QtWidgets -I$qt_include_path/QtNetwork -I$qt_include_path/QtTest -I$qt_include_path/QtDBus"
+      QT_INCLUDES="-I$qt_include_path -I$qt_include_path/QtCore -I$qt_include_path/QtGui -I$qt_include_path/QtWidgets -I$qt_include_path/QtNetwork -I$qt_include_path/QtTest -I$qt_include_path/QtDBus -I$qt_include_path/QtSvg"
       CPPFLAGS="$QT_INCLUDES $CPPFLAGS"
     fi
   ])
@@ -448,6 +453,7 @@ AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITHOUT_PKGCONFIG],[
   BITCOIN_QT_CHECK([AC_CHECK_HEADER([QtPlugin],,BITCOIN_QT_FAIL(QtCore headers missing))])
   BITCOIN_QT_CHECK([AC_CHECK_HEADER([QApplication],, BITCOIN_QT_FAIL(QtGui headers missing))])
   BITCOIN_QT_CHECK([AC_CHECK_HEADER([QLocalSocket],, BITCOIN_QT_FAIL(QtNetwork headers missing))])
+  BITCOIN_QT_CHECK([AC_CHECK_HEADER([QtSvg],, BITCOIN_QT_FAIL(QtSVG headers missing))])
 
   BITCOIN_QT_CHECK([
     if test x$bitcoin_qt_want_version = xauto; then
@@ -478,12 +484,22 @@ AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITHOUT_PKGCONFIG],[
   BITCOIN_QT_CHECK(AC_SEARCH_LIBS([jpeg_create_decompress] ,[qtjpeg jpeg],,AC_MSG_WARN([libjpeg not found. Assuming qt has it built-in])))
   BITCOIN_QT_CHECK(AC_SEARCH_LIBS([pcre16_exec], [qtpcre pcre16],,AC_MSG_WARN([libpcre16 not found. Assuming qt has it built-in])))
   BITCOIN_QT_CHECK(AC_SEARCH_LIBS([hb_ot_tags_from_script] ,[qtharfbuzzng harfbuzz],,AC_MSG_WARN([libharfbuzz not found. Assuming qt has it built-in or support is disabled])))
+  if test x$bitcoin_cv_qt58 = xno; then
+    BITCOIN_QT_CHECK(AC_SEARCH_LIBS([png_error] ,[qtpng png],,AC_MSG_WARN([libpng not found. Assuming qt has it built-in])))
+    BITCOIN_QT_CHECK(AC_SEARCH_LIBS([pcre16_exec], [qtpcre pcre16],,AC_MSG_WARN([libpcre16 not found. Assuming qt has it built-in])))
+  else
+    BITCOIN_QT_CHECK(AC_SEARCH_LIBS([png_error] ,[qtlibpng png],,AC_MSG_WARN([libpng not found. Assuming qt has it built-in])))
+    BITCOIN_QT_CHECK(AC_SEARCH_LIBS([pcre2_match_16], [qtpcre2 libqtpcre2],,AC_MSG_WARN([libqtpcre2 not found. Assuming qt has it built-in])))
+  fi
+  BITCOIN_QT_CHECK(AC_SEARCH_LIBS([svg_error] ,[qtlibsvg svg],,BITCOIN_QT_FAIL([libsvg not found. Assuming qt has it built-in])))
+  BITCOIN_QT_CHECK(AC_SEARCH_LIBS([hb_ot_tags_from_script] ,[qtharfbuzzng qtharfbuzz harfbuzz],,AC_MSG_WARN([libharfbuzz not found. Assuming qt has it built-in or support is disabled])))
   BITCOIN_QT_CHECK(AC_CHECK_LIB([${QT_LIB_PREFIX}Core]   ,[main],,BITCOIN_QT_FAIL(lib$QT_LIB_PREFIXCore not found)))
   BITCOIN_QT_CHECK(AC_CHECK_LIB([${QT_LIB_PREFIX}Gui]    ,[main],,BITCOIN_QT_FAIL(lib$QT_LIB_PREFIXGui not found)))
   BITCOIN_QT_CHECK(AC_CHECK_LIB([${QT_LIB_PREFIX}Network],[main],,BITCOIN_QT_FAIL(lib$QT_LIB_PREFIXNetwork not found)))
   if test x$bitcoin_qt_got_major_vers = x5; then
     BITCOIN_QT_CHECK(AC_CHECK_LIB([${QT_LIB_PREFIX}Widgets],[main],,BITCOIN_QT_FAIL(lib$QT_LIB_PREFIXWidgets not found)))
   fi
+  BITCOIN_QT_CHECK(AC_CHECK_LIB([${QT_LIB_PREFIX}Svg],[main],,BITCOIN_QT_FAIL(lib${QT_LIB_PREFIX}Svg not found)))
   QT_LIBS="$LIBS"
   LIBS="$TEMP_LIBS"
 

@@ -17,7 +17,6 @@ class BitcoinGUI;
 class ClientModel;
 class OverviewPage;
 class ReceiveCoinsDialog;
-class PrivacyDialog;
 class SendCoinsDialog;
 class SendCoinsRecipient;
 class TransactionView;
@@ -66,7 +65,6 @@ private:
     OverviewPage* overviewPage;
     QWidget* transactionsPage;
     ReceiveCoinsDialog* receiveCoinsPage;
-    PrivacyDialog* privacyPage;
     SendCoinsDialog* sendCoinsPage;
     BlockExplorer* explorerWindow;
     FundamentalnodeList* fundamentalnodeListPage;
@@ -88,8 +86,6 @@ public slots:
     void gotoMasternodePage();
     /** Switch to explorer page */
     void gotoBlockExplorerPage();
-    /** Switch to privacy page */
-    void gotoPrivacyPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
@@ -135,7 +131,7 @@ public slots:
     /** Show progress dialog e.g. for rescan */
     void showProgress(const QString& title, int nProgress);
 
-    /** Update selected VITAE amount from transactionview */
+    /** Update selected AureusXIV amount from transactionview */
     void trxAmount(QString amount);
 
 signals:

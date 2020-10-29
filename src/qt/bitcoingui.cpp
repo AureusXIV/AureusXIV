@@ -31,6 +31,7 @@
 
 #include "init.h"
 #include "fundamentalnodelist.h"
+#include "fundamentalnode-sync.h"
 #include "masternodelist.h"
 #include "ui_interface.h"
 #include "util.h"
@@ -98,7 +99,6 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
                                                                             multisigSignAction(0),
                                                                             aboutAction(0),
                                                                             receiveCoinsAction(0),
-                                                                            privacyAction(0),
                                                                             optionsAction(0),
                                                                             toggleHideAction(0),
                                                                             encryptWalletAction(0),
@@ -126,7 +126,7 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
 
     GUIUtil::restoreWindowGeometry("nWindow", QSize(850, 550), this);
 
-    QString windowTitle = tr("VITAE Core") + " - ";
+    QString windowTitle = tr("AureusXIV Core") + " - ";
 #ifdef ENABLE_WALLET
     /* if compiled with wallet support, -disablewallet can still disable the wallet */
     enableWallet = !GetBoolArg("-disablewallet", false);
@@ -323,7 +323,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     tabGroup->addAction(overviewAction);
 
     sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
-    sendCoinsAction->setStatusTip(tr("Send coins to a VITAE addresses"));
+    sendCoinsAction->setStatusTip(tr("Send coins to a AureusXIV address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setFont(GUIUtil::primaryFont());
@@ -337,8 +337,8 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 #endif
     tabGroup->addAction(sendCoinsAction);
 
-    receiveCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Receive"), this);
-    receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and vitae: URIs)"));
+    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive"), this);
+    receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and aureusxiv: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
     receiveCoinsAction->setFont(GUIUtil::primaryFont());
@@ -360,18 +360,6 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
 #endif
     tabGroup->addAction(historyAction);
-
-    privacyAction = new QAction(QIcon(":/icons/send"), tr("&Privacy"), this);
-    privacyAction->setStatusTip(tr("Privacy Actions for zVITAE"));
-    privacyAction->setToolTip(privacyAction->statusTip());
-    privacyAction->setCheckable(true);
-    privacyAction->setFont(GUIUtil::primaryFont());
-#ifdef Q_OS_MAC
-    privacyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_5));
-#else
-    privacyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
-#endif
-    tabGroup->addAction(privacyAction);
 
 #ifdef ENABLE_WALLET
 
@@ -416,8 +404,6 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     connect(sendCoinsAction, SIGNAL(triggered()), this, SLOT(gotoSendCoinsPage()));
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
-    connect(privacyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(privacyAction, SIGNAL(triggered()), this, SLOT(gotoPrivacyPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
 #endif // ENABLE_WALLET
@@ -426,8 +412,8 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     quitAction->setStatusTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(networkStyle->getAppIcon(), tr("&About VITAE Core"), this);
-    aboutAction->setStatusTip(tr("Show information about VITAE Core"));
+    aboutAction = new QAction(networkStyle->getAppIcon(), tr("&About AureusXIV Core"), this);
+    aboutAction->setStatusTip(tr("Show information about AureusXIV Core"));
     aboutAction->setMenuRole(QAction::AboutRole);
 #if QT_VERSION < 0x050000
     aboutQtAction = new QAction(QIcon(":/trolltech/qmessagebox/images/qtlogo-64.png"), tr("About &Qt"), this);
@@ -437,7 +423,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     aboutQtAction->setStatusTip(tr("Show information about Qt"));
     aboutQtAction->setMenuRole(QAction::AboutQtRole);
     optionsAction = new QAction(QIcon(":/icons/options"), tr("&Options..."), this);
-    optionsAction->setStatusTip(tr("Modify configuration options for VITAE"));
+    optionsAction->setStatusTip(tr("Modify configuration options for AureusXIV"));
     optionsAction->setMenuRole(QAction::PreferencesRole);
     toggleHideAction = new QAction(networkStyle->getAppIcon(), tr("&Show / Hide"), this);
     toggleHideAction->setStatusTip(tr("Show or hide the main Window"));
@@ -453,9 +439,9 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     unlockWalletAction->setToolTip(tr("Unlock wallet"));
     lockWalletAction = new QAction(tr("&Lock Wallet"), this);
     signMessageAction = new QAction(QIcon(":/icons/edit"), tr("Sign &message..."), this);
-    signMessageAction->setStatusTip(tr("Sign messages with your VITAE addresses to prove you own them"));
+    signMessageAction->setStatusTip(tr("Sign messages with your AureusXIV addresses to prove you own them"));
     verifyMessageAction = new QAction(QIcon(":/icons/transaction_0"), tr("&Verify message..."), this);
-    verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified VITAE addresses"));
+    verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified AureusXIV addresses"));
     bip38ToolAction = new QAction(QIcon(":/icons/key"), tr("&BIP38 tool"), this);
     bip38ToolAction->setToolTip(tr("Encrypt and decrypt private keys using a passphrase"));
     multiSendAction = new QAction(QIcon(":/icons/edit"), tr("&MultiSend"), this);
@@ -494,13 +480,13 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     multisigSignAction->setStatusTip(tr("Sign with a multisignature address"));
 
     openAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_FileIcon), tr("Open &URI..."), this);
-    openAction->setStatusTip(tr("Open a VITAE: URI or payment request"));
+    openAction->setStatusTip(tr("Open a AureusXIV: URI or payment request"));
     openBlockExplorerAction = new QAction(QIcon(":/icons/explorer"), tr("&Blockchain explorer"), this);
     openBlockExplorerAction->setStatusTip(tr("Block explorer window"));
 
     showHelpMessageAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Command-line options"), this);
     showHelpMessageAction->setMenuRole(QAction::NoRole);
-    showHelpMessageAction->setStatusTip(tr("Show the VITAE Core help message to get a list with possible VITAE command-line options"));
+    showHelpMessageAction->setStatusTip(tr("Show the AureusXIV Core help message to get a list with possible AureusXIV command-line options"));
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
@@ -654,9 +640,7 @@ void BitcoinGUI::createToolBars()
         toolbar->addAction(overviewAction);
         toolbar->addAction(sendCoinsAction);
         toolbar->addAction(receiveCoinsAction);
-        //toolbar->addAction(privacyAction);
         toolbar->addAction(historyAction);
-        //toolbar->addAction(privacyAction);
         QSettings settings;
         if (settings.value("fShowFundamentalnodesTab").toBool()) {
             toolbar->addAction(fundamentalnodeAction);
@@ -762,7 +746,6 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     overviewAction->setEnabled(enabled);
     sendCoinsAction->setEnabled(enabled);
     receiveCoinsAction->setEnabled(enabled);
-    privacyAction->setEnabled(enabled);
     historyAction->setEnabled(enabled);
     QSettings settings;
     if (settings.value("fShowFundamentalnodesTab").toBool()) {
@@ -789,7 +772,7 @@ void BitcoinGUI::createTrayIcon(const NetworkStyle* networkStyle)
 {
 #ifndef Q_OS_MAC
     trayIcon = new QSystemTrayIcon(this);
-    QString toolTip = tr("VITAE Core client") + " " + networkStyle->getTitleAddText();
+    QString toolTip = tr("AureusXIV Core client") + " " + networkStyle->getTitleAddText();
     trayIcon->setToolTip(toolTip);
     trayIcon->setIcon(networkStyle->getAppIcon());
     trayIcon->hide();
@@ -822,7 +805,6 @@ void BitcoinGUI::createTrayIconMenu()
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(sendCoinsAction);
     trayIconMenu->addAction(receiveCoinsAction);
-    trayIconMenu->addAction(privacyAction);
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(signMessageAction);
     trayIconMenu->addAction(verifyMessageAction);
@@ -928,12 +910,6 @@ void BitcoinGUI::gotoReceiveCoinsPage()
     if (walletFrame) walletFrame->gotoReceiveCoinsPage();
 }
 
-void BitcoinGUI::gotoPrivacyPage()
-{
-    privacyAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoPrivacyPage();
-}
-
 void BitcoinGUI::gotoSendCoinsPage(QString addr)
 {
     sendCoinsAction->setChecked(true);
@@ -1011,7 +987,7 @@ void BitcoinGUI::setNumConnections(int count)
     }
     QIcon connectionItem = QIcon(icon).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE);
     labelConnectionsIcon->setIcon(connectionItem);
-    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to VITAE network", "", count));
+    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to AureusXIV network", "", count));
 }
 
 void BitcoinGUI::setNumBlocks(int count)
@@ -1141,7 +1117,7 @@ void BitcoinGUI::setNumBlocks(int count)
 
 void BitcoinGUI::message(const QString& title, const QString& message, unsigned int style, bool* ret)
 {
-    QString strTitle = tr("VITAE Core"); // default title
+    QString strTitle = tr("AureusXIV Core"); // default title
     // Default to information icon
     int nMBoxIcon = QMessageBox::Information;
     int nNotifyIcon = Notificator::Information;
@@ -1166,7 +1142,7 @@ void BitcoinGUI::message(const QString& title, const QString& message, unsigned 
             break;
         }
     }
-    // Append title to "VITAE - "
+    // Append title to "AureusXIV - "
     if (!msgType.isEmpty())
         strTitle += " - " + msgType;
 

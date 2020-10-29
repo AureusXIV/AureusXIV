@@ -413,10 +413,8 @@ bool CTxMemPool::addUnchecked(const uint256& hash, const CTxMemPoolEntry& entry)
     {
         mapTx[hash] = entry;
         const CTransaction& tx = mapTx[hash].GetTx();
-        if(!tx.IsZerocoinSpend()) {
-            for (unsigned int i = 0; i < tx.vin.size(); i++)
-                mapNextTx[tx.vin[i].prevout] = CInPoint(&tx, i);
-        }
+        for (unsigned int i = 0; i < tx.vin.size(); i++)
+            mapNextTx[tx.vin[i].prevout] = CInPoint(&tx, i);
         nTransactionsUpdated++;
         totalTxSize += entry.GetTxSize();
     }

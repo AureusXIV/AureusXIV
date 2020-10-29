@@ -9,7 +9,7 @@
 #define BITCOIN_NETBASE_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/vitae-config.h"
+#include "config/aureusxiv-config.h"
 #endif
 
 #include "compat.h"
@@ -210,9 +210,10 @@ bool IsProxy(const CNetAddr& addr);
 bool SetNameProxy(const proxyType &addrProxy);
 bool HaveNameProxy();
 bool LookupHost(const char* pszName, std::vector<CNetAddr>& vIP, unsigned int nMaxSolutions = 0, bool fAllowLookup = true);
+bool LookupHost(const char* pszName, CNetAddr& addr, bool fAllowLookup);
 bool Lookup(const char* pszName, CService& addr, int portDefault = 0, bool fAllowLookup = true);
 bool Lookup(const char* pszName, std::vector<CService>& vAddr, int portDefault = 0, bool fAllowLookup = true, unsigned int nMaxSolutions = 0);
-bool LookupNumeric(const char* pszName, CService& addr, int portDefault = 0);
+CService LookupNumeric(const char* pszName, int portDefault = 0);
 bool ConnectSocket(const CService& addr, SOCKET& hSocketRet, int nTimeout, bool* outProxyConnectionFailed = 0);
 bool ConnectSocketByName(CService& addr, SOCKET& hSocketRet, const char* pszDest, int portDefault, int nTimeout, bool* outProxyConnectionFailed = 0);
 /** Return readable error string for a network error code */

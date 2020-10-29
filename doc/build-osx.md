@@ -1,6 +1,6 @@
 Mac OS X Build Instructions and Notes
 ====================================
-This guide will show you how to build vitaed (headless client) for OSX.
+This guide will show you how to build aureusxivd (headless client) for OSX.
 
 Notes
 -----
@@ -40,19 +40,19 @@ Instructions: Homebrew
 
         brew install autoconf automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf qt5 zmq libevent
 
-### Building `vitaed`
+### Building `aureusxivd`
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone https://github.com/vitaeteam/VITAE.git
-        cd VITAE
+        git clone https://github.com/aureusxivteam/AureusXIV.git
+        cd AureusXIV
 
 2.  Make the Homebrew OpenSSL headers visible to the configure script  (do ```brew info openssl``` to find out why this is necessary, or if you use Homebrew with installation folders different from the default).
 
         export LDFLAGS+=-L/usr/local/opt/openssl/lib
         export CPPFLAGS+=-I/usr/local/opt/openssl/include
         
-3.  Build vitaed:
+3.  Build aureusxivd:
 
         ./autogen.sh
         ./configure --with-gui=qt5
@@ -62,7 +62,7 @@ Instructions: Homebrew
 
         make check
 
-5.  (Optional) You can also install vitaed to your path:
+5.  (Optional) You can also install aureusxivd to your path:
 
         make install
 
@@ -74,7 +74,7 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 1. Make sure you installed everything through homebrew mentioned above
 2. Do a proper ./configure --with-gui=qt5 --enable-debug
 3. In Qt Creator do "New Project" -> Import Project -> Import Existing Project
-4. Enter "vitae-qt" as project name, enter src/qt as location
+4. Enter "aureusxiv-qt" as project name, enter src/qt as location
 5. Leave the file selection as it is
 6. Confirm the "summary page"
 7. In the "Projects" tab select "Manage Kits..."
@@ -84,11 +84,11 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 
 Creating a release build
 ------------------------
-You can ignore this section if you are building `vitaed` for your own use.
+You can ignore this section if you are building `aureusxivd` for your own use.
 
-vitaed/vitae-cli binaries are not included in the vitae-Qt.app bundle.
+aureusxivd/aureusxiv-cli binaries are not included in the aureusxiv-Qt.app bundle.
 
-If you are building `vitaed` or `vitae-qt` for others, your build machine should be set up
+If you are building `aureusxivd` or `aureusxiv-qt` for others, your build machine should be set up
 as follows for maximum compatibility:
 
 All dependencies should be compiled with these flags:
@@ -97,30 +97,30 @@ All dependencies should be compiled with these flags:
  -arch x86_64
  -isysroot $(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
 
-Once dependencies are compiled, see release-process.md for how the VITAE-Qt.app
+Once dependencies are compiled, see release-process.md for how the AureusXIV-Qt.app
 bundle is packaged and signed to create the .dmg disk image that is distributed.
 
 Running
 -------
 
-It's now available at `./vitaed`, provided that you are still in the `src`
+It's now available at `./aureusxivd`, provided that you are still in the `src`
 directory. We have to first create the RPC configuration file, though.
 
-Run `./vitaed` to get the filename where it should be put, or just try these
+Run `./aureusxivd` to get the filename where it should be put, or just try these
 commands:
 
-    echo -e "rpcuser=vitaerpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/VITAE/vitae.conf"
-    chmod 600 "/Users/${USER}/Library/Application Support/VITAE/vitae.conf"
+    echo -e "rpcuser=aureusxivrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/AureusXIV/aureusxiv.conf"
+    chmod 600 "/Users/${USER}/Library/Application Support/AureusXIV/aureusxiv.conf"
 
 The next time you run it, it will start downloading the blockchain, but it won't
 output anything while it's doing this. This process may take several hours;
 you can monitor its process by looking at the debug.log file, like this:
 
-    tail -f $HOME/Library/Application\ Support/VITAE/debug.log
+    tail -f $HOME/Library/Application\ Support/AureusXIV/debug.log
 
 Other commands:
 -------
 
-    ./vitaed -daemon # to start the vitae daemon.
-    ./vitae-cli --help  # for a list of command-line options.
-    ./vitae-cli help    # When the daemon is running, to get a list of RPC commands
+    ./aureusxivd -daemon # to start the aureusxiv daemon.
+    ./aureusxiv-cli --help  # for a list of command-line options.
+    ./aureusxiv-cli help    # When the daemon is running, to get a list of RPC commands

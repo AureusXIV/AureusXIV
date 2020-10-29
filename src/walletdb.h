@@ -12,10 +12,6 @@
 #include "db.h"
 #include "key.h"
 #include "keystore.h"
-#include "primitives/zerocoin.h"
-#include "libzerocoin/Accumulator.h"
-#include "libzerocoin/Denominations.h"
-#include "zvittracker.h"
 
 #include <list>
 #include <stdint.h>
@@ -31,9 +27,6 @@ class CMasterKey;
 class CScript;
 class CWallet;
 class CWalletTx;
-class CDeterministicMint;
-class CZerocoinMint;
-class CZerocoinSpend;
 class uint160;
 class uint256;
 
@@ -153,39 +146,6 @@ public:
     DBErrors ZapWalletTx(CWallet* pwallet, std::vector<CWalletTx>& vWtx);
     static bool Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys);
     static bool Recover(CDBEnv& dbenv, std::string filename);
-
-    bool WriteDeterministicMint(const CDeterministicMint& dMint);
-    bool ReadDeterministicMint(const uint256& hashPubcoin, CDeterministicMint& dMint);
-    bool EraseDeterministicMint(const uint256& hashPubcoin);
-    bool WriteZerocoinMint(const CZerocoinMint& zerocoinMint);
-    bool EraseZerocoinMint(const CZerocoinMint& zerocoinMint);
-    bool ReadZerocoinMint(const CBigNum &bnPubcoinValue, CZerocoinMint& zerocoinMint);
-    bool ReadZerocoinMint(const uint256& hashPubcoin, CZerocoinMint& mint);
-    bool ArchiveMintOrphan(const CZerocoinMint& zerocoinMint);
-    bool ArchiveDeterministicOrphan(const CDeterministicMint& dMint);
-    bool UnarchiveZerocoinMint(const uint256& hashPubcoin, CZerocoinMint& mint);
-    bool UnarchiveDeterministicMint(const uint256& hashPubcoin, CDeterministicMint& dMint);
-    std::list<CZerocoinMint> ListMintedCoins();
-    std::list<CDeterministicMint> ListDeterministicMints();
-    std::list<CZerocoinSpend> ListSpentCoins();
-    std::list<CBigNum> ListSpentCoinsSerial();
-    std::list<CZerocoinMint> ListArchivedZerocoins();
-    std::list<CDeterministicMint> ListArchivedDeterministicMints();
-    bool WriteZerocoinSpendSerialEntry(const CZerocoinSpend& zerocoinSpend);
-    bool EraseZerocoinSpendSerialEntry(const CBigNum& serialEntry);
-    bool ReadZerocoinSpendSerialEntry(const CBigNum& bnSerial);
-    bool WriteCurrentSeedHash(const uint256& hashSeed);
-    bool ReadCurrentSeedHash(uint256& hashSeed);
-    bool WriteZVITSeed(const uint256& hashSeed, const vector<unsigned char>& seed);
-    bool ReadZVITSeed(const uint256& hashSeed, vector<unsigned char>& seed);
-    bool ReadZVITSeed_deprecated(uint256& seed);
-    bool EraseZVITSeed();
-    bool EraseZVITSeed_deprecated();
-
-    bool WriteZVITCount(const uint32_t& nCount);
-    bool ReadZVITCount(uint32_t& nCount);
-    std::map<uint256, std::vector<pair<uint256, uint32_t> > > MapMintPool();
-    bool WriteMintPoolPair(const uint256& hashMasterSeed, const uint256& hashPubcoin, const uint32_t& nCount);
 
 
 private:

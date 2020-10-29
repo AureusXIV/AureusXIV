@@ -15,8 +15,6 @@
 #include "txdb.h"
 #include "util.h"
 #include "utilmoneystr.h"
-#include "accumulatormap.h"
-#include "accumulators.h"
 
 #include <stdint.h>
 #include <univalue.h>
@@ -71,7 +69,6 @@ UniValue blockheaderToJSON(const CBlockIndex* blockindex)
     result.push_back(Pair("bits", strprintf("%08x", blockindex->nBits)));
     result.push_back(Pair("difficulty", GetDifficulty(blockindex)));
     result.push_back(Pair("chainwork", blockindex->nChainWork.GetHex()));
-    result.push_back(Pair("acc_checkpoint", blockindex->nAccumulatorCheckpoint.GetHex()));
 
     if (blockindex->pprev)
         result.push_back(Pair("previousblockhash", blockindex->pprev->GetBlockHash().GetHex()));
@@ -94,7 +91,6 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     result.push_back(Pair("height", blockindex->nHeight));
     result.push_back(Pair("version", block.nVersion));
     result.push_back(Pair("merkleroot", block.hashMerkleRoot.GetHex()));
-    result.push_back(Pair("acc_checkpoint", block.nAccumulatorCheckpoint.GetHex()));
     UniValue txs(UniValue::VARR);
     BOOST_FOREACH (const CTransaction& tx, block.vtx) {
         if (txDetails) {
@@ -118,13 +114,6 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
         result.push_back(Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
 
     result.push_back(Pair("moneysupply",ValueFromAmount(blockindex->nMoneySupply)));
-
-    UniValue zVitObj(UniValue::VOBJ);
-    for (auto denom : libzerocoin::zerocoinDenomList) {
-        zVitObj.push_back(Pair(to_string(denom), ValueFromAmount(blockindex->mapZerocoinSupply.at(denom) * (denom*COIN))));
-    }
-    zVitObj.push_back(Pair("total", ValueFromAmount(blockindex->GetZerocoinSupply())));
-    result.push_back(Pair("zVITAEsupply", zVitObj));
 
     return result;
 }
@@ -244,7 +233,7 @@ UniValue getrawmempool(const UniValue& params, bool fHelp)
             "{                           (json object)\n"
             "  \"transactionid\" : {       (json object)\n"
             "    \"size\" : n,             (numeric) transaction size in bytes\n"
-            "    \"fee\" : n,              (numeric) transaction fee in vitae\n"
+            "    \"fee\" : n,              (numeric) transaction fee in aureusxiv\n"
             "    \"time\" : n,             (numeric) local time transaction entered pool in seconds since 1 Jan 1970 GMT\n"
             "    \"height\" : n,           (numeric) block height when transaction entered pool\n"
             "    \"startingpriority\" : n, (numeric) priority when transaction entered pool\n"
@@ -324,17 +313,17 @@ UniValue getblock(const UniValue& params, bool fHelp)
             "  \"previousblockhash\" : \"hash\",  (string) The hash of the previous block\n"
             "  \"nextblockhash\" : \"hash\"       (string) The hash of the next block\n"
             "  \"moneysupply\" : \"supply\"       (numeric) The money supply when this block was added to the blockchain\n"
-            "  \"zVITAEsupply\" :\n"
+            "  \"zAureusXIVsupply\" :\n"
             "  {\n"
-            "     \"1\" : n,            (numeric) supply of 1 zVITAE denomination\n"
-            "     \"5\" : n,            (numeric) supply of 5 zVITAE denomination\n"
-            "     \"10\" : n,           (numeric) supply of 10 zVITAE denomination\n"
-            "     \"50\" : n,           (numeric) supply of 50 zVITAE denomination\n"
-            "     \"100\" : n,          (numeric) supply of 100 zVITAE denomination\n"
-            "     \"500\" : n,          (numeric) supply of 500 zVITAE denomination\n"
-            "     \"1000\" : n,         (numeric) supply of 1000 zVITAE denomination\n"
-            "     \"5000\" : n,         (numeric) supply of 5000 zVITAE denomination\n"
-            "     \"total\" : n,        (numeric) The total supply of all zVITAE denominations\n"
+            "     \"1\" : n,            (numeric) supply of 1 zAureusXIV denomination\n"
+            "     \"5\" : n,            (numeric) supply of 5 zAureusXIV denomination\n"
+            "     \"10\" : n,           (numeric) supply of 10 zAureusXIV denomination\n"
+            "     \"50\" : n,           (numeric) supply of 50 zAureusXIV denomination\n"
+            "     \"100\" : n,          (numeric) supply of 100 zAureusXIV denomination\n"
+            "     \"500\" : n,          (numeric) supply of 500 zAureusXIV denomination\n"
+            "     \"1000\" : n,         (numeric) supply of 1000 zAureusXIV denomination\n"
+            "     \"5000\" : n,         (numeric) supply of 5000 zAureusXIV denomination\n"
+            "     \"total\" : n,        (numeric) The total supply of all zAureusXIV denominations\n"
             "  }\n"
             "}\n"
 
@@ -486,8 +475,8 @@ UniValue gettxout(const UniValue& params, bool fHelp)
             "     \"hex\" : \"hex\",        (string) \n"
             "     \"reqSigs\" : n,          (numeric) Number of required signatures\n"
             "     \"type\" : \"pubkeyhash\", (string) The type, eg pubkeyhash\n"
-            "     \"addresses\" : [          (array of string) array of vitae addresses\n"
-            "     \"vitaeaddress\"   	 	(string) vitae address\n"
+            "     \"addresses\" : [          (array of string) array of aureusxiv addresses\n"
+            "     \"aureusxivaddress\"   	 	(string) aureusxiv address\n"
             "        ,...\n"
             "     ]\n"
             "  },\n"
@@ -806,11 +795,6 @@ UniValue getfeeinfo(const UniValue& params, bool fHelp)
                 continue;
 
             for (unsigned int j = 0; j < tx.vin.size(); j++) {
-                if (tx.vin[j].scriptSig.IsZerocoinSpend()) {
-                    nValueIn += tx.vin[j].nSequence * COIN;
-                    continue;
-                }
-
                 COutPoint prevout = tx.vin[j].prevout;
                 CTransaction txPrev;
                 uint256 hashBlock;
@@ -948,69 +932,3 @@ UniValue reconsiderblock(const UniValue& params, bool fHelp)
     return NullUniValue;
 }
 
-UniValue findserial(const UniValue& params, bool fHelp)
-{
-    if(fHelp || params.size() != 1)
-        throw runtime_error(
-            "findserial \"serial\"\n"
-            "\nSearches the zerocoin database for a zerocoin spend transaction that contains the specified serial\n"
-
-            "\nArguments:\n"
-            "1. serial   (string, required) the serial of a zerocoin spend to search for.\n"
-
-            "\nResult:\n"
-            "{\n"
-            "  \"success\": true|false        (boolean) Whether the serial was found\n"
-            "  \"txid\": \"xxx\"              (string) The transaction that contains the spent serial\n"
-            "}\n"
-
-            "\nExamples:\n" +
-            HelpExampleCli("findserial", "\"serial\"") + HelpExampleRpc("findserial", "\"serial\""));
-
-    std::string strSerial = params[0].get_str();
-    CBigNum bnSerial = 0;
-    bnSerial.SetHex(strSerial);
-    if (!bnSerial)
-	throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid serial");
-
-    uint256 txid = 0;
-    bool fSuccess = zerocoinDB->ReadCoinSpend(bnSerial, txid);
-
-    UniValue ret(UniValue::VOBJ);
-    ret.push_back(Pair("success", fSuccess));
-    ret.push_back(Pair("txid", txid.GetHex()));
-    return ret;
-}
-
-UniValue getaccumulatorvalues(const UniValue& params, bool fHelp)
-{
-    if (fHelp || params.size() != 1)
-        throw runtime_error(
-            "getaccumulatorvalues \"height\"\n"
-                    "\nReturns the accumulator values associated with a block height\n"
-
-                    "\nArguments:\n"
-                    "1. height   (numeric, required) the height of the checkpoint.\n"
-
-                    "\nExamples:\n" +
-            HelpExampleCli("getaccumulatorvalues", "\"height\"") + HelpExampleRpc("getaccumulatorvalues", "\"height\""));
-
-    int nHeight = params[0].get_int();
-
-    CBlockIndex* pindex = chainActive[nHeight];
-    if (!pindex)
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "invalid block height");
-
-    UniValue ret(UniValue::VARR);
-    for (libzerocoin::CoinDenomination denom : libzerocoin::zerocoinDenomList) {
-        CBigNum bnValue;
-        if(!GetAccumulatorValueFromDB(pindex->nAccumulatorCheckpoint, denom, bnValue))
-            throw JSONRPCError(RPC_DATABASE_ERROR, "failed to find value in database");
-
-        UniValue obj(UniValue::VOBJ);
-        obj.push_back(Pair(std::to_string(denom), bnValue.GetHex()));
-        ret.push_back(obj);
-    }
-
-    return ret;
-}

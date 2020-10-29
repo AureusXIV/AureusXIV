@@ -75,7 +75,6 @@ public:
         Other,
         Generated,
         StakeMint,
-        StakeZVIT,
         SendToAddress,
         SendToOther,
         RecvWithAddress,
@@ -83,17 +82,6 @@ public:
         FNReward,
         RecvFromOther,
         SendToSelf,
-        ZerocoinMint,
-        ZerocoinSpend,
-        RecvFromZerocoinSpend,
-        ZerocoinSpend_Change_zVITAE,
-        ZerocoinSpend_FromMe,
-        RecvWithObfuscation,
-        ObfuscationDenominate,
-        ObfuscationCollateralPayment,
-        ObfuscationMakeCollaterals,
-        ObfuscationCreateDenominations,
-        Obfuscated
     };
 
     /** Number of confirmation recommended for accepting a transaction */

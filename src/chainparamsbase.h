@@ -10,8 +10,8 @@
 #include <vector>
 
 /**
- * CBaseChainParams defines the base parameters (shared between vitae-cli and vitaed)
- * of a given instance of the Vitae system.
+ * CBaseChainParams defines the base parameters (shared between aureusxiv-cli and aureusxivd)
+ * of a given instance of the AureusXIV system.
  */
 class CBaseChainParams
 {

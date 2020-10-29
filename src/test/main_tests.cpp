@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(subsidy_limit_test)
 return; // need to be fixed
     CAmount nSum = 0;
     for (int nHeight = 0; nHeight < 1; nHeight += 1) {
-        /* premine in block 1 (60,001 VITAE) */
+        /* premine in block 1 (60,001 AureusXIV) */
         CAmount nSubsidy = GetBlockValue(nHeight);
         BOOST_CHECK(nSubsidy <= 60001 * COIN);
         nSum += nSubsidy;

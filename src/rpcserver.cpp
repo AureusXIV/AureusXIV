@@ -11,12 +11,12 @@
 #include "base58.h"
 #include "init.h"
 #include "main.h"
+#include "wallet.h"
 #include "random.h"
 #include "sync.h"
 #include "ui_interface.h"
 #include "util.h"
 #include "utilstrencodings.h"
-
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
@@ -264,11 +264,11 @@ UniValue stop(const UniValue& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "stop\n"
-            "\nStop VITAE server.");
+            "\nStop AureusXIV server.");
     // Event loop will exit after current HTTP requests have been handled, so
     // this reply will get back to the client.
     StartShutdown();
-    return "VITAE server stopping";
+    return "AureusXIV server stopping";
 }
 
 
@@ -298,8 +298,6 @@ static const CRPCCommand vRPCCommands[] =
         {"network", "clearbanned", &clearbanned, true, false, false},
 
         /* Block chain and UTXO */
-        {"blockchain", "findserial", &findserial, true, false, false},
-        {"blockchain", "getaccumulatorvalues", &getaccumulatorvalues, true, false, false},
         {"blockchain", "getblockchaininfo", &getblockchaininfo, true, false, false},
         {"blockchain", "getbestblockhash", &getbestblockhash, true, false, false},
         {"blockchain", "getblockcount", &getblockcount, true, false, false},
@@ -351,46 +349,55 @@ static const CRPCCommand vRPCCommands[] =
         {"hidden", "invalidateblock", &invalidateblock, true, true, false},
         {"hidden", "reconsiderblock", &reconsiderblock, true, true, false},
         {"hidden", "setmocktime", &setmocktime, true, false, false},
+        /* AureusXIV features */
+        {"fundamentalnode", "listfundamentalnodes", &listfundamentalnodes, true, true, false},
+        {"fundamentalnode", "getfundamentalnodecount", &getfundamentalnodecount, true, true, false},
+        {"fundamentalnode", "createfundamentalnodebroadcast", &createfundamentalnodebroadcast, true, true, false},
+        {"fundamentalnode", "decodefundamentalnodebroadcast", &decodefundamentalnodebroadcast, true, true, false},
+        {"fundamentalnode", "relayfundamentalnodebroadcast", &relayfundamentalnodebroadcast, true, true, false},
+        {"fundamentalnode", "fundamentalnodecurrent", &fundamentalnodecurrent, true, true, false},
+        {"fundamentalnode", "startfundamentalnode", &startfundamentalnode, true, true, false},
+        {"fundamentalnode", "createfundamentalnodekey", &createfundamentalnodekey, true, true, false},
+        {"fundamentalnode", "getfundamentalnodeoutputs", &getfundamentalnodeoutputs, true, true, false},
+        {"fundamentalnode", "listfundamentalnodeconf", &listfundamentalnodeconf, true, true, false},
+        {"fundamentalnode", "getfundamentalnodestatus", &getfundamentalnodestatus, true, true, false},
+        {"fundamentalnode", "getfundamentalnodewinners", &getfundamentalnodewinners, true, true, false},
+        {"fundamentalnode", "getfundamentalnodescores", &getfundamentalnodescores, true, true, false},
+        {"fundamentalnode", "fnsync", &fnsync, true, true, false},
 
-        /* VITAE features */
-        {"vitae", "fundamentalnode", &fundamentalnode, true, true, false},
-        {"vitae", "listfundamentalnodes", &listfundamentalnodes, true, true, false},
-        {"vitae", "getfundamentalnodecount", &getfundamentalnodecount, true, true, false},
-        {"vitae", "fundamentalnodeconnect", &fundamentalnodeconnect, true, true, false},
-        {"vitae", "createfundamentalnodebroadcast", &createfundamentalnodebroadcast, true, true, false},
-        {"vitae", "decodefundamentalnodebroadcast", &decodefundamentalnodebroadcast, true, true, false},
-        {"vitae", "relayfundamentalnodebroadcast", &relayfundamentalnodebroadcast, true, true, false},
-        {"vitae", "fundamentalnodecurrent", &fundamentalnodecurrent, true, true, false},
-        {"vitae", "fundamentalnodedebug", &fundamentalnodedebug, true, true, false},
-        {"vitae", "startfundamentalnode", &startfundamentalnode, true, true, false},
-        {"vitae", "createfundamentalnodekey", &createfundamentalnodekey, true, true, false},
-        {"vitae", "getfundamentalnodeoutputs", &getfundamentalnodeoutputs, true, true, false},
-        {"vitae", "listfundamentalnodeconf", &listfundamentalnodeconf, true, true, false},
-        {"vitae", "getfundamentalnodestatus", &getfundamentalnodestatus, true, true, false},
-        {"vitae", "getfundamentalnodewinners", &getfundamentalnodewinners, true, true, false},
-        {"vitae", "getfundamentalnodescores", &getfundamentalnodescores, true, true, false},
-        {"vitae", "fnbudget", &fnbudget, true, true, false},
-        {"vitae", "preparebudget", &preparebudget, true, true, false},
-        {"vitae", "submitbudget", &submitbudget, true, true, false},
-        {"vitae", "fnbudgetvote", &fnbudgetvote, true, true, false},
-        {"vitae", "getbudgetvotes", &getbudgetvotes, true, true, false},
-        {"vitae", "getnextsuperblock", &getnextsuperblock, true, true, false},
-        {"vitae", "getbudgetprojection", &getbudgetprojection, true, true, false},
-        {"vitae", "getbudgetinfo", &getbudgetinfo, true, true, false},
-        {"vitae", "fnbudgetrawvote", &fnbudgetrawvote, true, true, false},
-        {"vitae", "fnfinalbudget", &fnfinalbudget, true, true, false},
-        {"vitae", "checkbudgets", &checkbudgets, true, true, false},
-        {"vitae", "fnsync", &fnsync, true, true, false},
-        {"vitae", "spork", &spork, true, true, false},
-        {"vitae", "getpoolinfo", &getpoolinfo, true, true, false},
-        {"vitae", "makekeypair", &makekeypair, true, true, false},
-        {"vitae", "mnspork", &mnspork, true, true, false},
-        {"vitae", "masternode", &masternode, true, true, false},
-        {"vitae", "masternodelist", &masternodelist, true, true, false},
-        {"vitae", "getmasternodestatus", &getmasternodestatus, true, true, false},
+
+/*
+        {"budget", "fnbudget", &fnbudget, true, true, false},
+        {"budget", "preparebudget", &preparebudget, true, true, false},
+        {"budget", "submitbudget", &submitbudget, true, true, false},
+        {"budget", "fnbudgetvote", &fnbudgetvote, true, true, false},
+        {"budget", "getbudgetvotes", &getbudgetvotes, true, true, false},
+        {"budget", "getnextsuperblock", &getnextsuperblock, true, true, false},
+        {"budget", "getbudgetprojection", &getbudgetprojection, true, true, false},
+        {"budget", "getbudgetinfo", &getbudgetinfo, true, true, false},
+        {"budget", "fnbudgetrawvote", &fnbudgetrawvote, true, true, false},
+        {"budget", "fnfinalbudget", &fnfinalbudget, true, true, false},
+        {"budget", "checkbudgets", &checkbudgets, true, true, false},
+*/
+
+        {"masternode", "listmasternodes", &listmasternodes, true, true, false },
+        {"masternode", "getmasternodecount", &getmasternodecount, true, true, false },
+        {"masternode", "createmasternodebroadcast", &createmasternodebroadcast, true, true, false },
+        {"masternode", "decodemasternodebroadcast", &decodemasternodebroadcast, true, true, false },
+        {"masternode", "relaymasternodebroadcast", &relaymasternodebroadcast, true, true, false },
+        {"masternode", "masternodecurrent", &masternodecurrent, true, true, false },
+        {"masternode", "startmasternode", &startmasternode, true, true, false },
+        {"masternode", "createmasternodekey", &createmasternodekey, true, true, false },
+        {"masternode", "getmasternodeoutputs", &getmasternodeoutputs, true, true, false },
+        {"masternode", "listmasternodeconf", &listmasternodeconf, true, true, false },
+        {"masternode", "getmasternodestatus", &getmasternodestatus, true, true, false },
+        {"masternode", "getmasternodewinners", &getmasternodewinners, true, true, false },
+        {"masternode", "getmasternodescores", &getmasternodescores, true, true, false },
+        {"masternode", "mnsync", &mnsync, true, true, false },
+
+        {"aureusxiv", "spork", &spork, true, true, false},
+        {"aureusxiv", "makekeypair", &makekeypair, true, true, false},
 #ifdef ENABLE_WALLET
-        {"vitae", "obfuscation", &obfuscation, false, false, true}, /* not threadSafe because of SendMoney */
-
         /* Wallet */
         {"wallet", "addmultisigaddress", &addmultisigaddress, true, false, true},
         {"wallet", "autocombinerewards", &autocombinerewards, false, false, true},
@@ -439,25 +446,6 @@ static const CRPCCommand vRPCCommands[] =
         {"wallet", "walletlock", &walletlock, true, false, true},
         {"wallet", "walletpassphrasechange", &walletpassphrasechange, true, false, true},
         {"wallet", "walletpassphrase", &walletpassphrase, true, false, true},
-
-        {"zerocoin", "getzerocoinbalance", &getzerocoinbalance, false, false, true},
-        {"zerocoin", "listmintedzerocoins", &listmintedzerocoins, false, false, true},
-        {"zerocoin", "listspentzerocoins", &listspentzerocoins, false, false, true},
-        {"zerocoin", "listzerocoinamounts", &listzerocoinamounts, false, false, true},
-        {"zerocoin", "mintzerocoin", &mintzerocoin, false, false, true},
-        {"zerocoin", "spendzerocoin", &spendzerocoin, false, false, true},
-        {"zerocoin", "resetmintzerocoin", &resetmintzerocoin, false, false, true},
-        {"zerocoin", "resetspentzerocoin", &resetspentzerocoin, false, false, true},
-        {"zerocoin", "getarchivedzerocoin", &getarchivedzerocoin, false, false, true},
-        {"zerocoin", "importzerocoins", &importzerocoins, false, false, true},
-        {"zerocoin", "exportzerocoins", &exportzerocoins, false, false, true},
-        {"zerocoin", "reconsiderzerocoins", &reconsiderzerocoins, false, false, true},
-        {"zerocoin", "getspentzerocoinamount", &getspentzerocoinamount, false, false, false},
-        {"zerocoin", "gezvitseed", &gezvitseed, false, false, true},
-        {"zerocoin", "sezvitseed", &sezvitseed, false, false, true},
-        {"zerocoin", "generatemintlist", &generatemintlist, false, false, true},
-        {"zerocoin", "searchdzvit", &searchdzvit, false, false, true},
-        {"zerocoin", "dzvitstate", &dzvitstate, false, false, true}
 
 #endif // ENABLE_WALLET
 };
@@ -621,7 +609,7 @@ std::vector<std::string> CRPCTable::listCommands() const
 
 std::string HelpExampleCli(string methodname, string args)
 {
-    return "> vitae-cli " + methodname + " " + args + "\n";
+    return "> aureusxiv-cli " + methodname + " " + args + "\n";
 }
 
 std::string HelpExampleRpc(string methodname, string args)

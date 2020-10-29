@@ -6,18 +6,17 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/vitae-config.h"
+#include "config/aureusxiv-config.h"
 #endif
 
 #include "init.h"
 
-#include "accumulatorcheckpoints.h"
-#include "accumulators.h"
 #include "activefundamentalnode.h"
 #include "addrman.h"
 #include "amount.h"
 #include "checkpoints.h"
 #include "compat/sanity.h"
+#include "fs.h"
 #include "httpserver.h"
 #include "httprpc.h"
 #include "invalid.h"
@@ -29,11 +28,11 @@
 #include "fundamentalnodeman.h"
 
 #include "activemasternode.h"
-#include "masternode-pos.h"
 #include "masternodeconfig.h"
 #include "masternodeman.h"
 
 #include "miner.h"
+#include "messagesigner.h"
 #include "net.h"
 #include "rpcserver.h"
 #include "script/standard.h"
@@ -46,13 +45,11 @@
 #include "util.h"
 #include "utilmoneystr.h"
 #include "validationinterface.h"
-#include "zvitchain.h"
 
 #ifdef ENABLE_WALLET
 #include "db.h"
 #include "wallet.h"
 #include "walletdb.h"
-#include "accumulators.h"
 
 #endif
 
@@ -80,7 +77,6 @@ using namespace std;
 
 #ifdef ENABLE_WALLET
 CWallet* pwalletMain = NULL;
-CzVITAEWallet* zwalletMain = NULL;
 int nWalletBackups = 10;
 #endif
 volatile bool fFeeEstimatesInitialized = false;
@@ -202,7 +198,7 @@ void PrepareShutdown()
     /// for example if the data directory was found to be locked.
     /// Be sure that anything that writes files or flushes caches only does this if the respective
     /// module was initialized.
-    RenameThread("vitae-shutoff");
+    RenameThread("aureusxiv-shutoff");
     mempool.AddTransactionsUpdated(1);
     StopHTTPRPC();
     StopREST();
@@ -246,8 +242,6 @@ void PrepareShutdown()
         pcoinsdbview = NULL;
         delete pblocktree;
         pblocktree = NULL;
-        delete zerocoinDB;
-        zerocoinDB = NULL;
         delete pSporkDB;
         pSporkDB = NULL;
     }
@@ -294,8 +288,6 @@ void Shutdown()
 #ifdef ENABLE_WALLET
     delete pwalletMain;
     pwalletMain = NULL;
-    delete zwalletMain;
-    zwalletMain = NULL;
 #endif
     globalVerifyHandle.reset();
     ECC_Stop();
@@ -372,7 +364,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-blocknotify=<cmd>", _("Execute command when the best block changes (%s in cmd is replaced by block hash)"));
     strUsage += HelpMessageOpt("-blocksizenotify=<cmd>", _("Execute command when the best block changes and its size is over (%s in cmd is replaced by block hash, %d with the block size)"));
     strUsage += HelpMessageOpt("-checkblocks=<n>", strprintf(_("How many blocks to check at startup (default: %u, 0 = all)"), 500));
-    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), "vitae.conf"));
+    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), "aureusxiv.conf"));
     if (mode == HMM_BITCOIND) {
 #if !defined(WIN32)
         strUsage += HelpMessageOpt("-daemon", _("Run in the background as a daemon and accept commands"));
@@ -385,10 +377,9 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-maxorphantx=<n>", strprintf(_("Keep at most <n> unconnectable transactions in memory (default: %u)"), DEFAULT_MAX_ORPHAN_TRANSACTIONS));
     strUsage += HelpMessageOpt("-par=<n>", strprintf(_("Set the number of script verification threads (%u to %d, 0 = auto, <0 = leave that many cores free, default: %d)"), -(int)boost::thread::hardware_concurrency(), MAX_SCRIPTCHECK_THREADS, DEFAULT_SCRIPTCHECK_THREADS));
 #ifndef WIN32
-    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), "vitaed.pid"));
+    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), "aureusxivd.pid"));
 #endif
     strUsage += HelpMessageOpt("-reindex", _("Rebuild block chain index from current blk000??.dat files") + " " + _("on startup"));
-    strUsage += HelpMessageOpt("-reindexaccumulators", _("Reindex the accumulator database") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-reindexmoneysupply", _("Reindex the VITAE and zVITAE money supply statistics") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-resync", _("Delete blockchain folders and resync from scratch") + " " + _("on startup"));
 #if !defined(WIN32)
@@ -417,7 +408,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-onlynet=<net>", _("Only connect to nodes in network <net> (ipv4, ipv6 or onion)"));
     strUsage += HelpMessageOpt("-permitbaremultisig", strprintf(_("Relay non-P2SH multisig (default: %u)"), 1));
     strUsage += HelpMessageOpt("-peerbloomfilters", strprintf(_("Support filtering of blocks and transaction with bloom filters (default: %u)"), DEFAULT_PEERBLOOMFILTERS));
-    strUsage += HelpMessageOpt("-port=<port>", strprintf(_("Listen for connections on <port> (default: %u or testnet: %u)"), 8765, 51474));
+    strUsage += HelpMessageOpt("-port=<port>", strprintf(_("Listen for connections on <port> (default: %u or testnet: %u)"), 10135, 10133));
     strUsage += HelpMessageOpt("-proxy=<ip:port>", _("Connect through SOCKS5 proxy"));
     strUsage += HelpMessageOpt("-proxyrandomize", strprintf(_("Randomize credentials for every proxy connection. This enables Tor stream isolation (default: %u)"), 1));
     strUsage += HelpMessageOpt("-seednode=<ip>", _("Connect to a node to retrieve peer addresses, and disconnect"));
@@ -444,13 +435,12 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-disablewallet", _("Do not load the wallet and disable wallet RPC calls"));
     strUsage += HelpMessageOpt("-keypool=<n>", strprintf(_("Set key pool size to <n> (default: %u)"), 100));
     if (GetBoolArg("-help-debug", false))
-        strUsage += HelpMessageOpt("-mintxfee=<amt>", strprintf(_("Fees (in VITAE/Kb) smaller than this are considered zero fee for transaction creation (default: %s)"),
+        strUsage += HelpMessageOpt("-mintxfee=<amt>", strprintf(_("Fees (in AureusXIV/Kb) smaller than this are considered zero fee for transaction creation (default: %s)"),
             FormatMoney(CWallet::minTxFee.GetFeePerK())));
-    strUsage += HelpMessageOpt("-paytxfee=<amt>", strprintf(_("Fee (in VITAE/kB) to add to transactions you send (default: %s)"), FormatMoney(payTxFee.GetFeePerK())));
+    strUsage += HelpMessageOpt("-paytxfee=<amt>", strprintf(_("Fee (in AureusXIV/kB) to add to transactions you send (default: %s)"), FormatMoney(payTxFee.GetFeePerK())));
     strUsage += HelpMessageOpt("-rescan", _("Rescan the block chain for missing wallet transactions") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-salvagewallet", _("Attempt to recover private keys from a corrupt wallet.dat") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-sendfreetransactions", strprintf(_("Send transactions as zero-fee transactions if possible (default: %u)"), 0));
-    strUsage += HelpMessageOpt("-spendzeroconfchange", strprintf(_("Spend unconfirmed change when sending transactions (default: %u)"), 1));
     strUsage += HelpMessageOpt("-disablesystemnotifications", strprintf(_("Disable OS notifications for incoming transactions (default: %u)"), 0));
     strUsage += HelpMessageOpt("-txconfirmtarget=<n>", strprintf(_("If paytxfee is not set, include enough fee so transactions begin confirmation on average within n blocks (default: %u)"), 1));
     strUsage += HelpMessageOpt("-maxtxfee=<amt>", strprintf(_("Maximum total fees to use in a single wallet transaction, setting too low may abort large transactions (default: %s)"),
@@ -489,7 +479,7 @@ std::string HelpMessage(HelpMessageMode mode)
         strUsage += HelpMessageOpt("-stopafterblockimport", strprintf(_("Stop running after importing blocks from disk (default: %u)"), 0));
         strUsage += HelpMessageOpt("-sporkkey=<privkey>", _("Enable spork administration functionality with the appropriate private key."));
     }
-    string debugCategories = "addrman, alert, bench, coindb, db, lock, rand, rpc, selectcoins, tor, mempool, net, proxy, vitae, (obfuscation, swiftx, fundamentalnode, mnpayments, mnbudget, zero)"; // Don't translate these and qt below
+    string debugCategories = "addrman, alert, bench, coindb, db, lock, rand, rpc, selectcoins, tor, mempool, net, proxy, aureusxiv, (obfuscation, swiftx, fundamentalnode, mnpayments, mnbudget, zero)"; // Don't translate these and qt below
     if (mode == HMM_BITCOIN_QT)
         debugCategories += ", qt";
     strUsage += HelpMessageOpt("-debug=<category>", strprintf(_("Output debugging information (default: %u, supplying <category> is optional)"), 0) + ". " +
@@ -508,7 +498,7 @@ std::string HelpMessage(HelpMessageMode mode)
         strUsage += HelpMessageOpt("-relaypriority", strprintf(_("Require high priority for relaying free or low-fee transactions (default:%u)"), 1));
         strUsage += HelpMessageOpt("-maxsigcachesize=<n>", strprintf(_("Limit size of signature cache to <n> entries (default: %u)"), 50000));
     }
-    strUsage += HelpMessageOpt("-minrelaytxfee=<amt>", strprintf(_("Fees (in VITAE/Kb) smaller than this are considered zero fee for relaying (default: %s)"), FormatMoney(::minRelayTxFee.GetFeePerK())));
+    strUsage += HelpMessageOpt("-minrelaytxfee=<amt>", strprintf(_("Fees (in AureusXIV/Kb) smaller than this are considered zero fee for relaying (default: %s)"), FormatMoney(::minRelayTxFee.GetFeePerK())));
     strUsage += HelpMessageOpt("-printtoconsole", strprintf(_("Send trace/debug info to console instead of debug.log file (default: %u)"), 0));
     if (GetBoolArg("-help-debug", false)) {
         strUsage += HelpMessageOpt("-printpriority", strprintf(_("Log transaction priority and fee per kB when mining blocks (default: %u)"), 0));
@@ -519,14 +509,13 @@ std::string HelpMessage(HelpMessageMode mode)
     }
     strUsage += HelpMessageOpt("-shrinkdebugfile", _("Shrink debug.log file on client startup (default: 1 when no -debug)"));
     strUsage += HelpMessageOpt("-testnet", _("Use the test network"));
-    strUsage += HelpMessageOpt("-litemode=<n>", strprintf(_("Disable all VITAE specific functionality (Fundamentalnodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)"), 0));
+    strUsage += HelpMessageOpt("-litemode=<n>", strprintf(_("Disable all AureusXIV specific functionality (Fundamentalnodes, SwiftX, Budgeting) (0-1, default: %u)"), 0));
     strUsage += HelpMessageOpt("-fmnlitemode=<n>", strprintf(_("Disable all Darksend/Masternode related functionality (0-1, default: %u)"), 0));
 
 #ifdef ENABLE_WALLET
     strUsage += HelpMessageGroup(_("Staking options:"));
     strUsage += HelpMessageOpt("-staking=<n>", strprintf(_("Enable staking functionality (0-1, default: %u)"), 1));
     strUsage += HelpMessageOpt("-vitstake=<n>", strprintf(_("Enable or disable staking functionality for VIT inputs (0-1, default: %u)"), 1));
-    strUsage += HelpMessageOpt("-zvitstake=<n>", strprintf(_("Enable or disable staking functionality for zVITAE inputs (0-1, default: %u)"), 1));
     strUsage += HelpMessageOpt("-reservebalance=<amt>", _("Keep the specified amount available for spending at all times (default: 0)"));
     if (GetBoolArg("-help-debug", false)) {
         strUsage += HelpMessageOpt("-printstakemodifier", _("Display the stake modifier calculations in the debug.log file."));
@@ -539,7 +528,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-fnconf=<file>", strprintf(_("Specify fundamentalnode configuration file (default: %s)"), "fundamentalnode.conf"));
     strUsage += HelpMessageOpt("-fnconflock=<n>", strprintf(_("Lock fundamentalnodes from fundamentalnode configuration file (default: %u)"), 1));
     strUsage += HelpMessageOpt("-fundamentalnodeprivkey=<n>", _("Set the fundamentalnode private key"));
-    strUsage += HelpMessageOpt("-fundamentalnodeaddr=<n>", strprintf(_("Set external address:port to get to this fundamentalnode (example: %s)"), "128.127.106.235:8765"));
+    strUsage += HelpMessageOpt("-fundamentalnodeaddr=<n>", strprintf(_("Set external address:port to get to this fundamentalnode (example: %s)"), "128.127.106.235:10135"));
     strUsage += HelpMessageOpt("-budgetvotemode=<mode>", _("Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)"));
 
 	strUsage += HelpMessageGroup(_("Masternode options:"));
@@ -547,20 +536,8 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-mnconf=<file>", strprintf(_("Specify masternode configuration file (default: %s)"), "masternode.conf"));
     strUsage += HelpMessageOpt("-mnconflock=<n>", strprintf(_("Lock masternodes from masternode configuration file (default: %u)"), 1));
     strUsage += HelpMessageOpt("-masternodeprivkey=<n>", _("Set the masternode private key"));
-    strUsage += HelpMessageOpt("-masternodeaddr=<n>", strprintf(_("Set external address:port to get to this masternode (example: %s)"), "127.0.0.2:8765"));
+    strUsage += HelpMessageOpt("-masternodeaddr=<n>", strprintf(_("Set external address:port to get to this masternode (example: %s)"), "127.0.0.2:10135"));
     strUsage += HelpMessageOpt("-budgetvotemode=<mode>", _("Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)"));
-
-
-    strUsage += HelpMessageGroup(_("Zerocoin options:"));
-#ifdef ENABLE_WALLET
-    strUsage += HelpMessageOpt("-preferredDenom=<n>", strprintf(_("Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)"), 0));
-    strUsage += HelpMessageOpt("-backupzVit=<n>", strprintf(_("Enable automatic wallet backups triggered after each zVITAE minting (0-1, default: %u)"), 1));
-    strUsage += HelpMessageOpt("-zvitaebackuppath=<dir|file>", _("Specify custom backup path to add a copy of any automatic zVITAE backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen"));
-#endif // ENABLE_WALLET
-    strUsage += HelpMessageOpt("-reindexzerocoin=<n>", strprintf(_("Delete all zerocoin spends and mints that have been recorded to the blockchain database and reindex them (0-1, default: %u)"), 0));
-
-//    strUsage += "  -anonymizevitaeamount=<n>     " + strprintf(_("Keep N PIV anonymized (default: %u)"), 0) + "\n";
-//    strUsage += "  -liquidityprovider=<n>       " + strprintf(_("Provide liquidity to Obfuscation by infrequently mixing coins on a continual basis (0-100, default: %u, 1=very frequent, high fees, 100=very infrequent, low fees)"), 0) + "\n";
 
     strUsage += HelpMessageGroup(_("SwiftX options:"));
     strUsage += HelpMessageOpt("-enableswifttx=<n>", strprintf(_("Enable SwiftX, show confirmations for locked transactions (bool, default: %s)"), "true"));
@@ -603,7 +580,7 @@ std::string LicenseInfo()
            "\n" +
            FormatParagraph(strprintf(_("Copyright (C) 2015-%i The PIVX Core Developers"), COPYRIGHT_YEAR)) + "\n" +
            "\n" +
-           FormatParagraph(strprintf(_("Copyright (C) %i The VITAE Core Developers"), COPYRIGHT_YEAR)) + "\n" +
+           FormatParagraph(strprintf(_("Copyright (C) %i The AureusXIV Core Developers"), COPYRIGHT_YEAR)) + "\n" +
            "\n" +
            FormatParagraph(_("This is experimental software.")) + "\n" +
            "\n" +
@@ -646,7 +623,7 @@ struct CImportingNow {
 
 void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 {
-    RenameThread("vitae-loadblk");
+    RenameThread("aureusxiv-loadblk");
 
     // -reindex
     if (fReindex) {
@@ -671,12 +648,12 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
     }
 
     // hardcoded $DATADIR/bootstrap.dat
-    filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
-    if (filesystem::exists(pathBootstrap)) {
+    boost::filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
+    if (boost::filesystem::exists(pathBootstrap)) {
         FILE* file = fopen(pathBootstrap.string().c_str(), "rb");
         if (file) {
             CImportingNow imp;
-            filesystem::path pathBootstrapOld = GetDataDir() / "bootstrap.dat.old";
+            boost::filesystem::path pathBootstrapOld = GetDataDir() / "bootstrap.dat.old";
             LogPrintf("Importing bootstrap.dat...\n");
             LoadExternalBlockFile(file);
             RenameOver(pathBootstrap, pathBootstrapOld);
@@ -704,7 +681,7 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 }
 
 /** Sanity checks
- *  Ensure that VITAE is running in a usable environment with all
+ *  Ensure that AureusXIV is running in a usable environment with all
  *  necessary library support.
  */
 bool InitSanityCheck(void)
@@ -736,7 +713,7 @@ bool AppInitServers(boost::thread_group& threadGroup)
     return true;
 }
 
-/** Initialize vitae.
+/** Initialize aureusxiv.
  *  @pre Parameters should be parsed and config file should be read.
  */
 bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
@@ -899,7 +876,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     // Check for -tor - as this is a privacy risk to continue, exit here
     if (GetBoolArg("-tor", false))
         return InitError(_("Error: Unsupported argument -tor found, use -onion."));
-    // Check level must be 4 for zerocoin checks
+
     if (mapArgs.count("-checklevel"))
         return InitError(_("Error: Unsupported argument -checklevel found. Checklevel must be level 4."));
 
@@ -907,7 +884,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         InitWarning(_("Warning: Unsupported argument -benchmark ignored, use -debug=bench."));
 
     // Checkmempool and checkblockindex default to true in regtest mode
-    mempool.setSanityCheck(GetBoolArg("-checkmempool", Params().DefaultConsistencyChecks()));
+    mempool.setSanityCheck(GetBoolArg("-checkmempool", Params().NetworkID() != CBaseChainParams::MAIN));
     fCheckBlockIndex = GetBoolArg("-checkblockindex", Params().DefaultConsistencyChecks());
     Checkpoints::fEnabled = GetBoolArg("-checkpoints", true);
 
@@ -985,7 +962,6 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         }
     }
     nTxConfirmTarget = GetArg("-txconfirmtarget", 1);
-    bSpendZeroConfChange = GetBoolArg("-spendzeroconfchange", false);
     bdisableSystemnotifications = GetBoolArg("-disablesystemnotifications", false);
     fSendFreeTransactions = GetBoolArg("-sendfreetransactions", false);
 
@@ -1009,7 +985,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     // Sanity check
     if (!InitSanityCheck())
-        return InitError(_("Initialization sanity check failed. VITAE Core is shutting down."));
+        return InitError(_("Initialization sanity check failed. AureusXIV Core is shutting down."));
 
     std::string strDataDir = GetDataDir().string();
 #ifdef ENABLE_WALLET
@@ -1017,7 +993,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     if (strWalletFile != boost::filesystem::basename(strWalletFile) + boost::filesystem::extension(strWalletFile))
         return InitError(strprintf(_("Wallet %s resides outside data directory %s"), strWalletFile, strDataDir));
 #endif
-    // Make sure only a single VITAE process is using the data directory.
+    // Make sure only a single AureusXIV process is using the data directory.
     boost::filesystem::path pathLockFile = GetDataDir() / ".lock";
     FILE* file = fopen(pathLockFile.string().c_str(), "a"); // empty lock file; created if it doesn't exist.
     if (file) fclose(file);
@@ -1025,7 +1001,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     // Wait maximum 10 seconds if an old wallet is still running. Avoids lockup during restart
     if (!lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(10)))
-        return InitError(strprintf(_("Cannot obtain a lock on data directory %s. VITAE Core is probably already running."), strDataDir));
+        return InitError(strprintf(_("Cannot obtain a lock on data directory %s. AureusXIV Core is probably already running."), strDataDir));
 
 #ifndef WIN32
     CreatePidFile(GetPidFile(), getpid());
@@ -1033,7 +1009,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     if (GetBoolArg("-shrinkdebugfile", !fDebug))
         ShrinkDebugFile();
     LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    LogPrintf("VITAE version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
+    LogPrintf("AureusXIV version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
     LogPrintf("Using OpenSSL version %s\n", SSLeay_version(SSLEAY_VERSION));
 #ifdef ENABLE_WALLET
     LogPrintf("Using BerkeleyDB version %s\n", DbEnv::version(0, 0, 0));
@@ -1084,15 +1060,15 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 // ********************************************************* Step 5: Backup wallet and verify wallet database integrity
 #ifdef ENABLE_WALLET
     if (!fDisableWallet) {
-        filesystem::path backupDir = GetDataDir() / "backups";
-        if (!filesystem::exists(backupDir)) {
+        boost::filesystem::path backupDir = GetDataDir() / "backups";
+        if (!boost::filesystem::exists(backupDir)) {
             // Always create backup folder to not confuse the operating system's file browser
-            filesystem::create_directories(backupDir);
+            boost::filesystem::create_directories(backupDir);
         }
         nWalletBackups = GetArg("-createwalletbackups", 10);
         nWalletBackups = std::max(0, std::min(10, nWalletBackups));
         if (nWalletBackups > 0) {
-            if (filesystem::exists(backupDir)) {
+            if (boost::filesystem::exists(backupDir)) {
                 // Create backup of the wallet
                 std::string dateTimeStr = DateTimeStrFormat(".%Y-%m-%d-%H-%M", GetTime());
                 std::string backupPathStr = backupDir.string();
@@ -1155,32 +1131,27 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         if (GetBoolArg("-resync", false)) {
             uiInterface.InitMessage(_("Preparing for resync..."));
             // Delete the local blockchain folders to force a resync from scratch to get a consitent blockchain-state
-            filesystem::path blocksDir = GetDataDir() / "blocks";
-            filesystem::path chainstateDir = GetDataDir() / "chainstate";
-            filesystem::path sporksDir = GetDataDir() / "sporks";
-            filesystem::path zerocoinDir = GetDataDir() / "zerocoin";
 
-            LogPrintf("Deleting blockchain folders blocks, chainstate, sporks and zerocoin\n");
+            boost::filesystem::path blocksDir = GetDataDir() / "blocks";
+            boost::filesystem::path chainstateDir = GetDataDir() / "chainstate";
+            boost::filesystem::path sporksDir = GetDataDir() / "sporks";
+
+            LogPrintf("Deleting blockchain folders blocks, chainstate, sporks\n");
             // We delete in 4 individual steps in case one of the folder is missing already
             try {
-                if (filesystem::exists(blocksDir)){
+                if (boost::filesystem::exists(blocksDir)){
                     boost::filesystem::remove_all(blocksDir);
                     LogPrintf("-resync: folder deleted: %s\n", blocksDir.string().c_str());
                 }
 
-                if (filesystem::exists(chainstateDir)){
+                if (boost::filesystem::exists(chainstateDir)){
                     boost::filesystem::remove_all(chainstateDir);
                     LogPrintf("-resync: folder deleted: %s\n", chainstateDir.string().c_str());
                 }
 
-                if (filesystem::exists(sporksDir)){
+                if (boost::filesystem::exists(sporksDir)){
                     boost::filesystem::remove_all(sporksDir);
                     LogPrintf("-resync: folder deleted: %s\n", sporksDir.string().c_str());
-                }
-
-                if (filesystem::exists(zerocoinDir)){
-                    boost::filesystem::remove_all(zerocoinDir);
-                    LogPrintf("-resync: folder deleted: %s\n", zerocoinDir.string().c_str());
                 }
             } catch (const boost::filesystem::filesystem_error& error) {
                 LogPrintf("Failed to delete blockchain folders %s\n", error.what());
@@ -1215,7 +1186,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                 return false;
         }
 
-        if (filesystem::exists(GetDataDir() / strWalletFile)) {
+        if (boost::filesystem::exists(GetDataDir() / strWalletFile)) {
             CDBEnv::VerifyResult r = bitdb.Verify(strWalletFile, CWalletDB::Recover);
             if (r == CDBEnv::RECOVER_OK) {
                 string msg = strprintf(_("Warning: wallet.dat corrupt, data salvaged!"
@@ -1357,25 +1328,22 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     // ********************************************************* Step 7: load block chain
 
-    //PIVX: Load Accumulator Checkpoints according to network (main/test/regtest)
-    assert(AccumulatorCheckpoints::LoadCheckpoints(Params().NetworkIDString()));
-
     fReindex = GetBoolArg("-reindex", false);
 
     // Upgrading to 0.8; hard-link the old blknnnn.dat files into /blocks/
-    filesystem::path blocksDir = GetDataDir() / "blocks";
-    if (!filesystem::exists(blocksDir)) {
-        filesystem::create_directories(blocksDir);
+    boost::filesystem::path blocksDir = GetDataDir() / "blocks";
+    if (!boost::filesystem::exists(blocksDir)) {
+        boost::filesystem::create_directories(blocksDir);
         bool linked = false;
         for (unsigned int i = 1; i < 10000; i++) {
-            filesystem::path source = GetDataDir() / strprintf("blk%04u.dat", i);
+            boost::filesystem::path source = GetDataDir() / strprintf("blk%04u.dat", i);
             if (!filesystem::exists(source)) break;
-            filesystem::path dest = blocksDir / strprintf("blk%05u.dat", i - 1);
+            boost::filesystem::path dest = blocksDir / strprintf("blk%05u.dat", i - 1);
             try {
-                filesystem::create_hard_link(source, dest);
+                boost::filesystem::create_hard_link(source, dest);
                 LogPrintf("Hardlinked %s -> %s\n", source.string(), dest.string());
                 linked = true;
-            } catch (const filesystem::filesystem_error& e) {
+            } catch (const boost::filesystem::filesystem_error& e) {
                 // Note: hardlink creation failing is not a disaster, it just means
                 // blocks will get re-downloaded from peers.
                 LogPrintf("Error hardlinking blk%04u.dat : %s\n", i, e.what());
@@ -1416,11 +1384,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                 delete pcoinsdbview;
                 delete pcoinscatcher;
                 delete pblocktree;
-                delete zerocoinDB;
                 delete pSporkDB;
 
-                //VITAE specific: zerocoin and spork DB's
-                zerocoinDB = new CZerocoinDB(0, false, fReindex);
+                //AureusXIV specific: spork DB's
                 pSporkDB = new CSporkDB(0, false, false);
 
                 pblocktree = new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
@@ -1431,9 +1397,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                 if (fReindex)
                     pblocktree->WriteReindexing(true);
 
-                // VITAE: load previous sessions sporks if we have them.
+                // AureusXIV: load previous sessions sporks if we have them.
                 uiInterface.InitMessage(_("Loading sporks..."));
-                LoadSporksFromDB();
+                sporkManager.LoadSporksFromDB();
 
                 uiInterface.InitMessage(_("Loading block index..."));
                 string strBlockIndexError = "";
@@ -1464,47 +1430,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                 invalid_out::LoadOutpoints();
                 invalid_out::LoadSerials();
 
-                // Drop all information from the zerocoinDB and repopulate
-                if (GetBoolArg("-reindexzerocoin", false)) {
-                    if (chainActive.Height() > Params().Zerocoin_StartHeight()) {
-                        uiInterface.InitMessage(_("Reindexing zerocoin database..."));
-                        std::string strError = ReindexZerocoinDB();
-                        if (strError != "") {
-                            strLoadError = strError;
-                            break;
-                        }
-                    }
-                }
-
-                // Recalculate money supply for blocks that are impacted by accounting issue after zerocoin activation
+                // Recalculate money supply
                 if (GetBoolArg("-reindexmoneysupply", false)) {
-                    if (chainActive.Height() > Params().Zerocoin_StartHeight()) {
-                        RecalculateZVITMinted();
-                        RecalculateZVITSpent();
-                    }
                     RecalculateVITSupply(1);
-                }
-
-                // Force recalculation of accumulators.
-                if (GetBoolArg("-reindexaccumulators", false)) {
-                    if (chainActive.Height() > Params().Zerocoin_Block_V2_Start()) {
-                        CBlockIndex *pindex = chainActive[Params().Zerocoin_Block_V2_Start()];
-                        while (pindex->nHeight < chainActive.Height()) {
-                            if (!count(listAccCheckpointsNoDB.begin(), listAccCheckpointsNoDB.end(),
-                                       pindex->nAccumulatorCheckpoint))
-                                listAccCheckpointsNoDB.emplace_back(pindex->nAccumulatorCheckpoint);
-                            pindex = chainActive.Next(pindex);
-                        }
-                        // PIVX: recalculate Accumulator Checkpoints that failed to database properly
-                        if (!listAccCheckpointsNoDB.empty()) {
-                            uiInterface.InitMessage(_("Calculating missing accumulators..."));
-                            LogPrintf("%s : finding missing checkpoints\n", __func__);
-
-                            string strError;
-                            if (!ReindexAccumulators(listAccCheckpointsNoDB, strError))
-                                return InitError(strError);
-                        }
-                    }
                 }
 
                 uiInterface.InitMessage(_("Verifying blocks..."));
@@ -1512,7 +1440,6 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                 // Flag sent to validation code to let it know it can skip certain checks
                 fVerifyingBlocks = true;
 
-                // Zerocoin must check at level 4
                 if (!CVerifyDB().VerifyDB(pcoinsdbview, 4, GetArg("-checkblocks", 100))) {
                     strLoadError = _("Corrupted block database detected");
                     fVerifyingBlocks = false;
@@ -1568,7 +1495,6 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 #ifdef ENABLE_WALLET
     if (fDisableWallet) {
         pwalletMain = NULL;
-        zwalletMain = NULL;
         LogPrintf("Wallet disabled!\n");
     } else {
         // needed to restore wallet transaction meta data after -zapwallettxes
@@ -1603,9 +1529,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                              " or address book entries might be missing or incorrect."));
                 InitWarning(msg);
             } else if (nLoadWalletRet == DB_TOO_NEW)
-                strErrors << _("Error loading wallet.dat: Wallet requires newer version of VITAE Core") << "\n";
+                strErrors << _("Error loading wallet.dat: Wallet requires newer version of AureusXIV Core") << "\n";
             else if (nLoadWalletRet == DB_NEED_REWRITE) {
-                strErrors << _("Wallet needed to be rewritten: restart VITAE Core to complete") << "\n";
+                strErrors << _("Wallet needed to be rewritten: restart AureusXIV Core to complete") << "\n";
                 LogPrintf("%s", strErrors.str());
                 return InitError(strErrors.str());
             } else
@@ -1642,8 +1568,6 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
         LogPrintf("%s", strErrors.str());
         LogPrintf(" wallet      %15dms\n", GetTimeMillis() - nStart);
-        zwalletMain = new CzVITAEWallet(pwalletMain->strWalletFile);
-        pwalletMain->setZWallet(zwalletMain);
 
         RegisterValidationInterface(pwalletMain);
 
@@ -1689,16 +1613,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         }
         fVerifyingBlocks = false;
 
-        //Inititalize zVITAEWallet
-        uiInterface.InitMessage(_("Syncing zVITAE wallet..."));
+        //Inititalize zAureusXIVWallet
+        uiInterface.InitMessage(_("Syncing zAureusXIV wallet..."));
 
-        bool fEnableZVitBackups = GetBoolArg("-backupzVit", true);
-        pwalletMain->setZVitAutoBackups(fEnableZVitBackups);
-
-        //Load zerocoin mint hashes to memory
-        pwalletMain->zvitTracker->Init();
-        zwalletMain->LoadMintPoolFromDB();
-        zwalletMain->SyncWithChain();
     }  // (!fDisableWallet)
 #else  // ENABLE_WALLET
     LogPrintf("No wallet compiled in!\n");
@@ -1728,7 +1645,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
             MilliSleep(10);
     }
 
-    // ********************************************************* Step 10: setup ObfuScation
+    // ********************************************************* Step 10: setup layer 2 data
 
     uiInterface.InitMessage(_("Loading fundamentalnode cache..."));
 
@@ -1820,7 +1737,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
             CKey key;
             CPubKey pubkey;
 
-            if (!obfuScationSigner.SetKey(strFundamentalNodePrivKey, errorMessage, key, pubkey)) {
+            if (!CMessageSigner::GetKeysFromSecret(strFundamentalNodePrivKey, key, pubkey)) {
                 return InitError(_("Invalid fundamentalnodeprivkey. Please see documenation."));
             }
 
@@ -1828,8 +1745,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
         } else {
             return InitError(_("You must specify a fundamentalnodeprivkey in the configuration. Please see documentation for help."));
-        }
-    }
+        }    }
 
     //TODO
     /*
@@ -1860,7 +1776,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
             CKey key;
             CPubKey pubkey;
 
-            if (!obfuScationSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey)) {
+            if (!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, key, pubkey)) {
                 return InitError(_("Invalid masternodeprivkey. Please see documenation."));
             }
 
@@ -1907,7 +1823,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                 CKey key;
                 CPubKey pubkey;
 
-                if(!obfuScationSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey))
+                if(!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, key, pubkey))
                 {
                     return InitError(_("Invalid masternodeprivkey. Please see documenation."));
                 }
@@ -1955,28 +1871,6 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         }
     }
 
-    nZeromintPercentage = 0;
-    nPreferredDenom  = GetArg("-preferredDenom", 0);
-    if (nPreferredDenom != 0 && nPreferredDenom != 1 && nPreferredDenom != 5 && nPreferredDenom != 10 && nPreferredDenom != 50 &&
-        nPreferredDenom != 100 && nPreferredDenom != 500 && nPreferredDenom != 1000 && nPreferredDenom != 5000){
-        LogPrintf("-preferredDenom: invalid denomination parameter %d. Default value used\n", nPreferredDenom);
-        nPreferredDenom = 0;
-    }
-
-// XX42 Remove/refactor code below. Until then provide safe defaults
-    nAnonymizeVitaeAmount = 2;
-
-//    nLiquidityProvider = GetArg("-liquidityprovider", 0); //0-100
-//    if (nLiquidityProvider != 0) {
-//        obfuScationPool.SetMinBlockSpacing(std::min(nLiquidityProvider, 100) * 15);
-//        fEnableZeromint = true;
-//        nZeromintPercentage = 99999;
-//    }
-//
-//    nAnonymizeVitaeAmount = GetArg("-anonymizevitaeamount", 0);
-//    if (nAnonymizeVitaeAmount > 999999) nAnonymizeVitaeAmount = 999999;
-//    if (nAnonymizeVitaeAmount < 2) nAnonymizeVitaeAmount = 2;
-
     fEnableSwiftTX = GetBoolArg("-enableswifttx", fEnableSwiftTX);
     nSwiftTXDepth = GetArg("-swifttxdepth", nSwiftTXDepth);
     nSwiftTXDepth = std::min(std::max(nSwiftTXDepth, 0), 60);
@@ -1989,33 +1883,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     LogPrintf("fLiteMode %d\n", fLiteMode);
     LogPrintf("nSwiftTXDepth %d\n", nSwiftTXDepth);
-    LogPrintf("Anonymize VITAE Amount %d\n", nAnonymizeVitaeAmount);
     LogPrintf("Budget Mode %s\n", strBudgetMode.c_str());
 
-    /* Denominations
-
-       A note about convertability. Within Obfuscation pools, each denomination
-       is convertable to another.
-
-       For example:
-       1VIT+1000 == (.1VIT+100)*10
-       10VIT+10000 == (1VIT+1000)*10
-    */
-    obfuScationDenominations.push_back((10000 * COIN) + 10000000);
-    obfuScationDenominations.push_back((1000 * COIN) + 1000000);
-    obfuScationDenominations.push_back((100 * COIN) + 100000);
-    obfuScationDenominations.push_back((10 * COIN) + 10000);
-    obfuScationDenominations.push_back((1 * COIN) + 1000);
-    obfuScationDenominations.push_back((.1 * COIN) + 100);
-    /* Disabled till we need them
-    obfuScationDenominations.push_back( (.01      * COIN)+10 );
-    obfuScationDenominations.push_back( (.001     * COIN)+1 );
-    */
-
-    obfuScationPool.InitCollateralAddress();
-
-    threadGroup.create_thread(boost::bind(&ThreadCheckObfuScationPool));
-    threadGroup.create_thread(boost::bind(&ThreadBitPool));
+    threadGroup.create_thread(boost::bind(&ThreadCheckMasternodes));
 
     // ********************************************************* Step 11: start node
 

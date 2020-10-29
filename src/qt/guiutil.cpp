@@ -77,7 +77,7 @@ extern double NSAppKitVersionNumber;
 #endif
 #endif
 
-#define URI_SCHEME "vitae"
+#define URI_SCHEME "aureusxiv"
 
 #if QT_VERSION >= 0x50200
 #include <QFontDatabase>
@@ -160,7 +160,7 @@ void setupAddressWidget(QValidatedLineEdit* widget, QWidget* parent)
 #if QT_VERSION >= 0x040700
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
-    widget->setPlaceholderText(QObject::tr("Enter a VITAE address (e.g. %1)").arg("D7VFR83SQbiezrW72hjcWJtcfip5krte2Z"));
+    widget->setPlaceholderText(QObject::tr("Enter a AureusXIV address (e.g. %1)").arg("D7VFR83SQbiezrW72hjcWJtcfip5krte2Z"));
 #endif
     widget->setValidator(new BitcoinAddressEntryValidator(parent));
     widget->setCheckValidator(new BitcoinAddressCheckValidator(parent));
@@ -177,7 +177,7 @@ void setupAmountWidget(QLineEdit* widget, QWidget* parent)
 
 bool parseBitcoinURI(const QUrl& uri, SendCoinsRecipient* out)
 {
-    // return if URI is not valid or is no VITAE: URI
+    // return if URI is not valid or is no AureusXIV: URI
     if (!uri.isValid() || uri.scheme() != QString(URI_SCHEME))
         return false;
 
@@ -211,7 +211,7 @@ bool parseBitcoinURI(const QUrl& uri, SendCoinsRecipient* out)
             fShouldReturnFalse = false;
         } else if (i->first == "amount") {
             if (!i->second.isEmpty()) {
-                if (!BitcoinUnits::parse(BitcoinUnits::VITAE, i->second, &rv.amount)) {
+                if (!BitcoinUnits::parse(BitcoinUnits::AXIV, i->second, &rv.amount)) {
                     return false;
                 }
             }
@@ -229,9 +229,9 @@ bool parseBitcoinURI(const QUrl& uri, SendCoinsRecipient* out)
 
 bool parseBitcoinURI(QString uri, SendCoinsRecipient* out)
 {
-    // Convert vitae:// to vitae:
+    // Convert aureusxiv:// to aureusxiv:
     //
-    //    Cannot handle this later, because vitae:// will cause Qt to see the part after // as host,
+    //    Cannot handle this later, because aureusxiv:// will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).
     if (uri.startsWith(URI_SCHEME "://", Qt::CaseInsensitive)) {
         uri.replace(0, std::strlen(URI_SCHEME) + 3, URI_SCHEME ":");
@@ -246,7 +246,7 @@ QString formatBitcoinURI(const SendCoinsRecipient& info)
     int paramCount = 0;
 
     if (info.amount) {
-        ret += QString("?amount=%1").arg(BitcoinUnits::format(BitcoinUnits::VITAE, info.amount, false, BitcoinUnits::separatorNever));
+        ret += QString("?amount=%1").arg(BitcoinUnits::format(BitcoinUnits::AXIV, info.amount, false, BitcoinUnits::separatorNever));
         paramCount++;
     }
 
@@ -422,7 +422,7 @@ void openConfigfile()
 {
     boost::filesystem::path pathConfig = GetConfigFile();
 
-    /* Open vitae.conf with the associated application */
+    /* Open aureusxiv.conf with the associated application */
     if (boost::filesystem::exists(pathConfig))
         QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
 }
@@ -653,12 +653,12 @@ bool DHMSTableWidgetItem::operator<(QTableWidgetItem const& item) const
 #ifdef WIN32
 boost::filesystem::path static StartupShortcutPath()
 {
-    return GetSpecialFolderPath(CSIDL_STARTUP) / "VITAE.lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / "AureusXIV.lnk";
 }
 
 bool GetStartOnSystemStartup()
 {
-    // check for VITAE.lnk
+    // check for AureusXIV.lnk
     return boost::filesystem::exists(StartupShortcutPath());
 }
 
@@ -732,7 +732,7 @@ boost::filesystem::path static GetAutostartDir()
 
 boost::filesystem::path static GetAutostartFilePath()
 {
-    return GetAutostartDir() / "vitae.desktop";
+    return GetAutostartDir() / "aureusxiv.desktop";
 }
 
 bool GetStartOnSystemStartup()
@@ -768,10 +768,10 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         boost::filesystem::ofstream optionFile(GetAutostartFilePath(), std::ios_base::out | std::ios_base::trunc);
         if (!optionFile.good())
             return false;
-        // Write a vitae.desktop file to the autostart directory:
+        // Write a aureusxiv.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
-        optionFile << "Name=VITAE\n";
+        optionFile << "Name=AureusXIV\n";
         optionFile << "Exec=" << pszExePath << " -min\n";
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
@@ -794,7 +794,7 @@ void ForceActivation();
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl);
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl)
 {
-    // loop through the list of startup items and try to find the vitae app
+    // loop through the list of startup items and try to find the aureusxiv app
     CFArrayRef listSnapshot = LSSharedFileListCopySnapshot(list, NULL);
     for (int i = 0; i < CFArrayGetCount(listSnapshot); i++) {
         LSSharedFileListItemRef item = (LSSharedFileListItemRef)CFArrayGetValueAtIndex(listSnapshot, i);
@@ -839,7 +839,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
     LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, bitcoinAppUrl);
 
     if (fAutoStart && !foundItem) {
-        // add vitae app to startup item list
+        // add aureusxiv app to startup item list
         LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, NULL, NULL, bitcoinAppUrl, NULL, NULL);
     } else if (!fAutoStart && foundItem) {
         // remove item

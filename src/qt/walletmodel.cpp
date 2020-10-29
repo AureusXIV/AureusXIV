@@ -17,6 +17,7 @@
 #include "main.h"
 #include "spork.h"
 #include "sync.h"
+#include "init.h"
 #include "ui_interface.h"
 #include "wallet.h"
 #include "walletdb.h" // for BackupWallet
@@ -32,7 +33,6 @@ WalletModel::WalletModel(CWallet* wallet, OptionsModel* optionsModel, QObject* p
                                                                                          transactionTableModel(0),
                                                                                          recentRequestsTableModel(0),
                                                                                          cachedBalance(0), cachedUnconfirmedBalance(0), cachedImmatureBalance(0),
-                                                                                         cachedZerocoinBalance(0), cachedUnconfirmedZerocoinBalance(0), cachedImmatureZerocoinBalance(0),
                                                                                          cachedEncryptionStatus(Unencrypted),
                                                                                          cachedNumBlocks(0)
 {
@@ -87,22 +87,6 @@ CAmount WalletModel::getLockedBalance() const
 {
     return wallet->GetLockedCoins();
 }
-
-CAmount WalletModel::getZerocoinBalance() const
-{
-    return wallet->GetZerocoinBalance(false);
-}
-
-CAmount WalletModel::getUnconfirmedZerocoinBalance() const
-{
-    return wallet->GetUnconfirmedZerocoinBalance();
-}
-
-CAmount WalletModel::getImmatureZerocoinBalance() const
-{
-    return wallet->GetImmatureZerocoinBalance();
-}
-
 
 bool WalletModel::haveWatchOnly() const
 {
@@ -161,7 +145,6 @@ void WalletModel::emitBalanceChanged()
 {
     // Force update of UI elements even when no values have changed
     emit balanceChanged(cachedBalance, cachedUnconfirmedBalance, cachedImmatureBalance, 
-                        cachedZerocoinBalance, cachedUnconfirmedZerocoinBalance, cachedImmatureZerocoinBalance,
                         cachedWatchOnlyBalance, cachedWatchUnconfBalance, cachedWatchImmatureBalance);
 }
 
@@ -173,9 +156,6 @@ void WalletModel::checkBalanceChanged()
     CAmount newBalance = getBalance();
     CAmount newUnconfirmedBalance = getUnconfirmedBalance();
     CAmount newImmatureBalance = getImmatureBalance();
-    CAmount newZerocoinBalance = getZerocoinBalance();
-    CAmount newUnconfirmedZerocoinBalance = getUnconfirmedZerocoinBalance();
-    CAmount newImmatureZerocoinBalance = getImmatureZerocoinBalance();
     CAmount newWatchOnlyBalance = 0;
     CAmount newWatchUnconfBalance = 0;
     CAmount newWatchImmatureBalance = 0;
@@ -186,21 +166,16 @@ void WalletModel::checkBalanceChanged()
     }
 
     if (cachedBalance != newBalance || cachedUnconfirmedBalance != newUnconfirmedBalance || cachedImmatureBalance != newImmatureBalance ||
-        cachedZerocoinBalance != newZerocoinBalance || cachedUnconfirmedZerocoinBalance != newUnconfirmedZerocoinBalance || cachedImmatureZerocoinBalance != newImmatureZerocoinBalance ||
         cachedWatchOnlyBalance != newWatchOnlyBalance || cachedWatchUnconfBalance != newWatchUnconfBalance || cachedWatchImmatureBalance != newWatchImmatureBalance ||
         cachedTxLocks != nCompleteTXLocks ) {
         cachedBalance = newBalance;
         cachedUnconfirmedBalance = newUnconfirmedBalance;
         cachedImmatureBalance = newImmatureBalance;
-        cachedZerocoinBalance = newZerocoinBalance;
-        cachedUnconfirmedZerocoinBalance = newUnconfirmedZerocoinBalance;
-        cachedImmatureZerocoinBalance = newImmatureZerocoinBalance;
         cachedTxLocks = nCompleteTXLocks;
         cachedWatchOnlyBalance = newWatchOnlyBalance;
         cachedWatchUnconfBalance = newWatchUnconfBalance;
         cachedWatchImmatureBalance = newWatchImmatureBalance;
         emit balanceChanged(newBalance, newUnconfirmedBalance, newImmatureBalance, 
-                            newZerocoinBalance, newUnconfirmedZerocoinBalance, newImmatureZerocoinBalance,
                             newWatchOnlyBalance, newWatchUnconfBalance, newWatchImmatureBalance);
     }
 }
@@ -292,7 +267,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                 return InvalidAmount;
             }
             total += subtotal;
-        } else { // User-entered vitae address / amount:
+        } else { // User-entered aureusxiv address / amount:
             if (!validateAddress(rcp.address)) {
                 return InvalidAddress;
             }
@@ -329,8 +304,8 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         CReserveKey* keyChange = transaction.getPossibleKeyChange();
 
 
-        if (recipients[0].useSwiftTX && total > GetSporkValue(SPORK_5_MAX_VALUE) * COIN) {
-            emit message(tr("Send Coins"), tr("SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 VITAE.").arg(GetSporkValue(SPORK_5_MAX_VALUE)),
+        if (recipients[0].useSwiftTX && total > sporkManager.GetSporkValue(SPORK_5_MAX_VALUE) * COIN) {
+            emit message(tr("Send Coins"), tr("SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 AureusXIV.").arg(sporkManager.GetSporkValue(SPORK_5_MAX_VALUE)),
                 CClientUIInterface::MSG_ERROR);
             return TransactionCreationFailed;
         }
@@ -338,8 +313,8 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         bool fCreated = wallet->CreateTransaction(vecSend, *newTx, *keyChange, nFeeRequired, strFailReason, coinControl, recipients[0].inputType, recipients[0].useSwiftTX,0, IsFundamentalNodePayment);
         transaction.setTransactionFee(nFeeRequired);
 
-        if (recipients[0].useSwiftTX && newTx->GetValueOut() > GetSporkValue(SPORK_5_MAX_VALUE) * COIN) {
-            emit message(tr("Send Coins"), tr("SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 VITAE.").arg(GetSporkValue(SPORK_5_MAX_VALUE)),
+        if (recipients[0].useSwiftTX && newTx->GetValueOut() > sporkManager.GetSporkValue(SPORK_5_MAX_VALUE) * COIN) {
+            emit message(tr("Send Coins"), tr("SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 AureusXIV.").arg(sporkManager.GetSporkValue(SPORK_5_MAX_VALUE)),
                 CClientUIInterface::MSG_ERROR);
             return TransactionCreationFailed;
         }
@@ -381,7 +356,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
                 std::string value;
                 rcp.paymentRequest.SerializeToString(&value);
                 newTx->vOrderForm.push_back(make_pair(key, value));
-            } else if (!rcp.message.isEmpty()) // Message from normal vitae:URI (vitae:XyZ...?message=example)
+            } else if (!rcp.message.isEmpty()) // Message from normal aureusxiv:URI (aureusxiv:XyZ...?message=example)
             {
                 newTx->vOrderForm.push_back(make_pair("Message", rcp.message.toStdString()));
             }
@@ -563,24 +538,6 @@ static void NotifyMultiSigChanged(WalletModel* walletmodel, bool fHaveMultiSig)
                               Q_ARG(bool, fHaveMultiSig));
 }
 
-static void NotifyZerocoinChanged(WalletModel* walletmodel, CWallet* wallet, const std::string& hexString,
-                                  const std::string& isUsed, ChangeType status)
-{
-    QString HexStr = QString::fromStdString(hexString);
-    QString isUsedStr = QString::fromStdString(isUsed);
-    qDebug() << "NotifyZerocoinChanged : " + HexStr + " " + isUsedStr + " status= " + QString::number(status);
-    QMetaObject::invokeMethod(walletmodel, "updateAddressBook", Qt::QueuedConnection,
-                              Q_ARG(QString, HexStr),
-                              Q_ARG(QString, isUsedStr),
-                              Q_ARG(int, status));
-}
-
-static void NotifyzPIVReset(WalletModel* walletmodel)
-{
-    qDebug() << "NotifyzPIVReset";
-    QMetaObject::invokeMethod(walletmodel, "checkBalanceChanged", Qt::QueuedConnection);
-}
-
 static void NotifyWalletBacked(WalletModel* model, const bool& fSuccess, const string& filename)
 {
     string message;
@@ -614,8 +571,6 @@ void WalletModel::subscribeToCoreSignals()
     wallet->ShowProgress.connect(boost::bind(ShowProgress, this, _1, _2));
     wallet->NotifyWatchonlyChanged.connect(boost::bind(NotifyWatchonlyChanged, this, _1));
     wallet->NotifyMultiSigChanged.connect(boost::bind(NotifyMultiSigChanged, this, _1));
-    wallet->NotifyZerocoinChanged.connect(boost::bind(NotifyZerocoinChanged, this, _1, _2, _3, _4));
-    wallet->NotifyzPIVReset.connect(boost::bind(NotifyzPIVReset, this));
     wallet->NotifyWalletBacked.connect(boost::bind(NotifyWalletBacked, this, _1, _2));
 }
 
@@ -628,8 +583,6 @@ void WalletModel::unsubscribeFromCoreSignals()
     wallet->ShowProgress.disconnect(boost::bind(ShowProgress, this, _1, _2));
     wallet->NotifyWatchonlyChanged.disconnect(boost::bind(NotifyWatchonlyChanged, this, _1));
     wallet->NotifyMultiSigChanged.disconnect(boost::bind(NotifyMultiSigChanged, this, _1));
-    wallet->NotifyZerocoinChanged.disconnect(boost::bind(NotifyZerocoinChanged, this, _1, _2, _3, _4));
-    wallet->NotifyzPIVReset.disconnect(boost::bind(NotifyzPIVReset, this));
     wallet->NotifyWalletBacked.disconnect(boost::bind(NotifyWalletBacked, this, _1, _2));
 }
 
@@ -758,12 +711,6 @@ void WalletModel::listLockedCoins(std::vector<COutPoint>& vOutpts)
     wallet->ListLockedCoins(vOutpts);
 }
 
-
-void WalletModel::listZerocoinMints(std::set<CMintMeta>& setMints, bool fUnusedOnly, bool fMaturedOnly, bool fUpdateStatus)
-{
-    setMints.clear();
-    setMints = pwalletMain->zvitTracker->ListMints(fUnusedOnly, fMaturedOnly, fUpdateStatus);
-}
 
 void WalletModel::loadReceiveRequests(std::vector<std::string>& vReceiveRequests)
 {

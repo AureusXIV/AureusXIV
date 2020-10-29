@@ -14,7 +14,6 @@
 #include "protocol.h"
 #include "uint256.h"
 
-#include "libzerocoin/Params.h"
 #include <vector>
 
 typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
@@ -26,7 +25,7 @@ struct CDNSSeedData {
 
 /**
  * CChainParams defines various tweakable parameters of a given instance of the
- * VITAE system. There are three: the main network on which people trade goods
+ * AureusXIV system. There are three: the main network on which people trade goods
  * and services, the public test network which gets reset from time to time and
  * a regression test mode which is intended for private networks only. It has
  * minimal difficulty to ensure that blocks can be found instantly.
@@ -77,6 +76,9 @@ public:
     int64_t Interval() const { return nTargetTimespan / nTargetSpacing; }
     int COINBASE_MATURITY() const { return nMaturity; }
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
+    CAmount BudgetCycleBlocks() const { return nBudgetCycleBlocks; }
+    CAmount BudgetFeeConfirmations() const { return nBudgetFeeConfirmations; }
+    CAmount ProposalEstablishmentTime() const { return nProposalEstablishmentTime; }
     /** The fundamentalnode count that we will allow the see-saw reward payments to be off by */
     int FundamentalnodeCountDrift() const { return nFundamentalnodeCountDrift; }
 	/** The masternode count that we will allow the see-saw reward payments to be off by */
@@ -94,7 +96,7 @@ public:
     int PoolMaxTransactions() const { return nPoolMaxTransactions; }
 
     /** Spork key and Masternode Handling **/
-    std::string SporkKey() const { return strSporkKey; }
+    std::string strSporkPubKey() const { return strSporkKey; }
     std::string SporkKeyOld() const { return strSporkKeyOld; }
     int64_t NewSporkStart() const { return nEnforceNewSporkKey; }
     int64_t RejectOldSporkKey() const { return nRejectOldSporkKey; }
@@ -104,29 +106,12 @@ public:
 
     CBaseChainParams::Network NetworkID() const { return networkID; }
 
-    /** Zerocoin **/
-    std::string Zerocoin_Modulus() const { return zerocoinModulus; }
-    libzerocoin::ZerocoinParams* Zerocoin_Params(bool useModulusV1) const;
-    int Zerocoin_MaxSpendsPerTransaction() const { return nMaxZerocoinSpendsPerTransaction; }
-    CAmount Zerocoin_MintFee() const { return nMinZerocoinMintFee; }
-    int Zerocoin_MintRequiredConfirmations() const { return nMintRequiredConfirmations; }
-    int Zerocoin_RequiredAccumulation() const { return nRequiredAccumulation; }
-    int Zerocoin_DefaultSpendSecurity() const { return nDefaultSecurityLevel; }
-    int Zerocoin_HeaderVersion() const { return nZerocoinHeaderVersion; }
-    int Zerocoin_RequiredStakeDepth() const { return nZerocoinRequiredStakeDepth; }
-
     /** Height or Time Based Activations **/
     int ModifierUpgradeBlock() const { return nModifierUpdateBlock; }
     int LAST_POW_BLOCK() const { return nLastPOWBlock; }
-    int Zerocoin_StartHeight() const { return nZerocoinStartHeight; }
-    int Zerocoin_Block_EnforceSerialRange() const { return nBlockEnforceSerialRange; }
-    int Zerocoin_Block_RecalculateAccumulators() const { return nBlockRecalculateAccumulators; }
-    int Zerocoin_Block_FirstFraudulent() const { return nBlockFirstFraudulent; }
-    int Zerocoin_Block_LastGoodCheckpoint() const { return nBlockLastGoodCheckpoint; }
-    int Zerocoin_StartTime() const { return nZerocoinStartTime; }
     int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
-    int Zerocoin_Block_V2_Start() const { return nBlockZerocoinV2; }
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
+    int START_MASTERNODE_PAYMENTS() const { return nStartMasternodePayments; }
 
 protected:
     CChainParams() {}
@@ -145,8 +130,12 @@ protected:
     int64_t nTargetTimespan;
     int64_t nTargetSpacing;
     int nLastPOWBlock;
+    int nStartMasternodePayments;
     int nFundamentalnodeCountDrift;
 	int nMasternodeCountDrift;
+    int nBudgetCycleBlocks;
+    int nBudgetFeeConfirmations;
+    int64_t nProposalEstablishmentTime;
     int nMaturity;
     int nModifierUpdateBlock;
     CAmount nMaxMoneyOut;
@@ -172,25 +161,17 @@ protected:
     int64_t nRejectOldSporkKey;
     std::string strObfuscationPoolDummyAddress;
     int64_t nStartFundamentalnodePayments;
-    std::string zerocoinModulus;
-    int nMaxZerocoinSpendsPerTransaction;
-    CAmount nMinZerocoinMintFee;
     CAmount nInvalidAmountFiltered;
     int nMintRequiredConfirmations;
     int nRequiredAccumulation;
     int nDefaultSecurityLevel;
-    int nZerocoinHeaderVersion;
     int64_t nBudget_Fee_Confirmations;
-    int nZerocoinStartHeight;
-    int nZerocoinStartTime;
-    int nZerocoinRequiredStakeDepth;
 
     int nBlockEnforceSerialRange;
     int nBlockRecalculateAccumulators;
     int nBlockFirstFraudulent;
     int nBlockLastGoodCheckpoint;
     int nBlockEnforceInvalidUTXO;
-    int nBlockZerocoinV2;
 };
 
 /**

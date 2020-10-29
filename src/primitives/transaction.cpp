@@ -53,9 +53,6 @@ std::string CTxIn::ToString() const
     str += "CTxIn(";
     str += prevout.ToString();
     if (prevout.IsNull())
-        if(scriptSig.IsZerocoinSpend())
-            str += strprintf(", zerocoinspend %s...", HexStr(scriptSig).substr(0, 25));
-        else
             str += strprintf(", coinbase %s", HexStr(scriptSig));
     else
         str += strprintf(", scriptSig=%s", scriptSig.ToString().substr(0,24));
@@ -147,8 +144,7 @@ bool CTransaction::IsCoinStake() const
         return false;
 
     // ppcoin: the coin stake transaction is marked with the first output empty
-    bool fAllowNull = vin[0].scriptSig.IsZerocoinSpend();
-    if (vin[0].prevout.IsNull() && !fAllowNull)
+    if (vin[0].prevout.IsNull())
         return false;
 
     return (vin.size() > 0 && vout.size() >= 2 && vout[0].IsEmpty());
@@ -159,7 +155,7 @@ CAmount CTransaction::GetValueOut() const
     CAmount nValueOut = 0;
     for (std::vector<CTxOut>::const_iterator it(vout.begin()); it != vout.end(); ++it)
     {
-        // VITAE: previously MoneyRange() was called here. This has been replaced with negative check and boundary wrap check.
+        // AureusXIV: previously MoneyRange() was called here. This has been replaced with negative check and boundary wrap check.
         if (it->nValue < 0)
             throw std::runtime_error("CTransaction::GetValueOut() : value out of range : less than 0");
 
@@ -169,18 +165,6 @@ CAmount CTransaction::GetValueOut() const
         nValueOut += it->nValue;
     }
     return nValueOut;
-}
-
-CAmount CTransaction::GetZerocoinMinted() const
-{
-    for (const CTxOut txOut : vout) {
-        if(!txOut.scriptPubKey.IsZerocoinMint())
-            continue;
-
-        return txOut.nValue;
-    }
-
-    return  CAmount(0);
 }
 
 bool CTransaction::UsesUTXO(const COutPoint out)
@@ -200,32 +184,6 @@ std::list<COutPoint> CTransaction::GetOutPoints() const
     for (unsigned int i = 0; i < vout.size(); i++)
         listOutPoints.emplace_back(COutPoint(txHash, i));
     return listOutPoints;
-}
-
-CAmount CTransaction::GetZerocoinSpent() const
-{
-    if(!IsZerocoinSpend())
-        return 0;
-
-    CAmount nValueOut = 0;
-    for (const CTxIn txin : vin) {
-        if(!txin.scriptSig.IsZerocoinSpend())
-            continue;
-
-        nValueOut += txin.nSequence * COIN;
-    }
-
-    return nValueOut;
-}
-
-int CTransaction::GetZerocoinMintCount() const
-{
-    int nCount = 0;
-    for (const CTxOut out : vout) {
-        if (out.scriptPubKey.IsZerocoinMint())
-            nCount++;
-    }
-    return nCount;
 }
 
 double CTransaction::ComputePriority(double dPriorityInputs, unsigned int nTxSize) const

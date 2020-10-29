@@ -1,0 +1,11 @@
+[Protocol]
+exec=aureusxiv-qt '%u'
+protocol=aureusxiv
+input=none
+output=none
+helper=true
+listing=
+reading=false
+writing=false
+makedir=false
+deleting=false

@@ -1,31 +1,31 @@
 #!/bin/bash
 #
-#  vitaed The VITAE core server.
+#  aureusxivd The AureusXIV core server.
 #
 #
 # chkconfig: 345 80 20
-# description: vitaed
-# processname: vitaed
+# description: aureusxivd
+# processname: aureusxivd
 #
 
 # Source function library.
 . /etc/init.d/functions
 
-# you can override defaults in /etc/sysconfig/vitaed, see below
-if [ -f /etc/sysconfig/vitaed ]; then
-        . /etc/sysconfig/vitaed
+# you can override defaults in /etc/sysconfig/aureusxivd, see below
+if [ -f /etc/sysconfig/aureusxivd ]; then
+        . /etc/sysconfig/aureusxivd
 fi
 
 RETVAL=0
 
-prog=vitaed
-# you can override the lockfile via BITCOIND_LOCKFILE in /etc/sysconfig/vitaed
-lockfile=${BITCOIND_LOCKFILE-/var/lock/subsys/vitaed}
+prog=aureusxivd
+# you can override the lockfile via BITCOIND_LOCKFILE in /etc/sysconfig/aureusxivd
+lockfile=${BITCOIND_LOCKFILE-/var/lock/subsys/aureusxivd}
 
-# vitaed defaults to /usr/bin/vitaed, override with BITCOIND_BIN
-bitcoind=${BITCOIND_BIN-/usr/bin/vitaed}
+# aureusxivd defaults to /usr/bin/aureusxivd, override with BITCOIND_BIN
+bitcoind=${BITCOIND_BIN-/usr/bin/aureusxivd}
 
-# vitaed opts default to -disablewallet, override with BITCOIND_OPTS
+# aureusxivd opts default to -disablewallet, override with BITCOIND_OPTS
 bitcoind_opts=${BITCOIND_OPTS}
 
 start() {

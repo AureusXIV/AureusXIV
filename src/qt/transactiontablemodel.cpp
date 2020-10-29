@@ -336,40 +336,15 @@ QString TransactionTableModel::formatTxType(const TransactionRecord* wtx) const
         return tr("Fundamentalnode Reward");
     case TransactionRecord::RecvFromOther:
         return tr("Received from");
-    case TransactionRecord::RecvWithObfuscation:
-        return tr("Received via Obfuscation");
     case TransactionRecord::SendToAddress:
     case TransactionRecord::SendToOther:
         return tr("Sent to");
     case TransactionRecord::SendToSelf:
         return tr("Payment to yourself");
     case TransactionRecord::StakeMint:
-        return tr("VITAE Stake");
-    case TransactionRecord::StakeZVIT:
-        return tr("zVITAE Stake");
+        return tr("AureusXIV Stake");
     case TransactionRecord::Generated:
         return tr("Mined");
-    case TransactionRecord::ObfuscationDenominate:
-        return tr("Obfuscation Denominate");
-    case TransactionRecord::ObfuscationCollateralPayment:
-        return tr("Obfuscation Collateral Payment");
-    case TransactionRecord::ObfuscationMakeCollaterals:
-        return tr("Obfuscation Make Collateral Inputs");
-    case TransactionRecord::ObfuscationCreateDenominations:
-        return tr("Obfuscation Create Denominations");
-    case TransactionRecord::Obfuscated:
-        return tr("Obfuscated");
-    case TransactionRecord::ZerocoinMint:
-        return tr("Converted VITAE to zVITAE");
-    case TransactionRecord::ZerocoinSpend:
-        return tr("Spent zVITAE");
-    case TransactionRecord::RecvFromZerocoinSpend:
-        return tr("Received VITAE from zVITAE");
-    case TransactionRecord::ZerocoinSpend_Change_zVITAE:
-        return tr("Minted Change as zVITAE from zVITAE Spend");
-    case TransactionRecord::ZerocoinSpend_FromMe:
-        return tr("Converted zVITAE to VITAE");
-
     default:
         return QString();
     }
@@ -380,18 +355,14 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord* wtx
     switch (wtx->type) {
     case TransactionRecord::Generated:
     case TransactionRecord::StakeMint:
-    case TransactionRecord::StakeZVIT:
     case TransactionRecord::MNReward:
     case TransactionRecord::FNReward:
         return QIcon(":/icons/tx_mined");
-    case TransactionRecord::RecvWithObfuscation:
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::RecvFromOther:
-    case TransactionRecord::RecvFromZerocoinSpend:
         return QIcon(":/icons/tx_input");
     case TransactionRecord::SendToAddress:
     case TransactionRecord::SendToOther:
-    case TransactionRecord::ZerocoinSpend:
         return QIcon(":/icons/tx_output");
     default:
         return QIcon(":/icons/tx_inout");
@@ -412,23 +383,12 @@ QString TransactionTableModel::formatTxToAddress(const TransactionRecord* wtx, b
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::MNReward:
 	case TransactionRecord::FNReward:
-    case TransactionRecord::RecvWithObfuscation:
     case TransactionRecord::SendToAddress:
     case TransactionRecord::Generated:
     case TransactionRecord::StakeMint:
-    case TransactionRecord::ZerocoinSpend:
-    case TransactionRecord::ZerocoinSpend_FromMe:
-    case TransactionRecord::RecvFromZerocoinSpend:
         return lookupAddress(wtx->address, tooltip);
-    case TransactionRecord::Obfuscated:
-        return lookupAddress(wtx->address, tooltip) + watchAddress;
     case TransactionRecord::SendToOther:
         return QString::fromStdString(wtx->address) + watchAddress;
-    case TransactionRecord::ZerocoinMint:
-    case TransactionRecord::ZerocoinSpend_Change_zVITAE:
-        return tr("Anonymous (zVITAE Transaction)");
-    case TransactionRecord::StakeZVIT:
-        return tr("zVITAE Accumulator");
     case TransactionRecord::SendToSelf:
     default:
         return tr("(n/a)") + watchAddress;

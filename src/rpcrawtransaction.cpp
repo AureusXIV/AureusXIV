@@ -21,7 +21,6 @@
 #include "swifttx.h"
 #include "uint256.h"
 #include "utilmoneystr.h"
-#include "zvitchain.h"
 #ifdef ENABLE_WALLET
 #include "wallet.h"
 #endif
@@ -157,7 +156,7 @@ UniValue getrawtransaction(const UniValue& params, bool fHelp)
             "         \"reqSigs\" : n,            (numeric) The required sigs\n"
             "         \"type\" : \"pubkeyhash\",  (string) The type, eg 'pubkeyhash'\n"
             "         \"addresses\" : [           (json array of string)\n"
-            "           \"vitaeaddress\"        (string) vitae address\n"
+            "           \"aureusxivaddress\"        (string) aureusxiv address\n"
             "           ,...\n"
             "         ]\n"
             "       }\n"
@@ -212,9 +211,9 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "\nArguments:\n"
             "1. minconf          (numeric, optional, default=1) The minimum confirmations to filter\n"
             "2. maxconf          (numeric, optional, default=9999999) The maximum confirmations to filter\n"
-            "3. \"addresses\"    (string) A json array of vitae addresses to filter\n"
+            "3. \"addresses\"    (string) A json array of aureusxiv addresses to filter\n"
             "    [\n"
-            "      \"address\"   (string) vitae address\n"
+            "      \"address\"   (string) aureusxiv address\n"
             "      ,...\n"
             "    ]\n"
             "4. watchonlyconfig  (numberic, optional, default=1) 1 = list regular unspent transactions, 2 = list only watchonly transactions,  3 = list all unspent transactions (including watchonly)\n"
@@ -224,7 +223,7 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "  {\n"
             "    \"txid\" : \"txid\",        (string) the transaction id \n"
             "    \"vout\" : n,               (numeric) the vout value\n"
-            "    \"address\" : \"address\",  (string) the vitae address\n"
+            "    \"address\" : \"address\",  (string) the aureusxiv address\n"
             "    \"account\" : \"account\",  (string) The associated account, or \"\" for the default account\n"
             "    \"scriptPubKey\" : \"key\", (string) the script key\n"
             "    \"amount\" : x.xxx,         (numeric) the transaction amount in btc\n"
@@ -253,7 +252,7 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             const UniValue& input = inputs[inx];
             CBitcoinAddress address(input.get_str());
             if (!address.IsValid())
-                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid VITAE address: ") + input.get_str());
+                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid AureusXIV address: ") + input.get_str());
             if (setAddress.count(address))
                 throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ") + input.get_str());
             setAddress.insert(address);
@@ -337,7 +336,7 @@ UniValue createrawtransaction(const UniValue& params, bool fHelp)
             "     ]\n"
             "2. \"addresses\"           (string, required) a json object with addresses as keys and amounts as values\n"
             "    {\n"
-            "      \"address\": x.xxx   (numeric, required) The key is the vitae address, the value is the btc amount\n"
+            "      \"address\": x.xxx   (numeric, required) The key is the aureusxiv address, the value is the btc amount\n"
             "      ,...\n"
             "    }\n"
 
@@ -377,7 +376,7 @@ UniValue createrawtransaction(const UniValue& params, bool fHelp)
     BOOST_FOREACH(const string& name_, addrList) {
         CBitcoinAddress address(name_);
         if (!address.IsValid())
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid VITAE address: ")+name_);
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid AureusXIV address: ")+name_);
 
         if (setAddress.count(address))
             throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+name_);
@@ -430,7 +429,7 @@ UniValue decoderawtransaction(const UniValue& params, bool fHelp)
             "         \"reqSigs\" : n,            (numeric) The required sigs\n"
             "         \"type\" : \"pubkeyhash\",  (string) The type, eg 'pubkeyhash'\n"
             "         \"addresses\" : [           (json array of string)\n"
-            "           \"12tvKAXCxZjSmdNbao16dKXC8tRWfcF5oc\"   (string) vitae address\n"
+            "           \"12tvKAXCxZjSmdNbao16dKXC8tRWfcF5oc\"   (string) aureusxiv address\n"
             "           ,...\n"
             "         ]\n"
             "       }\n"
@@ -473,7 +472,7 @@ UniValue decodescript(const UniValue& params, bool fHelp)
             "  \"type\":\"type\", (string) The output type\n"
             "  \"reqSigs\": n,    (numeric) The required signatures\n"
             "  \"addresses\": [   (json array of string)\n"
-            "     \"address\"     (string) vitae address\n"
+            "     \"address\"     (string) aureusxiv address\n"
             "     ,...\n"
             "  ],\n"
             "  \"p2sh\",\"address\" (string) script address\n"
@@ -809,43 +808,3 @@ UniValue sendrawtransaction(const UniValue& params, bool fHelp)
     return hashTx.GetHex();
 }
 
-UniValue getspentzerocoinamount(const UniValue& params, bool fHelp)
-{
-    if (fHelp || params.size() != 2)
-        throw runtime_error(
-            "getspentzerocoinamount hexstring index\n"
-            "\nReturns value of spent zerocoin output designated by transaction hash and input index.\n"
-
-            "\nArguments:\n"
-            "1. hash          (hexstring) Transaction hash\n"
-            "2. index         (int) Input index\n"
-
-            "\nResult:\n"
-            "\"value\"        (int) Spent output value, -1 if error\n"
-
-            "\nExamples:\n" +
-            HelpExampleCli("getspentzerocoinamount", "78021ebf92a80dfccef1413067f1222e37535399797cce029bb40ad981131706 0"));
-
-    LOCK(cs_main);
-
-    uint256 txHash = ParseHashV(params[0], "parameter 1");
-    int inputIndex = params[1].get_int();
-    if (inputIndex < 0)
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter for transaction input");
-
-    CTransaction tx;
-    uint256 hashBlock = 0;
-    if (!GetTransaction(txHash, tx, hashBlock, true))
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No information available about transaction");
-
-    if (inputIndex >= (int)tx.vin.size())
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter for transaction input");
-
-    const CTxIn& input = tx.vin[inputIndex];
-    if (!input.scriptSig.IsZerocoinSpend())
-        return -1;
-
-    libzerocoin::CoinSpend spend = TxInToZerocoinSpend(input);
-    CAmount nValue = libzerocoin::ZerocoinDenominationToAmount(spend.getDenomination());
-    return FormatMoney(nValue);
-}

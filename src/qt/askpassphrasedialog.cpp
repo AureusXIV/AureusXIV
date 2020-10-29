@@ -123,7 +123,7 @@ void AskPassphraseDialog::accept()
             break;
         }
         QMessageBox::StandardButton retval = QMessageBox::question(this, tr("Confirm wallet encryption"),
-            tr("Warning: If you encrypt your wallet and lose your passphrase, you will <b>LOSE ALL OF YOUR VITAE</b>!") + "<br><br>" + tr("Are you sure you wish to encrypt your wallet?"),
+            tr("Warning: If you encrypt your wallet and lose your passphrase, you will <b>LOSE ALL OF YOUR AureusXIV</b>!") + "<br><br>" + tr("Are you sure you wish to encrypt your wallet?"),
             QMessageBox::Yes | QMessageBox::Cancel,
             QMessageBox::Cancel);
         if (retval == QMessageBox::Yes) {
@@ -131,7 +131,7 @@ void AskPassphraseDialog::accept()
                 if (model->setWalletEncrypted(true, newpass1)) {
                     QMessageBox::warning(this, tr("Wallet encrypted"),
                         "<qt>" +
-                            tr("VITAE will close now to finish the encryption process. "
+                            tr("AureusXIV will close now to finish the encryption process. "
                                "Remember that encrypting your wallet cannot fully protect "
                                "your VITs from being stolen by malware infecting your computer.") +
                             "<br><br><b>" +
