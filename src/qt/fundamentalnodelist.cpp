@@ -29,10 +29,10 @@ FundamentalnodeList::FundamentalnodeList(QWidget* parent) : QWidget(parent),
 
     int columnAliasWidth = 100;
     int columnAddressWidth = 200;
-    int columnProtocolWidth = 60;
+    int columnProtocolWidth = 100;
     int columnStatusWidth = 80;
-    int columnActiveWidth = 130;
-    int columnLastSeenWidth = 130;
+    int columnActiveWidth = 100;
+    int columnLastSeenWidth = 160;
 
     ui->tableWidgetMyFundamentalnodes->setAlternatingRowColors(true);
     ui->tableWidgetMyFundamentalnodes->setColumnWidth(0, columnAliasWidth);
@@ -41,6 +41,9 @@ FundamentalnodeList::FundamentalnodeList(QWidget* parent) : QWidget(parent),
     ui->tableWidgetMyFundamentalnodes->setColumnWidth(3, columnStatusWidth);
     ui->tableWidgetMyFundamentalnodes->setColumnWidth(4, columnActiveWidth);
     ui->tableWidgetMyFundamentalnodes->setColumnWidth(5, columnLastSeenWidth);
+
+    ui->tableWidgetMyFundamentalnodes->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->tableWidgetMyFundamentalnodes->horizontalHeader()->setTextElideMode(Qt::ElideRight);
 
     ui->tableWidgetMyFundamentalnodes->setContextMenuPolicy(Qt::CustomContextMenu);
 
