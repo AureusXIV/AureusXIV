@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The VITAE developers
+// Copyright (c) 2015-2017 The AureusXIV developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -308,7 +308,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     QActionGroup* tabGroup = new QActionGroup(this);
     // tabGroup.setFont(QFont(font, 28 * Andale-Mono));
     overviewAction = new QAction(QIcon(":/icons/send"), tr("&Overview"), this);
-    overviewAction->setStatusTip(tr("Send coins to a VITAE addresses"));
+    overviewAction->setStatusTip(tr("Send coins to a AureusXIV addresses"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
     overviewAction->setFont(GUIUtil::primaryFont());
@@ -337,8 +337,8 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 #endif
     tabGroup->addAction(sendCoinsAction);
 
-    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive"), this);
-    receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and aureusxiv: URIs)"));
+    receiveCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Receive"), this);
+    receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and AureusXIV: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
     receiveCoinsAction->setFont(GUIUtil::primaryFont());
@@ -624,9 +624,7 @@ void BitcoinGUI::createToolBars()
        toolbar->addAction(spacer);
        toolbar->widgetForAction(spacer)->setObjectName("ToolbarSpacer");
        toolbar->addWidget(label);
-        QAction* spacer2 = new QAction(this);
-       toolbar->addAction(spacer2);
-       toolbar->widgetForAction(spacer2)->setObjectName("ToolbarSpacer2");
+ 
        //toolbar->addWidget(syncLabel);
        //toolbar->setStyleSheet("text-align:left;");
 

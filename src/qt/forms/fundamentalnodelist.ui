@@ -231,6 +231,11 @@
                   </property>
                   <item>
                    <widget class="QPushButton" name="startButton">
+                    <property name="font">
+                    <font>
+                        <family>Andale Mono</family>
+                    </font>
+                    </property>
                     <property name="text">
                      <string>S&amp;tart alias</string>
                     </property>
@@ -238,6 +243,11 @@
                   </item>
                   <item>
                    <widget class="QPushButton" name="startAllButton">
+                    <property name="font">
+                    <font>
+                        <family>Andale Mono</family>
+                    </font>
+                    </property>
                     <property name="text">
                      <string>Start &amp;all</string>
                     </property>
@@ -245,6 +255,11 @@
                   </item>
                   <item>
                    <widget class="QPushButton" name="startMissingButton">
+                    <property name="font">
+                    <font>
+                        <family>Andale Mono</family>
+                    </font>
+                    </property>
                     <property name="text">
                      <string>Start &amp;MISSING</string>
                     </property>
@@ -252,6 +267,11 @@
                   </item>
                   <item>
                    <widget class="QPushButton" name="UpdateButton">
+                    <property name="font">
+                    <font>
+                        <family>Andale Mono</family>
+                    </font>
+                    </property>
                     <property name="text">
                      <string>&amp;Update status</string>
                     </property>
