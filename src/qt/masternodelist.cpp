@@ -32,12 +32,12 @@ MasternodeList::MasternodeList(QWidget* parent) : QWidget(parent),
 
     ui->startButton->setEnabled(false);
 
-    int columnAliasWidth = 100;
+    int columnAliasWidth = 50;
     int columnAddressWidth = 200;
-    int columnProtocolWidth = 60;
+    int columnProtocolWidth = 100;
     int columnStatusWidth = 80;
-    int columnActiveWidth = 130;
-    int columnLastSeenWidth = 130;
+    int columnActiveWidth = 100;
+    int columnLastSeenWidth = 160;
 
     ui->tableWidgetMyMasternodes->setAlternatingRowColors(true);
     ui->tableWidgetMyMasternodes->setColumnWidth(0, columnAliasWidth);
@@ -46,6 +46,16 @@ MasternodeList::MasternodeList(QWidget* parent) : QWidget(parent),
     ui->tableWidgetMyMasternodes->setColumnWidth(3, columnStatusWidth);
     ui->tableWidgetMyMasternodes->setColumnWidth(4, columnActiveWidth);
     ui->tableWidgetMyMasternodes->setColumnWidth(5, columnLastSeenWidth);
+    ui->tableWidgetMyMasternodes->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->tableWidgetMyMasternodes->horizontalHeader()->setTextElideMode(Qt::ElideRight);
+
+    ui->tableWidgetMasternodes->setColumnWidth(0, columnAddressWidth);
+    ui->tableWidgetMasternodes->setColumnWidth(1, columnProtocolWidth);
+    ui->tableWidgetMasternodes->setColumnWidth(2, columnStatusWidth);
+    ui->tableWidgetMasternodes->setColumnWidth(3, columnActiveWidth);
+    ui->tableWidgetMasternodes->setColumnWidth(4, columnLastSeenWidth);
+    ui->tableWidgetMasternodes->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->tableWidgetMasternodes->horizontalHeader()->setTextElideMode(Qt::ElideRight);
 
     ui->tableWidgetMyMasternodes->setContextMenuPolicy(Qt::CustomContextMenu);
 
