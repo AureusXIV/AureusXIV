@@ -734,6 +734,7 @@ border:0;
 .QTableView { /* Table - has to be selected as a class otherwise it throws off QCalendarWidget */
 background:transparent;
 border:0;
+alternate-background-color:transparent;
 }
 
 QTableView::item:first {
@@ -1943,7 +1944,17 @@ QWidget#ReceiveCoinsDialog .QFrame#frame .QLabel#label_6 { /* Requested Payments
 /* color:#382f44;
 font-weight:bold;
 font-size:14px; */
+font-size:20px;
 }
+
+QWidget#ReceiveCoinsDialog .QFrame#frame2  > .QLabel#label_5 { /* Requested Payments History Label */
+    /* color:#382f44;
+    font-weight:bold;
+    font-size:14px; */
+    font-size:10px;
+    margin-bottom:4px;
+    min-height:12px;
+    }
 
 /**************************** RECEIVE COINS DIALOG **************************************/
 
