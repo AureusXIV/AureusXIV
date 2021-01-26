@@ -38,9 +38,12 @@
         <file alias="export">res/icons/export.png</file>
         <file alias="synced">res/icons/synced.svg</file>
         <file alias="remove">res/icons/remove.svg</file>
-        <file alias="tx_mined">res/icons/tx_mined.png</file>
+        <file alias="tx_mined">res/icons/tx_mined.svg</file>
+        <file alias="tx_staked">res/icons/tx_staked.svg</file>
+        <file alias="tx_masternode">res/icons/tx_masternode.svg</file>
+        <file alias="tx_fundamentalnode">res/icons/tx_fundamentalnode.svg</file>
         <file alias="tx_input">res/icons/tx_input.svg</file>
-        <file alias="tx_output">res/icons/tx_output.png</file>
+        <file alias="tx_output">res/icons/tx_output.svg</file>
         <file alias="tx_inout">res/icons/tx_inout.svg</file>
         <file alias="unit_axiv">res/icons/unit_axiv.png</file>
         <file alias="unit_maxiv">res/icons/unit_maxiv.png</file>
@@ -63,7 +66,7 @@
         <file alias="default">res/css/default.css</file>
     </qresource>
     <qresource prefix="/images">
-        <file alias="about">res/images/about.png</file>
+        <file alias="about">res/images/about.svg</file>
         <file alias="axiv_logo_horizontal">res/images/axiv_logo_horizontal.png</file>
         <file alias="downArrow">res/images/downArrow.svg</file>
         <file alias="upArrow">res/images/upArrow.svg</file>

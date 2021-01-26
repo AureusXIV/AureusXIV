@@ -338,7 +338,8 @@ background-color:#606a84;
 
 .QValidatedLineEdit:disabled, .QLineEdit:disabled, .QTextEdit:disabled {
 color: #f9ffdc;
-background-color:#f2f2f2;
+background-color:rgba(96, 106, 132, 0.3);
+color:rgba(249, 255, 220, 0.3);
 }
 
 .QPlainTextEdit {
@@ -1230,7 +1231,7 @@ background:#fff;
 
 /* Command Line Options Dialog */
 QDialog#HelpMessageDialog QScrollArea * {
-background-color:#fff;
+background-color:transparent;
 }
 
 QDialog#HelpMessageDialog QScrollBar:vertical, QDialog#HelpMessageDialog QScrollBar:horizontal {
