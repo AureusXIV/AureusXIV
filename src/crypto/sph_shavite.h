@@ -35,8 +35,8 @@
  * @author   Thomas Pornin <thomas.pornin@cryptolog.com>
  */
 
-#ifndef SPH_SHAVITE_H__
-#define SPH_SHAVITE_H__
+#ifndef SPH_SHAAXIVE_H__
+#define SPH_SHAAXIVE_H__
 
 #include <stddef.h>
 #include "sph_types.h"

@@ -1,18 +1,18 @@
 AXIV Core version 2.3.1 is now available from:
 
-  <https://github.com/AXIVteam/AXIV/releases>
+  <https://github.com/axivteam/axiv/releases>
 
 This is a new minor version release, including various bug fixes and
 performance improvements, as well as updated translations.
 
 Please report bugs using the issue tracker at github:
 
-  <https://github.com/AXIVteam/AXIV/issues>
+  <https://github.com/axivteam/axiv/issues>
 
 How to Upgrade
 ==============
 
-If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/AXIV-Qt (on Mac) or AXIVd/AXIV-qt (on Linux).
+If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/AXIV-Qt (on Mac) or axivd/axiv-qt (on Linux).
 
 Compatibility
 ==============
@@ -98,7 +98,7 @@ Result: (for other sets):
 }
 
 Examples:
-> AXIV-cli startmasternode "alias" true "my_mn"
+> axiv-cli startmasternode "alias" true "my_mn"
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "startmasternode", "params": ["alias" true "my_mn"] }' -H 'content-type: text/plain;' http://127.0.0.1:51473/
 ```
 
@@ -133,7 +133,7 @@ Result:
 }
 
 Examples:
-> AXIV-cli mnbudgetvote "local" "ed2f83cedee59a91406f5f47ec4d60bf5a7f9ee6293913c82976bd2d3a658041" "yes"
+> axiv-cli mnbudgetvote "local" "ed2f83cedee59a91406f5f47ec4d60bf5a7f9ee6293913c82976bd2d3a658041" "yes"
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "mnbudgetvote", "params": ["local" "ed2f83cedee59a91406f5f47ec4d60bf5a7f9ee6293913c82976bd2d3a658041" "yes"] }' -H 'content-type: text/plain;' http://127.0.0.1:51473/
 ```
 
@@ -175,7 +175,7 @@ Result:
 ]
 
 Examples:
-> AXIV-cli getbudgetinfo
+> axiv-cli getbudgetinfo
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbudgetinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:51473/
 ```
 
@@ -210,4 +210,4 @@ Thanks to everyone who directly contributed to this release:
 - Mrs-X
 - amirabrams
 
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/AXIV-project-translations/).
+As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/axiv-project-translations/).

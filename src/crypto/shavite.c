@@ -39,8 +39,8 @@
 extern "C"{
 #endif
 
-#if SPH_SMALL_FOOTPRINT && !defined SPH_SMALL_FOOTPRINT_SHAVITE
-#define SPH_SMALL_FOOTPRINT_SHAVITE   1
+#if SPH_SMALL_FOOTPRINT && !defined SPH_SMALL_FOOTPRINT_SHAAXIVE
+#define SPH_SMALL_FOOTPRINT_SHAAXIVE   1
 #endif
 
 #ifdef _MSC_VER
@@ -148,7 +148,7 @@ static const sph_u32 IV512[] = {
 		(k3) = kt; \
 	} while (0)
 
-#if SPH_SMALL_FOOTPRINT_SHAVITE
+#if SPH_SMALL_FOOTPRINT_SHAAXIVE
 
 /*
  * This function assumes that "msg" is aligned for 32-bit access.
@@ -720,7 +720,7 @@ c256(sph_shavite_small_context *sc, const void *msg)
 
 #endif
 
-#if SPH_SMALL_FOOTPRINT_SHAVITE
+#if SPH_SMALL_FOOTPRINT_SHAAXIVE
 
 /*
  * This function assumes that "msg" is aligned for 32-bit access.

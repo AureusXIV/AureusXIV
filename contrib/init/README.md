@@ -1,10 +1,10 @@
 Sample configuration files for:
 
-SystemD: AXIVd.service
-Upstart: AXIVd.conf
-OpenRC:  AXIVd.openrc
-         AXIVd.openrcconf
-CentOS:  AXIVd.init
+SystemD: axivd.service
+Upstart: axivd.conf
+OpenRC:  axivd.openrc
+         axivd.openrcconf
+CentOS:  axivd.init
 
 have been made available to assist packagers in creating node packages here.
 

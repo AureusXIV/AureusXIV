@@ -35,7 +35,7 @@ extern bool fFundamentalNode;
 extern bool fLiteMode;
 extern bool fEnableSwiftTX;
 extern int nSwiftTXDepth;
-extern int nAnonymizeVitaeAmount;
+extern int nAnonymizeAxivAmount;
 extern int nLiquidityProvider;
 extern int64_t enforceFundamentalnodePaymentsTime;
 extern std::string strFundamentalNodeAddr;
@@ -216,7 +216,7 @@ void RenameThread(const char* name);
 template <typename Callable>
 void TraceThread(const char* name, Callable func)
 {
-    std::string s = strprintf("AXIV-%s", name);
+    std::string s = strprintf("axiv-%s", name);
     RenameThread(s.c_str());
     try {
         LogPrintf("%s thread start\n", name);

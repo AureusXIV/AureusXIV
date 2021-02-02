@@ -176,7 +176,7 @@
         <translation>cüzdan şifrelemesini onayla</translation>
     </message>
     <message>
-        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your VITs from being stolen by malware infecting your computer.</source>
+        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AXIVs from being stolen by malware infecting your computer.</source>
         <translation>AXIV şifreleme işlemini tamamlamak için şimdi kapanacaktır. Cüzdanınızı şifrelemenin, AXIV'lerinizi bilgisayarınıza bulaşan kötücül yazılımlar tarafından çalınmasına tamamen engelleyemediğini unutmayın</translation>
     </message>
     <message>
@@ -395,9 +395,9 @@
     </message>
     </context>
 <context>
-    <name>ZAXIVControlDialog</name>
+    <name>ZAxivControlDialog</name>
     </context>
 <context>
-    <name>AXIV-core</name>
+    <name>vitae-core</name>
     </context>
 </TS>

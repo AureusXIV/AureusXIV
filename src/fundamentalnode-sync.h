@@ -1,17 +1,15 @@
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2017 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef FUNDAMENTALNODE_SYNC_H
 #define FUNDAMENTALNODE_SYNC_H
 
-#include <atomic>
-
 #define FUNDAMENTALNODE_SYNC_INITIAL 0
 #define FUNDAMENTALNODE_SYNC_SPORKS 1
 #define FUNDAMENTALNODE_SYNC_LIST 2
-#define FUNDAMENTALNODE_SYNC_FNW 3
+#define FUNDAMENTALNODE_SYNC_MNW 3
 #define FUNDAMENTALNODE_SYNC_BUDGET 4
 #define FUNDAMENTALNODE_SYNC_BUDGET_PROP 10
 #define FUNDAMENTALNODE_SYNC_BUDGET_FIN 11
@@ -31,8 +29,8 @@ extern CFundamentalnodeSync fundamentalnodeSync;
 class CFundamentalnodeSync
 {
 public:
-    std::map<uint256, int> mapSeenSyncFNB;
-    std::map<uint256, int> mapSeenSyncFNW;
+    std::map<uint256, int> mapSeenSyncMNB;
+    std::map<uint256, int> mapSeenSyncMNW;
     std::map<uint256, int> mapSeenSyncBudget;
 
     int64_t lastFundamentalnodeList;
@@ -40,9 +38,6 @@ public:
     int64_t lastBudgetItem;
     int64_t lastFailure;
     int nCountFailures;
-
-    std::atomic<int64_t> lastProcess;
-    std::atomic<bool> fBlockchainSynced;
 
     // sum of all counts
     int sumFundamentalnodeList;
@@ -76,10 +71,8 @@ public:
     void Reset();
     void Process();
     bool IsSynced();
-    bool NotCompleted();
-    bool IsSporkListSynced();
-    bool IsFundamentalnodeListSynced();
     bool IsBlockchainSynced();
+    bool IsFundamentalnodeListSynced() { return RequestedFundamentalnodeAssets > FUNDAMENTALNODE_SYNC_LIST; }
     void ClearFulfilledRequest();
 };
 

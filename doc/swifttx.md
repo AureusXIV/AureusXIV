@@ -12,8 +12,8 @@ When a "Transaction Lock" occurs the hash of the related transaction is broadcas
 * `zmqpubhashtxlock`: publishes the transaction hash when locked via SwiftX
 
 This mechanism has been integrated into Bitcore-Node-AXIV which allows for notification to be broadcast through Insight API in one of two ways:
-* WebSocket: [https://github.com/AXIVteam/insight-api-AXIV#web-socket-api](https://github.com/AXIVteam/insight-api-AXIV#web-socket-api) 
-* API: [https://github.com/AXIVteam/insight-api-AXIV#swifttx-transactions](https://github.com/AXIVteam/insight-api-AXIV#swifttx-transactions) 
+* WebSocket: [https://github.com/axivteam/insight-api-axiv#web-socket-api](https://github.com/axivteam/insight-api-axiv#web-socket-api) 
+* API: [https://github.com/axivteam/insight-api-axiv#swifttx-transactions](https://github.com/axivteam/insight-api-axiv#swifttx-transactions) 
 
 ####Command line option
 

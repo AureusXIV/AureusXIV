@@ -42,12 +42,11 @@ public:
         CoinControlFeatures, // bool
         ThreadsScriptVerif,  // int
         DatabaseCache,       // int
-        SpendZeroConfChange, // bool
         //ZeromintEnable,      // bool
         //ZeromintPercentage,  // int
         ZeromintPrefDenom,   // int
         HideZeroBalances,    // bool
-        AnonymizeAXIVAmount, //int
+        AnonymizeAxivAmount, //int
         ShowFundamentalnodesTab,  // bool
 		ShowMasternodesTab,  // bool
         Listen,              // bool
@@ -100,7 +99,7 @@ signals:
     //void zeromintEnableChanged(bool);
     //void zeromintPercentageChanged(int);
     void preferredDenomChanged(int);
-    void anonymizeAXIVAmountChanged(int);
+    void anonymizeAxivAmountChanged(int);
     void coinControlFeaturesChanged(bool);
     void hideZeroBalancesChanged(bool);
 };

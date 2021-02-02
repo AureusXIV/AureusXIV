@@ -176,7 +176,7 @@
         <translation>Підтвердження шифрування гаманця</translation>
     </message>
     <message>
-        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your VITs from being stolen by malware infecting your computer.</source>
+        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AXIVs from being stolen by malware infecting your computer.</source>
         <translation>AXIV зараз закриється, щоб завершити процес шифрування. Пам'ятайте, що шифрування гаманця не може повністю захистити ваші AXIV'и від крадіжки зловмисним програмним забезпеченням, що заражає ваш комп'ютер.</translation>
     </message>
     <message>
@@ -367,9 +367,9 @@
     </message>
     </context>
 <context>
-    <name>ZAXIVControlDialog</name>
+    <name>ZAxivControlDialog</name>
     </context>
 <context>
-    <name>AXIV-core</name>
+    <name>vitae-core</name>
     </context>
 </TS>

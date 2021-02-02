@@ -997,7 +997,7 @@
         </color>
        </brush>
       </colorrole>
-    </inactive>
+     </inactive>
      <disabled>
       <colorrole role="WindowText">
        <brush brushstyle="SolidPattern">

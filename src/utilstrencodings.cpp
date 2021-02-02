@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2016-2017 The PIVX developers
-// Copyright (c) 2018 The VITAE developers
+// Copyright (c) 2018 The AXIV developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -35,33 +35,6 @@ string SanitizeString(const string& str)
             strResult.push_back(str[i]);
     }
     return strResult;
-}
-
-bool validateURL(std::string strURL, std::string& strErr, unsigned int maxSize) {
-
-    // Check URL size
-    if (strURL.size() > maxSize) {
-        strErr = strprintf("Invalid URL: %d exceeds limit of %d characters.", strURL.size(), maxSize);
-        return false;
-    }
-
-    std::vector<std::string> reqPre;
-
-    // Required initial strings; URL must contain one
-    reqPre.push_back("http://");
-    reqPre.push_back("https://");
-
-    // check fronts
-    bool found = false;
-    for (int i=0; i < (int) reqPre.size() && !found; i++) {
-        if (strURL.find(reqPre[i]) == 0) found = true;
-    }
-    if ((!found) && (reqPre.size() > 0)) {
-        strErr = "Invalid URL, check scheme (e.g. https://)";
-        return false;
-    }
-
-    return true;
 }
 
 const signed char p_util_hexdigit[256] =

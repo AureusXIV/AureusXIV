@@ -160,8 +160,8 @@
         <translation>Bekräfta plånboks krypering</translation>
     </message>
     <message>
-        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your VITs from being stolen by malware infecting your computer.</source>
-        <translation>AXIV kommer att stängas ner nu för att färdigställa kryperingsprocessen. Kom ihåg att kryptering av din plånbok inte kan säkerställa dina VITs från att bli stulna av skadeprogram som infekterat din dator.</translation>
+        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AXIVs from being stolen by malware infecting your computer.</source>
+        <translation>AXIV kommer att stängas ner nu för att färdigställa kryperingsprocessen. Kom ihåg att kryptering av din plånbok inte kan säkerställa dina AXIVs från att bli stulna av skadeprogram som infekterat din dator.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -223,8 +223,8 @@
         <translation>BIP 38 Kryptering</translation>
     </message>
     <message>
-        <source>Enter a AXIV Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
-        <translation>Ange en AXIV adress som du vill kryptera med BIP 38.
+        <source>Enter a Axiv Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
+        <translation>Ange en Axiv adress som du vill kryptera med BIP 38.
 Ange en lösenfras i den mellersta boxen. Tryck kryptera för att beräkna den krypterade privata nyckeln.</translation>
     </message>
     <message>
@@ -591,8 +591,8 @@ Ange en lösenfras i den mellersta boxen. Tryck kryptera för att beräkna den k
         <translation>Skicka mynt till en AXIV adress</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and AXIV: URIs)</source>
-        <translation>Begär betalning (genererar QR kod och AXIV: URls)</translation>
+        <source>Request payments (generates QR codes and vitae: URIs)</source>
+        <translation>Begär betalning (genererar QR kod och vitae: URls)</translation>
     </message>
     <message>
         <source>&amp;Masternodes</source>
@@ -1416,10 +1416,10 @@ Ange en lösenfras i den mellersta boxen. Tryck kryptera för att beräkna den k
     </message>
     </context>
 <context>
-    <name>ZAXIVControlDialog</name>
+    <name>ZAxivControlDialog</name>
     </context>
 <context>
-    <name>AXIV-core</name>
+    <name>vitae-core</name>
     <message>
         <source>Error</source>
         <translation>Fel</translation>

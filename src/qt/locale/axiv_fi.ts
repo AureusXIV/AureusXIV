@@ -172,8 +172,8 @@
         <translation>Vahvista lompakon salaus</translation>
     </message>
     <message>
-        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your VITs from being stolen by malware infecting your computer.</source>
-        <translation>AXIV sulkeutuu salausprosessin ajaksi. Muista, että lompakon salaus ei voi täysin suojella VITien varkaudelta, jos tietokoneesi sisältää haittaohjelmia.</translation>
+        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AXIVs from being stolen by malware infecting your computer.</source>
+        <translation>AXIV sulkeutuu salausprosessin ajaksi. Muista, että lompakon salaus ei voi täysin suojella AXIVien varkaudelta, jos tietokoneesi sisältää haittaohjelmia.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -181,7 +181,7 @@
     </message>
     <message>
         <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR AXIV&lt;/b&gt;!</source>
-        <translation>Varoitus: Jos salaat lompakkosi ja unohdat salausavaimesi, &lt;b&gt;menetät kaikki VITisi&lt;/b&gt;</translation>
+        <translation>Varoitus: Jos salaat lompakkosi ja unohdat salausavaimesi, &lt;b&gt;menetät kaikki AXIVisi&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -235,8 +235,8 @@
         <translation>&amp;BIP 38 Salaus</translation>
     </message>
     <message>
-        <source>Enter a AXIV Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
-        <translation>Syötä AXIV osoite, jonnka tahtoisit salata käyttäen BIP 38.
+        <source>Enter a Axiv Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
+        <translation>Syötä Axiv osoite, jonnka tahtoisit salata käyttäen BIP 38.
 Syötä salausavain laatikon keskelle. Paina salaa tuottaaksesi salatun yksityisavaimen.</translation>
     </message>
     <message>
@@ -599,8 +599,8 @@ Syötä salausavain laatikon keskelle. Paina salaa tuottaaksesi salatun yksityis
         <translation>Lähetä kolikkoja AXIV osoitteeseen</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and AXIV: URIs)</source>
-        <translation>Pyydä maksuja (Generoi QR koodeja ja AXIV: URIja)</translation>
+        <source>Request payments (generates QR codes and vitae: URIs)</source>
+        <translation>Pyydä maksuja (Generoi QR koodeja ja vitae: URIja)</translation>
     </message>
     <message>
         <source>&amp;Masternodes</source>
@@ -2534,14 +2534,14 @@ Please check the address and try again.</source>
     </message>
     </context>
 <context>
-    <name>ZAXIVControlDialog</name>
+    <name>ZAxivControlDialog</name>
     <message>
         <source>0</source>
         <translation>0</translation>
     </message>
     </context>
 <context>
-    <name>AXIV-core</name>
+    <name>vitae-core</name>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
         <translation>Varoitus: Verkko ei näytä olevan samaa mieltä! Jotkin mainaajat saattavat kokea ongelmia.</translation>

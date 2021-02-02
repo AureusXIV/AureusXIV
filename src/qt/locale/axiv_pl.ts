@@ -526,8 +526,8 @@
         <translation>Wyślij monety do adresu AXIV</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and AXIV: URIs)</source>
-        <translation>Zarządaj płatności (generuje kod QR i AXIV:URI)</translation>
+        <source>Request payments (generates QR codes and vitae: URIs)</source>
+        <translation>Zarządaj płatności (generuje kod QR i vitae:URI)</translation>
     </message>
     <message>
         <source>&amp;Masternodes</source>
@@ -1217,9 +1217,9 @@ Proszę sprawdzić adres i spróbować ponownie</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/AXIV-project/AXIV-project-translations</source>
+https://www.transifex.com/vitae-project/vitae-project-translations</source>
         <translation>Brakuje języka bądź nieukończona pełnego tłumaczenia? Pomóż w tłumaczeniu tutaj:
-https://www.transifex.com/AXIV-project/AXIV-project-translations </translation>
+https://www.transifex.com/vitae-project/vitae-project-translations </translation>
     </message>
     <message>
         <source>Connect to the AXIV network through a SOCKS5 proxy.</source>
@@ -2027,14 +2027,14 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations </translation>
     </message>
     </context>
 <context>
-    <name>ZAXIVControlDialog</name>
+    <name>ZAxivControlDialog</name>
     <message>
         <source>0</source>
         <translation>0</translation>
     </message>
     </context>
 <context>
-    <name>AXIV-core</name>
+    <name>vitae-core</name>
     <message>
         <source>Error</source>
         <translation>Błąd</translation>

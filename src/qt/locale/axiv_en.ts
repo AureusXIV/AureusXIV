@@ -221,7 +221,7 @@
     </message>
     <message>
         <location line="+9"/>
-        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your VITs from being stolen by malware infecting your computer.</source>
+        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AXIVs from being stolen by malware infecting your computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -307,7 +307,7 @@
     </message>
     <message>
         <location line="+6"/>
-        <source>Enter a AXIV Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
+        <source>Enter a Axiv Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -821,7 +821,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <source>Request payments (generates QR codes and AXIV: URIs)</source>
+        <source>Request payments (generates QR codes and vitae: URIs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1127,7 +1127,7 @@ Address: %4
     </message>
     <message>
         <location filename="../blockexplorer.cpp" line="+476"/>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (AXIV.conf).</source>
+        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (vitae.conf).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2182,6 +2182,91 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>ObfuscationConfig</name>
+    <message>
+        <location filename="../forms/obfuscationconfig.ui" line="+14"/>
+        <source>Configure Obfuscation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Basic Privacy</source>
+        <translation type="unfinished">Basic Privacy</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>High Privacy</source>
+        <translation type="unfinished">High Privacy</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Maximum Privacy</source>
+        <translation type="unfinished">Maximum Privacy</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Please select a privacy level.</source>
+        <translation type="unfinished">Please select a privacy level.</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Use 2 separate masternodes to mix funds up to 10000 AXIV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Use 8 separate masternodes to mix funds up to 10000 AXIV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Use 16 separate masternodes</source>
+        <translation type="unfinished">Use 16 separate masternodes</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>This option is the quickest and will cost about ~0.025 AXIV to anonymize 10000 AXIV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>This option is moderately fast and will cost about 0.05 AXIV to anonymize 10000 AXIV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
+        <translation type="unfinished">This is the slowest and most secure option. Using maximum anonymity will cost</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>0.1 AXIV per 10000 AXIV you anonymize.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../obfuscationconfig.cpp" line="+42"/>
+        <location line="+14"/>
+        <location line="+14"/>
+        <source>Obfuscation Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-27"/>
+        <source>Obfuscation was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening AXIV&apos;s configuration screen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Obfuscation was successfully set to high (%1 and 8 rounds). You can change this at any time by opening AXIV&apos;s configuration screen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Obfuscation was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening AXIV&apos;s configuration screen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>OpenURIDialog</name>
     <message>
         <location filename="../forms/openuridialog.ui" line="+14"/>
@@ -2324,7 +2409,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location line="+21"/>
         <source>Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/AXIV-project/AXIV-project-translations</source>
+https://www.transifex.com/vitae-project/vitae-project-translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2664,7 +2749,7 @@ If AutoMint is enabled this percentage will settle around the configured AutoMin
     <message>
         <location line="+7"/>
         <location line="+10"/>
-        <source>Unlocked VITs. These can be used for zAXIV minting.</source>
+        <source>Unlocked AXIVs. These can be used for zAXIV minting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2734,7 +2819,7 @@ If AutoMint is enabled this percentage will settle around the configured AutoMin
     </message>
     <message>
         <location line="+1"/>
-        <source>To disable AutoMint add &apos;enablezeromint=0&apos; in AXIV.conf.</source>
+        <source>To disable AutoMint add &apos;enablezeromint=0&apos; in vitae.conf.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2779,7 +2864,7 @@ If AutoMint is enabled this percentage will settle around the configured AutoMin
     </message>
     <message>
         <location line="-108"/>
-        <source>Cannot start AXIV: click-to-pay handler</source>
+        <source>Cannot start vitae: click-to-pay handler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3411,7 +3496,7 @@ Please be patient...</source>
     </message>
     <message>
         <location line="+4"/>
-        <source>Invalid AXIV Address</source>
+        <source>Invalid Axiv Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4435,12 +4520,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <location line="+772"/>
-        <source>If the custom fee is set to 1000 uVITs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uVITs in fee,&lt;br /&gt;while &quot;at least&quot; pays 1000 uVITs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <source>If the custom fee is set to 1000 uAXIVs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uAXIVs in fee,&lt;br /&gt;while &quot;at least&quot; pays 1000 uAXIVs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+16"/>
-        <source>If the custom fee is set to 1000 uVITs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uVITs in fee,&lt;br /&gt;while &quot;total at least&quot; pays 1000 uVITs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <source>If the custom fee is set to 1000 uAXIVs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uAXIVs in fee,&lt;br /&gt;while &quot;total at least&quot; pays 1000 uAXIVs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5841,9 +5926,9 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
 </context>
 <context>
-    <name>ZAXIVControlDialog</name>
+    <name>ZAxivControlDialog</name>
     <message>
-        <location filename="../forms/zAXIVcontroldialog.ui" line="+20"/>
+        <location filename="../forms/zAxivcontroldialog.ui" line="+20"/>
         <source>Select zAXIV to Spend</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5875,9 +5960,9 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
 </context>
 <context>
-    <name>AXIV-core</name>
+    <name>vitae-core</name>
     <message>
-        <location filename="../AXIVstrings.cpp" line="+15"/>
+        <location filename="../vitaestrings.cpp" line="+15"/>
         <source>(1 = keep tx meta data e.g. account owner and payment request information, 2 = drop tx meta data)</source>
         <translation type="unfinished">(1 = keep tx meta data e.g. account owner and payment request information, 2 = drop tx meta data)</translation>
     </message>
@@ -6108,10 +6193,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <location line="+4"/>
-        <source>To use AXIVd, or the -server option to AXIV-qt, you must set an rpcpassword in the configuration file:
+        <source>To use vitaed, or the -server option to vitae-qt, you must set an rpcpassword in the configuration file:
 %s
 It is recommended you use the following random password:
-rpcuser=AXIVrpc
+rpcuser=vitaerpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
@@ -6198,8 +6283,8 @@ for example: alertnotify=echo %%s | mail -s &quot;AXIV Alert&quot; admin@foo.com
     </message>
     <message>
         <location line="+3"/>
-        <source>(10135 could be used only on mainnet)</source>
-        <translation type="unfinished">(10135 could be used only on mainnet)</translation>
+        <source>(51472 could be used only on mainnet)</source>
+        <translation type="unfinished">(51472 could be used only on mainnet)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6213,7 +6298,7 @@ for example: alertnotify=echo %%s | mail -s &quot;AXIV Alert&quot; admin@foo.com
     </message>
     <message>
         <location line="+1"/>
-        <source>(must be 10135 for mainnet)</source>
+        <source>(must be 51472 for mainnet)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

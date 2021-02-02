@@ -176,8 +176,8 @@
         <translation>Confirm wallet encryption</translation>
     </message>
     <message>
-        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your VITs from being stolen by malware infecting your computer.</source>
-        <translation>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your VITs from being stolen by malware infecting your computer.</translation>
+        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AXIVs from being stolen by malware infecting your computer.</source>
+        <translation>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AXIVs from being stolen by malware infecting your computer.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -239,8 +239,8 @@
         <translation>&amp;BIP 38 Encrypt</translation>
     </message>
     <message>
-        <source>Enter a AXIV Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
-        <translation>Enter a AXIV Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</translation>
+        <source>Enter a Axiv Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
+        <translation>Enter a Axiv Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</translation>
     </message>
     <message>
         <source>Address:</source>
@@ -610,8 +610,8 @@
         <translation>Send coins to a AXIV address</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and AXIV: URIs)</source>
-        <translation>Request payments (generates QR codes and AXIV: URIs)</translation>
+        <source>Request payments (generates QR codes and vitae: URIs)</source>
+        <translation>Request payments (generates QR codes and vitae: URIs)</translation>
     </message>
     <message>
         <source>&amp;Masternodes</source>
@@ -837,8 +837,8 @@ Address: %4
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (AXIV.conf).</source>
-        <translation>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (AXIV.conf).</translation>
+        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (vitae.conf).</source>
+        <translation>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (vitae.conf).</translation>
     </message>
 </context>
 <context>
@@ -1719,9 +1719,9 @@ Please check the address and try again.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/AXIV-project/AXIV-project-translations</source>
+https://www.transifex.com/vitae-project/vitae-project-translations</source>
         <translation>Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
+https://www.transifex.com/vitae-project/vitae-project-translations</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -2092,8 +2092,8 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
         <translation>Invalid payment address %1</translation>
     </message>
     <message>
-        <source>Cannot start AXIV: click-to-pay handler</source>
-        <translation>Cannot start AXIV: click-to-pay handler</translation>
+        <source>Cannot start vitae: click-to-pay handler</source>
+        <translation>Cannot start vitae: click-to-pay handler</translation>
     </message>
     <message>
         <source>URI cannot be parsed! This can be caused by an invalid AXIV address or malformed URI parameters.</source>
@@ -2840,12 +2840,12 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
         <translation>Confirmation time:</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 uVITs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uVITs in fee,&lt;br /&gt;while "at least" pays 1000 uVITs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>If the custom fee is set to 1000 uVITs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uVITs in fee,&lt;br /&gt;while "at least" pays 1000 uVITs. For transactions bigger than a kilobyte both pay by kilobyte.</translation>
+        <source>If the custom fee is set to 1000 uAXIVs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAXIVs in fee,&lt;br /&gt;while "at least" pays 1000 uAXIVs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>If the custom fee is set to 1000 uAXIVs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAXIVs in fee,&lt;br /&gt;while "at least" pays 1000 uAXIVs. For transactions bigger than a kilobyte both pay by kilobyte.</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 uVITs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uVITs in fee,&lt;br /&gt;while "total at least" pays 1000 uVITs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>If the custom fee is set to 1000 uVITs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uVITs in fee,&lt;br /&gt;while "total at least" pays 1000 uVITs. For transactions bigger than a kilobyte both pay by kilobyte.</translation>
+        <source>If the custom fee is set to 1000 uAXIVs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAXIVs in fee,&lt;br /&gt;while "total at least" pays 1000 uAXIVs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>If the custom fee is set to 1000 uAXIVs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAXIVs in fee,&lt;br /&gt;while "total at least" pays 1000 uAXIVs. For transactions bigger than a kilobyte both pay by kilobyte.</translation>
     </message>
     <message>
         <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for AXIV transactions than the network can process.</source>
@@ -3884,7 +3884,7 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
     </message>
 </context>
 <context>
-    <name>AXIV-core</name>
+    <name>vitae-core</name>
     <message>
         <source>(1 = keep tx meta data e.g. account owner and payment request information, 2 = drop tx meta data)</source>
         <translation>(1 = keep tx meta data e.g. account owner and payment request information, 2 = drop tx meta data)</translation>
@@ -4082,10 +4082,10 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
         <translation>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit &lt;https://www.openssl.org/&gt; and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.</translation>
     </message>
     <message>
-        <source>To use AXIVd, or the -server option to AXIV-qt, you must set an rpcpassword in the configuration file:
+        <source>To use vitaed, or the -server option to vitae-qt, you must set an rpcpassword in the configuration file:
 %s
 It is recommended you use the following random password:
-rpcuser=AXIVrpc
+rpcuser=vitaerpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
@@ -4093,10 +4093,10 @@ If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
 for example: alertnotify=echo %%s | mail -s "AXIV Alert" admin@foo.com
 </source>
-        <translation>To use AXIVd, or the -server option to AXIV-qt, you must set an rpcpassword in the configuration file:
+        <translation>To use vitaed, or the -server option to vitae-qt, you must set an rpcpassword in the configuration file:
 %s
 It is recommended you use the following random password:
-rpcuser=AXIVrpc
+rpcuser=vitaerpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
@@ -4166,8 +4166,8 @@ for example: alertnotify=echo %%s | mail -s "AXIV Alert" admin@foo.com
         <translation>You must specify a masternodeprivkey in the configuration. Please see documentation for help.</translation>
     </message>
     <message>
-        <source>(10135 could be used only on mainnet)</source>
-        <translation>(10135 could be used only on mainnet)</translation>
+        <source>(51472 could be used only on mainnet)</source>
+        <translation>(51472 could be used only on mainnet)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -4178,8 +4178,8 @@ for example: alertnotify=echo %%s | mail -s "AXIV Alert" admin@foo.com
         <translation>(default: 1)</translation>
     </message>
     <message>
-        <source>(must be 10135 for mainnet)</source>
-        <translation>(must be 10135 for mainnet)</translation>
+        <source>(must be 51472 for mainnet)</source>
+        <translation>(must be 51472 for mainnet)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>

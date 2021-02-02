@@ -181,7 +181,7 @@
       <string>Asks</string>
      </property>
     </widget>
-    <widget class="QLabel" name="VITSupply">
+    <widget class="QLabel" name="AXIVSupply">
      <property name="geometry">
       <rect>
        <x>540</x>
@@ -197,7 +197,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="VITDemand">
+    <widget class="QLabel" name="AXIVDemand">
      <property name="geometry">
       <rect>
        <x>160</x>
@@ -432,7 +432,7 @@
     <attribute name="title">
      <string>Buy</string>
     </attribute>
-    <widget class="QPushButton" name="BuyVIT">
+    <widget class="QPushButton" name="BuyAXIV">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -1741,7 +1741,7 @@
       </font>
      </property>
     </widget>
-    <widget class="QPushButton" name="SellVITBTN">
+    <widget class="QPushButton" name="SellAXIVBTN">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -1782,7 +1782,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="VITAvailableLabel">
+       <widget class="QLabel" name="AXIVAvailableLabel">
         <property name="palette">
          <palette>
           <active>
@@ -2213,7 +2213,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="labelVIT">
+       <widget class="QLabel" name="labelAXIV">
         <property name="font">
          <font>
           <weight>75</weight>
@@ -2733,7 +2733,7 @@
       <string>TextLabel</string>
      </property>
     </widget>
-    <widget class="QLabel" name="VITBalanceLabel">
+    <widget class="QLabel" name="AXIVBalanceLabel">
      <property name="geometry">
       <rect>
        <x>150</x>
@@ -2784,7 +2784,7 @@
       <string>BTC Balance:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="VITAvailableLabel_2">
+    <widget class="QLabel" name="AXIVAvailableLabel_2">
      <property name="geometry">
       <rect>
        <x>150</x>
@@ -2835,7 +2835,7 @@
       <string>AXIV Pending:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="VITPendingLabel">
+    <widget class="QLabel" name="AXIVPendingLabel">
      <property name="geometry">
       <rect>
        <x>150</x>
@@ -3155,7 +3155,7 @@
        <string notr="true">border: 1px solid #61696c;margin-left:4px;</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnConvertAXIV">
+     <widget class="QPushButton" name="btnConvertAxiv">
       <property name="geometry">
        <rect>
         <x>260</x>

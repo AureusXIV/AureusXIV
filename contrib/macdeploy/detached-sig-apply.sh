@@ -5,7 +5,7 @@ UNSIGNED=$1
 SIGNATURE=$2
 ARCH=x86_64
 ROOTDIR=dist
-BUNDLE=${ROOTDIR}/AXIV-Qt.app
+BUNDLE=${ROOTDIR}/Axiv-Qt.app
 TEMPDIR=signed.temp
 OUTDIR=signed-app
 

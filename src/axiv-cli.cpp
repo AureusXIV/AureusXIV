@@ -33,7 +33,7 @@ std::string HelpMessageCli()
     string strUsage;
     strUsage += HelpMessageGroup(_("Options:"));
     strUsage += HelpMessageOpt("-?", _("This help message"));
-    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), "AXIV.conf"));
+    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), "axiv.conf"));
     strUsage += HelpMessageOpt("-datadir=<dir>", _("Specify data directory"));
     strUsage += HelpMessageOpt("-testnet", _("Use the test network"));
     strUsage += HelpMessageOpt("-regtest", _("Enter regression test mode, which uses a special chain in which blocks can be "
@@ -75,9 +75,9 @@ static bool AppInitRPC(int argc, char* argv[])
         std::string strUsage = _("AXIV Core RPC client version") + " " + FormatFullVersion() + "\n";
         if (!mapArgs.count("-version")) {
             strUsage += "\n" + _("Usage:") + "\n" +
-                        "  AXIV-cli [options] <command> [params]  " + _("Send command to AXIV Core") + "\n" +
-                        "  AXIV-cli [options] help                " + _("List commands") + "\n" +
-                        "  AXIV-cli [options] help <command>      " + _("Get help for a command") + "\n";
+                        "  axiv-cli [options] <command> [params]  " + _("Send command to AXIV Core") + "\n" +
+                        "  axiv-cli [options] help                " + _("List commands") + "\n" +
+                        "  axiv-cli [options] help <command>      " + _("Get help for a command") + "\n";
 
             strUsage += "\n" + HelpMessageCli();
         }

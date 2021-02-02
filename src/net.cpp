@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2017 The PIVX developers
-// Copyright (c) 2018 The VITAE developers
+// Copyright (c) 2018 The AXIV developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -16,6 +16,7 @@
 #include "chainparams.h"
 #include "clientversion.h"
 #include "miner.h"
+#include "obfuscation.h"
 #include "primitives/transaction.h"
 #include "scheduler.h"
 #include "ui_interface.h"
@@ -389,7 +390,7 @@ CNode* ConnectNode(CAddress addrConnect, const char* pszDest, bool obfuScationMa
 {
     if (pszDest == NULL) {
         // we clean fundamentalnode connections in CFundamentalnodeMan::ProcessFundamentalnodeConnections()
-        // so should be safe to skip this and connect to local Hot FN on CActiveFundamentalnode::ManageStatus()
+        // so should be safe to skip this and connect to local Hot MN on CActiveFundamentalnode::ManageStatus()
         if (IsLocal(addrConnect) && !obfuScationMaster)
             return NULL;
 
@@ -1889,7 +1890,7 @@ void RelayInv(CInv& inv)
 {
     LOCK(cs_vNodes);
     BOOST_FOREACH (CNode* pnode, vNodes){
-    		if((pnode->nServices==NODE_BLOOM_WITHOUT_FN) && inv.IsFundamentalNodeType())continue;
+    		if((pnode->nServices==NODE_BLOOM_WITHOUT_MN) && inv.IsFundamentalNodeType())continue;
         if (pnode->nVersion >= ActiveProtocol())
             pnode->PushInventory(inv);
     }

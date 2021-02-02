@@ -17,13 +17,13 @@ BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
             VALUE "CompanyName",        "AXIV"
-            VALUE "FileDescription",    "AXIVd (OSS daemon/client for AXIV)"
+            VALUE "FileDescription",    "axivd (OSS daemon/client for AXIV)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
-            VALUE "InternalName",       "AXIVd"
+            VALUE "InternalName",       "axivd"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
-            VALUE "OriginalFilename",   "AXIVd.exe"
-            VALUE "ProductName",        "AXIVd"
+            VALUE "OriginalFilename",   "axivd.exe"
+            VALUE "ProductName",        "axivd"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

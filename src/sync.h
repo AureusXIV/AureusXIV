@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2013 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2017 The PIVX developers
-// Copyright (c) 2018 The VITAE developers
+// Copyright (c) 2018 The AXIV developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -191,16 +191,6 @@ typedef CMutexLock<CCriticalSection> CCriticalBlock;
         (cs).unlock();             \
         LeaveCritical();           \
     }
-
-//! Run code while locking a mutex.
-//!
-//! Examples:
-//!
-//!   WITH_LOCK(cs, shared_val = shared_val + 1);
-//!
-//!   int val = WITH_LOCK(cs, return shared_val);
-//!
-#define WITH_LOCK(cs, code) [&] { LOCK(cs); code; }()
 
 class CSemaphore
 {

@@ -1,5 +1,6 @@
 // Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2017 The PIVX developers
+// Copyright (c) 2018 The AXIV developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -19,6 +20,7 @@
 #define ACTIVE_FUNDAMENTALNODE_INPUT_TOO_NEW 2
 #define ACTIVE_FUNDAMENTALNODE_NOT_CAPABLE 3
 #define ACTIVE_FUNDAMENTALNODE_STARTED 4
+#define ACTIVE_FUNDAMENTALNODE_NEW_NODE_DISABLED 5
 
 // Responsible for activating the Fundamentalnode and pinging the network
 class CActiveFundamentalnode
@@ -31,9 +33,9 @@ private:
     bool SendFundamentalnodePing(std::string& errorMessage);
 
     /// Create Fundamentalnode broadcast, needs to be relayed manually after that
-    bool CreateBroadcast(CTxIn vin, CService service, CKey key, CPubKey pubKey, CKey keyFundamentalnode, CPubKey pubKeyFundamentalnode, std::string& errorMessage, CFundamentalnodeBroadcast &fnb);
+    bool CreateBroadcast(CTxIn vin, CService service, CKey key, CPubKey pubKey, CKey keyFundamentalnode, CPubKey pubKeyFundamentalnode, std::string& errorMessage, CFundamentalnodeBroadcast &mnb);
 
-    /// Get 10000 PIV input that can be used for the Fundamentalnode
+    /// Get 10000 AXIV input that can be used for the Fundamentalnode
     bool GetFundamentalNodeVin(CTxIn& vin, CPubKey& pubkey, CKey& secretKey, std::string strTxHash, std::string strOutputIndex);
     bool GetVinFromOutput(COutput out, CTxIn& vin, CPubKey& pubkey, CKey& secretKey);
 
@@ -59,11 +61,11 @@ public:
     std::string GetStatus();
 
     /// Create Fundamentalnode broadcast, needs to be relayed manually after that
-    bool CreateBroadcast(std::string strService, std::string strKey, std::string strTxHash, std::string strOutputIndex, std::string& errorMessage, CFundamentalnodeBroadcast &fnb, bool fOffline = false);
+    bool CreateBroadcast(std::string strService, std::string strKey, std::string strTxHash, std::string strOutputIndex, std::string& errorMessage, CFundamentalnodeBroadcast &mnb, bool fOffline = false);
 
-    /// Get 10000 PIV input that can be used for the Fundamentalnode
+    /// Get 10000 AXIV input that can be used for the Fundamentalnode
     bool GetFundamentalNodeVin(CTxIn& vin, CPubKey& pubkey, CKey& secretKey);
-    std::vector<COutput> SelectCoinsFundamentalnode();
+    vector<COutput> SelectCoinsFundamentalnode();
 
     /// Enable cold wallet mode (run a Fundamentalnode with no funds)
     bool EnableHotColdFundamentalNode(CTxIn& vin, CService& addr);

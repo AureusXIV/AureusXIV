@@ -1,13 +1,13 @@
 AXIV Core version 3.0.2 is now available from:
 
-  <https://github.com/AXIVteam/AXIV/releases>
+  <https://github.com/axivteam/axiv/releases>
 
 This is a new minor-revision version release, including various bug fixes and
 performance improvements, as well as updated translations.
 
 Please report bugs using the issue tracker at github:
 
-  <https://github.com/AXIVteam/AXIV/issues>
+  <https://github.com/axivteam/axiv/issues>
 
 Recommended Update
 ==============
@@ -19,7 +19,7 @@ zAXIV spending requires this update.
 How to Upgrade
 ==============
 
-If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/AXIV-Qt (on Mac) or AXIVd/AXIV-qt (on Linux).
+If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/AXIV-Qt (on Mac) or axivd/axiv-qt (on Linux).
 
 Compatibility
 ==============
@@ -45,9 +45,9 @@ Notable Changes
 
 Auto Wallet Backup
 ---------------------
-In addition to the automatic wallet backup that is done at each start of the client, a new automatic backup function has been added that will, by default, create a backup of the wallet file during each zAXIV mint operation (zAXIV spends which re-mint their change are also included in this). This functionality is controlled by the `-backupzAXIV` command-line option, which defaults to `1` (enabled, auto-backup).
+In addition to the automatic wallet backup that is done at each start of the client, a new automatic backup function has been added that will, by default, create a backup of the wallet file during each zAXIV mint operation (zAXIV spends which re-mint their change are also included in this). This functionality is controlled by the `-backupzAxiv` command-line option, which defaults to `1` (enabled, auto-backup).
 
-Users that wish to prevent this behavior (not recommended) can pass `-backupzAXIV=0` at the command-line when starting the client, or add `backupzAXIV=0` to their `AXIV.conf` file.
+Users that wish to prevent this behavior (not recommended) can pass `-backupzAxiv=0` at the command-line when starting the client, or add `backupzAxiv=0` to their `axiv.conf` file.
 
 zAXIV Automint Calculations
 ---------------------
@@ -94,7 +94,7 @@ git merge commit are mentioned.
 
 ### Wallet
 - #271 `5e9a086` [Wallet] Remove unused member wallet in UnlockContext inner class (Jon Spock)
-- #279 `e734010` Add -backupzAXIV startup flag. (presstab)
+- #279 `e734010` Add -backupzAxiv startup flag. (presstab)
 - #280 `fdc182d` [Wallet] Fix zAXIV spending errors. (presstab)
 - #282 `310f216` [Wallet] Count pending zAXIV balance for automint. (presstab)
 - #290 `004d7b6` Include both pending and mature zerocoins for automint calculations (presstab)
@@ -125,4 +125,4 @@ Thanks to everyone who directly contributed to this release:
 - rejectedpromise
 - Warrows
 
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/AXIV-project-translations/).
+As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/axiv-project-translations/).

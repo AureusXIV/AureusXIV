@@ -3,7 +3,7 @@ AXIV Core
 
 Setup
 ---------------------
-[AXIV Core](http://AXIV.org/wallet) is the original AXIV client and it builds the backbone of the network. However, it downloads and stores the entire history of AXIV transactions; depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once.
+[AXIV Core](http://axiv.org/wallet) is the original AXIV client and it builds the backbone of the network. However, it downloads and stores the entire history of AXIV transactions; depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once.
 
 Running
 ---------------------
@@ -13,12 +13,12 @@ The following are some helpful notes on how to run AXIV on your native platform.
 
 Unpack the files into a directory and run:
 
-- bin/32/AXIV-qt (GUI, 32-bit) or bin/32/AXIVd (headless, 32-bit)
-- bin/64/AXIV-qt (GUI, 64-bit) or bin/64/AXIVd (headless, 64-bit)
+- bin/32/axiv-qt (GUI, 32-bit) or bin/32/axivd (headless, 32-bit)
+- bin/64/axiv-qt (GUI, 64-bit) or bin/64/axivd (headless, 64-bit)
 
 ### Windows
 
-Unpack the files into a directory, and then run AXIV-qt.exe.
+Unpack the files into a directory, and then run axiv-qt.exe.
 
 ### OSX
 
@@ -28,9 +28,9 @@ Drag AXIV-Qt to your applications folder, and then run AXIV-Qt.
 
 * See the documentation at the [AXIV Wiki](https://en.bitcoin.it/wiki/Main_Page) ***TODO***
 for help and more information.
-* Ask for help on [BitcoinTalk](https://bitcointalk.org/index.php?topic=1262920.0) or on the [AXIV Forum](http://forum.AXIV.org/).
-* Join our Discord server [Discord Server](https://discord.AXIV.org)
-* Join one of our Slack groups [AXIV Slack Groups](https://AXIV.org/slack-logins/) (Main community is replaced by Discord).
+* Ask for help on [BitcoinTalk](https://bitcointalk.org/index.php?topic=1262920.0) or on the [AXIV Forum](http://forum.axiv.org/).
+* Join our Discord server [Discord Server](https://discord.axiv.org)
+* Join one of our Slack groups [AXIV Slack Groups](https://axiv.org/slack-logins/) (Main community is replaced by Discord).
 
 Building
 ---------------------
@@ -42,7 +42,7 @@ The following are developer notes on how to build AXIV on your native platform. 
 
 Development
 ---------------------
-The AXIV repo's [root README](https://github.com/AXIVteam/AXIV/blob/master/README.md) contains relevant information on the development process and automated testing.
+The Axiv repo's [root README](https://github.com/axivteam/AXIV/blob/master/README.md) contains relevant information on the development process and automated testing.
 
 - [Developer Notes](developer-notes.md)
 - [Multiwallet Qt Development](multiwallet-qt.md)
@@ -56,8 +56,8 @@ The AXIV repo's [root README](https://github.com/AXIVteam/AXIV/blob/master/READM
 
 ### Resources
 
-* Discuss on the [BitcoinTalk](https://bitcointalk.org/index.php?topic=1262920.0) or the [AXIV](http://forum.AXIV.org/) forum.
-* Join the [AXIV-Dev](https://AXIV-dev.slack.com/) Slack group ([Sign-Up](https://AXIV-dev.herokuapp.com/)).
+* Discuss on the [BitcoinTalk](https://bitcointalk.org/index.php?topic=1262920.0) or the [AXIV](http://forum.axiv.org/) forum.
+* Join the [AXIV-Dev](https://axiv-dev.slack.com/) Slack group ([Sign-Up](https://axiv-dev.herokuapp.com/)).
 
 ### Miscellaneous
 - [Assets Attribution](assets-attribution.md)

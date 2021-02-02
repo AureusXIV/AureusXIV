@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2017 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -29,50 +29,30 @@ bool CFundamentalnodeSync::IsSynced()
     return RequestedFundamentalnodeAssets == FUNDAMENTALNODE_SYNC_FINISHED;
 }
 
-bool CFundamentalnodeSync::IsSporkListSynced()
-{
-    return RequestedFundamentalnodeAssets > FUNDAMENTALNODE_SYNC_SPORKS;
-}
-
-bool CFundamentalnodeSync::IsFundamentalnodeListSynced()
-{
-    return RequestedFundamentalnodeAssets > FUNDAMENTALNODE_SYNC_LIST;
-}
-
-bool CFundamentalnodeSync::NotCompleted()
-{
-    return (!IsSynced() && (
-            !IsSporkListSynced() ||
-            sporkManager.IsSporkActive(SPORK_8_FUNDAMENTALNODE_PAYMENT_ENFORCEMENT) ||
-            sporkManager.IsSporkActive(SPORK_10_FUNDAMENTALNODE_BUDGET_ENFORCEMENT) ||
-            sporkManager.IsSporkActive(SPORK_11_ENABLE_SUPERBLOCKS)));
-}
-
 bool CFundamentalnodeSync::IsBlockchainSynced()
 {
-    int64_t now = GetTime();
+    static bool fBlockchainSynced = false;
+    static int64_t lastProcess = GetTime();
 
     // if the last call to this function was more than 60 minutes ago (client was in sleep mode) reset the sync process
-    if (now > lastProcess + 60 * 60) {
+    if (GetTime() - lastProcess > 60 * 60) {
         Reset();
         fBlockchainSynced = false;
     }
-    lastProcess = now;
+    lastProcess = GetTime();
 
     if (fBlockchainSynced) return true;
 
     if (fImporting || fReindex) return false;
 
-    int64_t blockTime = 0;
-    {
-        TRY_LOCK(cs_main, lockMain);
-        if (!lockMain) return false;
-        CBlockIndex *pindex = chainActive.Tip();
-        if (pindex == nullptr) return false;
-        blockTime = pindex->nTime;
-    }
+    TRY_LOCK(cs_main, lockMain);
+    if (!lockMain) return false;
 
-    if (blockTime + 60 * 60 < lastProcess)
+    CBlockIndex* pindex = chainActive.Tip();
+    if (pindex == NULL) return false;
+
+
+    if (pindex->nTime + 60 * 60 < GetTime())
         return false;
 
     fBlockchainSynced = true;
@@ -82,13 +62,11 @@ bool CFundamentalnodeSync::IsBlockchainSynced()
 
 void CFundamentalnodeSync::Reset()
 {
-    fBlockchainSynced = false;
-    lastProcess = 0;
     lastFundamentalnodeList = 0;
     lastFundamentalnodeWinner = 0;
     lastBudgetItem = 0;
-    mapSeenSyncFNB.clear();
-    mapSeenSyncFNW.clear();
+    mapSeenSyncMNB.clear();
+    mapSeenSyncMNW.clear();
     mapSeenSyncBudget.clear();
     lastFailure = 0;
     nCountFailures = 0;
@@ -107,27 +85,27 @@ void CFundamentalnodeSync::Reset()
 
 void CFundamentalnodeSync::AddedFundamentalnodeList(uint256 hash)
 {
-    if (fnodeman.mapSeenFundamentalnodeBroadcast.count(hash)) {
-        if (mapSeenSyncFNB[hash] < FUNDAMENTALNODE_SYNC_THRESHOLD) {
+    if (mnodeman.mapSeenFundamentalnodeBroadcast.count(hash)) {
+        if (mapSeenSyncMNB[hash] < FUNDAMENTALNODE_SYNC_THRESHOLD) {
             lastFundamentalnodeList = GetTime();
-            mapSeenSyncFNB[hash]++;
+            mapSeenSyncMNB[hash]++;
         }
     } else {
         lastFundamentalnodeList = GetTime();
-        mapSeenSyncFNB.insert(std::make_pair(hash, 1));
+        mapSeenSyncMNB.insert(make_pair(hash, 1));
     }
 }
 
 void CFundamentalnodeSync::AddedFundamentalnodeWinner(uint256 hash)
 {
     if (fundamentalnodePayments.mapFundamentalnodePayeeVotes.count(hash)) {
-        if (mapSeenSyncFNW[hash] < FUNDAMENTALNODE_SYNC_THRESHOLD) {
+        if (mapSeenSyncMNW[hash] < FUNDAMENTALNODE_SYNC_THRESHOLD) {
             lastFundamentalnodeWinner = GetTime();
-            mapSeenSyncFNW[hash]++;
+            mapSeenSyncMNW[hash]++;
         }
     } else {
         lastFundamentalnodeWinner = GetTime();
-        mapSeenSyncFNW.insert(std::make_pair(hash, 1));
+        mapSeenSyncMNW.insert(make_pair(hash, 1));
     }
 }
 
@@ -141,7 +119,7 @@ void CFundamentalnodeSync::AddedBudgetItem(uint256 hash)
         }
     } else {
         lastBudgetItem = GetTime();
-        mapSeenSyncBudget.insert(std::make_pair(hash, 1));
+        mapSeenSyncBudget.insert(make_pair(hash, 1));
     }
 }
 
@@ -158,24 +136,24 @@ bool CFundamentalnodeSync::IsBudgetFinEmpty()
 void CFundamentalnodeSync::GetNextAsset()
 {
     switch (RequestedFundamentalnodeAssets) {
-        case (FUNDAMENTALNODE_SYNC_INITIAL):
-        case (FUNDAMENTALNODE_SYNC_FAILED): // should never be used here actually, use Reset() instead
-            ClearFulfilledRequest();
-            RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_SPORKS;
-            break;
-        case (FUNDAMENTALNODE_SYNC_SPORKS):
-            RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_LIST;
-            break;
-        case (FUNDAMENTALNODE_SYNC_LIST):
-            RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_FNW;
-            break;
-        case (FUNDAMENTALNODE_SYNC_FNW):
-            RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_BUDGET;
-            break;
-        case (FUNDAMENTALNODE_SYNC_BUDGET):
-            LogPrintf("CFundamentalnodeSync::GetNextAsset - Sync has finished\n");
-            RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_FINISHED;
-            break;
+    case (FUNDAMENTALNODE_SYNC_INITIAL):
+    case (FUNDAMENTALNODE_SYNC_FAILED): // should never be used here actually, use Reset() instead
+        ClearFulfilledRequest();
+        RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_SPORKS;
+        break;
+    case (FUNDAMENTALNODE_SYNC_SPORKS):
+        RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_LIST;
+        break;
+    case (FUNDAMENTALNODE_SYNC_LIST):
+        RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_MNW;
+        break;
+    case (FUNDAMENTALNODE_SYNC_MNW):
+        RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_BUDGET;
+        break;
+    case (FUNDAMENTALNODE_SYNC_BUDGET):
+        LogPrintf("CFundamentalnodeSync::GetNextAsset - Sync has finished\n");
+        RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_FINISHED;
+        break;
     }
     RequestedFundamentalnodeAttempt = 0;
     nAssetSyncStarted = GetTime();
@@ -184,20 +162,20 @@ void CFundamentalnodeSync::GetNextAsset()
 std::string CFundamentalnodeSync::GetSyncStatus()
 {
     switch (fundamentalnodeSync.RequestedFundamentalnodeAssets) {
-        case FUNDAMENTALNODE_SYNC_INITIAL:
-            return _("Synchronization pending...");
-        case FUNDAMENTALNODE_SYNC_SPORKS:
-            return _("Synchronizing sporks...");
-        case FUNDAMENTALNODE_SYNC_LIST:
-            return _("Synchronizing fundamentalnodes...");
-        case FUNDAMENTALNODE_SYNC_FNW:
-            return _("Synchronizing fundamentalnode winners...");
-        case FUNDAMENTALNODE_SYNC_BUDGET:
-            return _("Synchronizing budgets...");
-        case FUNDAMENTALNODE_SYNC_FAILED:
-            return _("Synchronization failed");
-        case FUNDAMENTALNODE_SYNC_FINISHED:
-            return _("Synchronization finished");
+    case FUNDAMENTALNODE_SYNC_INITIAL:
+        return _("Synchronization pending...");
+    case FUNDAMENTALNODE_SYNC_SPORKS:
+        return _("Synchronizing sporks...");
+    case FUNDAMENTALNODE_SYNC_LIST:
+        return _("Synchronizing fundamentalnodes...");
+    case FUNDAMENTALNODE_SYNC_MNW:
+        return _("Synchronizing fundamentalnode winners...");
+    case FUNDAMENTALNODE_SYNC_BUDGET:
+        return _("Synchronizing budgets...");
+    case FUNDAMENTALNODE_SYNC_FAILED:
+        return _("Synchronization failed");
+    case FUNDAMENTALNODE_SYNC_FINISHED:
+        return _("Synchronization finished");
     }
     return "";
 }
@@ -213,26 +191,26 @@ void CFundamentalnodeSync::ProcessMessage(CNode* pfrom, std::string& strCommand,
 
         //this means we will receive no further communication
         switch (nItemID) {
-            case (FUNDAMENTALNODE_SYNC_LIST):
-                if (nItemID != RequestedFundamentalnodeAssets) return;
-                sumFundamentalnodeList += nCount;
-                countFundamentalnodeList++;
-                break;
-            case (FUNDAMENTALNODE_SYNC_FNW):
-                if (nItemID != RequestedFundamentalnodeAssets) return;
-                sumFundamentalnodeWinner += nCount;
-                countFundamentalnodeWinner++;
-                break;
-            case (FUNDAMENTALNODE_SYNC_BUDGET_PROP):
-                if (RequestedFundamentalnodeAssets != FUNDAMENTALNODE_SYNC_BUDGET) return;
-                sumBudgetItemProp += nCount;
-                countBudgetItemProp++;
-                break;
-            case (FUNDAMENTALNODE_SYNC_BUDGET_FIN):
-                if (RequestedFundamentalnodeAssets != FUNDAMENTALNODE_SYNC_BUDGET) return;
-                sumBudgetItemFin += nCount;
-                countBudgetItemFin++;
-                break;
+        case (FUNDAMENTALNODE_SYNC_LIST):
+            if (nItemID != RequestedFundamentalnodeAssets) return;
+            sumFundamentalnodeList += nCount;
+            countFundamentalnodeList++;
+            break;
+        case (FUNDAMENTALNODE_SYNC_MNW):
+            if (nItemID != RequestedFundamentalnodeAssets) return;
+            sumFundamentalnodeWinner += nCount;
+            countFundamentalnodeWinner++;
+            break;
+        case (FUNDAMENTALNODE_SYNC_BUDGET_PROP):
+            if (RequestedFundamentalnodeAssets != FUNDAMENTALNODE_SYNC_BUDGET) return;
+            sumBudgetItemProp += nCount;
+            countBudgetItemProp++;
+            break;
+        case (FUNDAMENTALNODE_SYNC_BUDGET_FIN):
+            if (RequestedFundamentalnodeAssets != FUNDAMENTALNODE_SYNC_BUDGET) return;
+            sumBudgetItemFin += nCount;
+            countBudgetItemFin++;
+            break;
         }
 
         LogPrint("fundamentalnode", "CFundamentalnodeSync:ProcessMessage - ssc - got inventory count %d %d\n", nItemID, nCount);
@@ -244,7 +222,7 @@ void CFundamentalnodeSync::ClearFulfilledRequest()
     TRY_LOCK(cs_vNodes, lockRecv);
     if (!lockRecv) return;
 
-    for (CNode* pnode : vNodes) {
+    BOOST_FOREACH (CNode* pnode, vNodes) {
         pnode->ClearFulfilledRequest("getspork");
         pnode->ClearFulfilledRequest("fnsync");
         pnode->ClearFulfilledRequest("fnwsync");
@@ -262,7 +240,7 @@ void CFundamentalnodeSync::Process()
         /*
             Resync if we lose all fundamentalnodes from sleep/wake or failure to sync originally
         */
-        if (fnodeman.CountEnabled() == 0) {
+        if (mnodeman.CountEnabled() == 0) {
             Reset();
         } else
             return;
@@ -286,15 +264,15 @@ void CFundamentalnodeSync::Process()
     TRY_LOCK(cs_vNodes, lockRecv);
     if (!lockRecv) return;
 
-    for (CNode* pnode : vNodes) {
+    BOOST_FOREACH (CNode* pnode, vNodes) {
         if (Params().NetworkID() == CBaseChainParams::REGTEST) {
             if (RequestedFundamentalnodeAttempt <= 2) {
                 pnode->PushMessage("getsporks"); //get current network sporks
             } else if (RequestedFundamentalnodeAttempt < 4) {
-                fnodeman.DsegUpdate(pnode);
+                mnodeman.DsegUpdate(pnode);
             } else if (RequestedFundamentalnodeAttempt < 6) {
-                int nFnCount = fnodeman.CountEnabled();
-                pnode->PushMessage("fnget", nFnCount); //sync payees
+                int nMnCount = mnodeman.CountEnabled();
+                pnode->PushMessage("fnget", nMnCount); //sync payees
                 uint256 n = 0;
                 pnode->PushMessage("fnvs", n); //sync fundamentalnode votes
             } else {
@@ -330,8 +308,8 @@ void CFundamentalnodeSync::Process()
                 // timeout
                 if (lastFundamentalnodeList == 0 &&
                     (RequestedFundamentalnodeAttempt >= FUNDAMENTALNODE_SYNC_THRESHOLD * 3 || GetTime() - nAssetSyncStarted > FUNDAMENTALNODE_SYNC_TIMEOUT * 5)) {
-                    if (sporkManager.IsSporkActive(SPORK_8_FUNDAMENTALNODE_PAYMENT_ENFORCEMENT)) {
-                        LogPrintf("CFundamentalnodeSync::Process - ERROR - Sync has failed on %s, will retry later\n", "FUNDAMENTALNODE_SYNC_LIST");
+                    if (IsSporkActive(SPORK_8_FUNDAMENTALNODE_PAYMENT_ENFORCEMENT)) {
+                        LogPrintf("CFundamentalnodeSync::Process - ERROR - Sync has failed, will retry later\n");
                         RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_FAILED;
                         RequestedFundamentalnodeAttempt = 0;
                         lastFailure = GetTime();
@@ -344,12 +322,12 @@ void CFundamentalnodeSync::Process()
 
                 if (RequestedFundamentalnodeAttempt >= FUNDAMENTALNODE_SYNC_THRESHOLD * 3) return;
 
-                fnodeman.DsegUpdate(pnode);
+                mnodeman.DsegUpdate(pnode);
                 RequestedFundamentalnodeAttempt++;
                 return;
             }
 
-            if (RequestedFundamentalnodeAssets == FUNDAMENTALNODE_SYNC_FNW) {
+            if (RequestedFundamentalnodeAssets == FUNDAMENTALNODE_SYNC_MNW) {
                 if (lastFundamentalnodeWinner > 0 && lastFundamentalnodeWinner < GetTime() - FUNDAMENTALNODE_SYNC_TIMEOUT * 2 && RequestedFundamentalnodeAttempt >= FUNDAMENTALNODE_SYNC_THRESHOLD) { //hasn't received a new item in the last five seconds, so we'll move to the
                     GetNextAsset();
                     return;
@@ -361,8 +339,8 @@ void CFundamentalnodeSync::Process()
                 // timeout
                 if (lastFundamentalnodeWinner == 0 &&
                     (RequestedFundamentalnodeAttempt >= FUNDAMENTALNODE_SYNC_THRESHOLD * 3 || GetTime() - nAssetSyncStarted > FUNDAMENTALNODE_SYNC_TIMEOUT * 5)) {
-                    if (sporkManager.IsSporkActive(SPORK_8_FUNDAMENTALNODE_PAYMENT_ENFORCEMENT)) {
-                        LogPrintf("CFundamentalnodeSync::Process - ERROR - Sync has failed on %s, will retry later\n", "FUNDAMENTALNODE_SYNC_FNW");
+                    if (IsSporkActive(SPORK_8_FUNDAMENTALNODE_PAYMENT_ENFORCEMENT)) {
+                        LogPrintf("CFundamentalnodeSync::Process - ERROR - Sync has failed, will retry later\n");
                         RequestedFundamentalnodeAssets = FUNDAMENTALNODE_SYNC_FAILED;
                         RequestedFundamentalnodeAttempt = 0;
                         lastFailure = GetTime();
@@ -375,8 +353,11 @@ void CFundamentalnodeSync::Process()
 
                 if (RequestedFundamentalnodeAttempt >= FUNDAMENTALNODE_SYNC_THRESHOLD * 3) return;
 
-                int nFnCount = fnodeman.CountEnabled();
-                pnode->PushMessage("fnget", nFnCount); //sync payees
+                CBlockIndex* pindexPrev = chainActive.Tip();
+                if (pindexPrev == NULL) return;
+
+                int nMnCount = mnodeman.CountEnabled();
+                pnode->PushMessage("fnget", nMnCount); //sync payees
                 RequestedFundamentalnodeAttempt++;
 
                 return;

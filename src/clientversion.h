@@ -13,7 +13,7 @@
  * client versioning and copyright year
  */
 
-//! These need to be macros, as clientversion.cpp's and AXIV*-res.rc's voodoo requires it
+//! These need to be macros, as clientversion.cpp's and axiv*-res.rc's voodoo requires it
 #define CLIENT_VERSION_MAJOR 4
 #define CLIENT_VERSION_MINOR 5
 #define CLIENT_VERSION_REVISION 0
@@ -41,7 +41,7 @@
 #define COPYRIGHT_STR "2009-" STRINGIZE(COPYRIGHT_YEAR) " The Bitcoin Core Developers, 2014-" STRINGIZE(COPYRIGHT_YEAR) " The Dash Core Developers, 2015-" STRINGIZE(COPYRIGHT_YEAR) " The PIVX Core Developers, 2018-" STRINGIZE(COPYRIGHT_YEAR) " The AXIV Core Developers"
 
 /**
- * AXIVd-res.rc includes this file, but it cannot cope with real c++ code.
+ * axivd-res.rc includes this file, but it cannot cope with real c++ code.
  * WINDRES_PREPROC is defined to indicate that its pre-processor is running.
  * Anything other than a define should be guarded below.
  */

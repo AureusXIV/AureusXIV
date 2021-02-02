@@ -76,9 +76,10 @@ public:
     int64_t Interval() const { return nTargetTimespan / nTargetSpacing; }
     int COINBASE_MATURITY() const { return nMaturity; }
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
-    CAmount BudgetCycleBlocks() const { return nBudgetCycleBlocks; }
-    CAmount BudgetFeeConfirmations() const { return nBudgetFeeConfirmations; }
-    CAmount ProposalEstablishmentTime() const { return nProposalEstablishmentTime; }
+    /** The fundamentalnode count that we will allow the see-saw reward payments to be off by */
+    int FundamentalnodeCountDrift() const { return nFundamentalnodeCountDrift; }
+	/** The masternode count that we will allow the see-saw reward payments to be off by */
+    int MasternodeCountDrift() const { return nMasternodeCountDrift; }
     /** Make miner stop after a block is found. In RPC, don't return until nGenProcLimit blocks are generated */
     bool MineBlocksOnDemand() const { return fMineBlocksOnDemand; }
     /** In the future use NetworkIDString() for RPC fields */
@@ -92,7 +93,7 @@ public:
     int PoolMaxTransactions() const { return nPoolMaxTransactions; }
 
     /** Spork key and Masternode Handling **/
-    std::string strSporkPubKey() const { return strSporkKey; }
+    std::string SporkKey() const { return strSporkKey; }
     std::string SporkKeyOld() const { return strSporkKeyOld; }
     int64_t NewSporkStart() const { return nEnforceNewSporkKey; }
     int64_t RejectOldSporkKey() const { return nRejectOldSporkKey; }
@@ -107,7 +108,6 @@ public:
     int LAST_POW_BLOCK() const { return nLastPOWBlock; }
     int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
-    int START_MASTERNODE_PAYMENTS() const { return nStartMasternodePayments; }
 
 protected:
     CChainParams() {}
@@ -126,10 +126,8 @@ protected:
     int64_t nTargetTimespan;
     int64_t nTargetSpacing;
     int nLastPOWBlock;
-    int nStartMasternodePayments;
-    int nBudgetCycleBlocks;
-    int nBudgetFeeConfirmations;
-    int64_t nProposalEstablishmentTime;
+    int nFundamentalnodeCountDrift;
+	int nMasternodeCountDrift;
     int nMaturity;
     int nModifierUpdateBlock;
     CAmount nMaxMoneyOut;

@@ -110,12 +110,9 @@ public:
         nTargetTimespan = 1 * 45; // AXIV: 1 day
         nTargetSpacing = 1 * 45;  // AXIV: 1 minute
         nMaturity = 8;
+        nFundamentalnodeCountDrift = 20;
+        nMasternodeCountDrift = 20;
         nMaxMoneyOut = 21000000 * COIN;
-
-        nBudgetCycleBlocks = 43200;       // approx. 1 every 30 days
-        nBudgetFeeConfirmations = 6;      // Number of confirmations for the finalization fee
-        nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
-
 
         /** Height or Time Based Activations **/
         nLastPOWBlock = 200;
@@ -128,7 +125,6 @@ public:
         nInvalidAmountFiltered = 268200*COIN; //Amount of invalid coins filtered through exchanges, that should be considered valid
         nEnforceNewSporkKey = 1596240000; //!> Sporks signed after (GMT): August 1, 2020 12:00:00 AM must use the new spork key
         nRejectOldSporkKey = 1604188800; //!> Fully reject old spork key after (GMT): November 1, 2020 12:00:00 AM
-        nStartMasternodePayments = 2000; // This will be the block when masternode payments will start
 
         /**
          * Build the genesis block. Note that the output of the genesis coinbase cannot
@@ -188,14 +184,14 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("dns0", "dns0.AXIV.phore.io")); // Primary DNS seeder
-        vSeeds.push_back(CDNSSeedData("dns1", "dns1.AXIV.phore.io")); // Secondary DNS seeder
-        vSeeds.push_back(CDNSSeedData("seednode1.AXIV.co", "seednode1.AXIV.co"));
-        vSeeds.push_back(CDNSSeedData("seednode2.AXIV.co", "seednode2.AXIV.co"));
-        vSeeds.push_back(CDNSSeedData("seednode1.AXIVtoken.io", "seednode1.AXIVtoken.io"));
-        vSeeds.push_back(CDNSSeedData("seednode2.AXIVtoken.io", "seednode2.AXIVtoken.io"));
-        vSeeds.push_back(CDNSSeedData("seednode1.AXIVinfo.co", "seednode1.AXIVinfo.co"));
-        vSeeds.push_back(CDNSSeedData("seednode2.AXIVinfo.co", "seednode2.AXIVinfo.co"));
+        vSeeds.push_back(CDNSSeedData("dns0", "dns0.axiv.phore.io")); // Primary DNS seeder
+        vSeeds.push_back(CDNSSeedData("dns1", "dns1.axiv.phore.io")); // Secondary DNS seeder
+        vSeeds.push_back(CDNSSeedData("seednode1.axiv.co", "seednode1.axiv.co"));
+        vSeeds.push_back(CDNSSeedData("seednode2.axiv.co", "seednode2.axiv.co"));
+        vSeeds.push_back(CDNSSeedData("seednode1.axivtoken.io", "seednode1.axivtoken.io"));
+        vSeeds.push_back(CDNSSeedData("seednode2.axivtoken.io", "seednode2.axivtoken.io"));
+        vSeeds.push_back(CDNSSeedData("seednode1.axivinfo.co", "seednode1.axivinfo.co"));
+        vSeeds.push_back(CDNSSeedData("seednode2.axivinfo.co", "seednode2.axivinfo.co"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 23);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 13);
@@ -221,6 +217,7 @@ public:
         strSporkKeyOld = "04fd2375653a3064623b8a9e179c34a4ffa9ee9afbc13e2218b37f5fa6cbe2f94ef874a216cbfddbcbf06b5951a9011d65dae988fb4469fabcfa29b9c8daf23c7e";
         strObfuscationPoolDummyAddress = "VjVqgZbamLZ3KmEKBZZzmZgvtqDWw7jsrL";
         nStartFundamentalnodePayments = 1524487214;
+
         nBudget_Fee_Confirmations = 6; // Number of confirmations for the finalization fee
     }
 
@@ -284,16 +281,18 @@ public:
         pchMessageStart[2] = 0x65;
         pchMessageStart[3] = 0xba;
         vAlertPubKey = ParseHex("000010e83b2703ccf322f7dbd62dd5855ac7c10bd055814ce121ba32607d573b8810c02c0582aed05b4deb9c4b77b26d92428c61256cd42774babea0a073b2ed0c9");
-        nDefaultPort = 10133;
+        nDefaultPort = 10132;
         nEnforceBlockUpgradeMajority = 6480;
         nRejectBlockOutdatedMajority = 8208;
         nToCheckBlockUpgradeMajority = 8640; // ((60*60*24)/45)*4.5 = 8640 or about 4 days
         nMinerThreads = 0;
         nTargetTimespan = 1 * 45; // AXIV: 1 day
         nTargetSpacing = 1 * 45;  // AXIV: 1 minute
-        nLastPOWBlock = 400;
+        nLastPOWBlock = 200;
         nMaturity = 15;
-        nModifierUpdateBlock = 100500; //approx Mon, 17 Apr 2017 04:00:00 GMT
+        nFundamentalnodeCountDrift = 4;
+        nMasternodeCountDrift = 4;
+        nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
         nMaxMoneyOut = 43199500 * COIN;
         nBlockEnforceSerialRange = 1; //Enforce serial range starting this block
         nBlockRecalculateAccumulators = 9908000; //Trigger a recalculation of accumulators
@@ -303,18 +302,11 @@ public:
         nInvalidAmountFiltered = 0; //Amount of invalid coins filtered through exchanges, that should be considered valid
         nEnforceNewSporkKey = 1596240000; //!> Sporks signed after (GMT): August 1, 2020 12:00:00 AM must use the new spork key
         nRejectOldSporkKey = 1601510400; //!> Fully reject old spork key after (GMT): October 1, 2020 12:00:00 AM
-        nStartMasternodePayments = 2000; // This will be the block when masternode payments will start
-
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
-        genesis.nTime = 1603311280;
-        genesis.nNonce = 973214;
-        
         genesis = CreateGenesisBlock(1603311280, 973214, 0x1e0ffff0, 1, 250 * COIN);
-        //genesis = CreateGenesisBlock(1589445785, 296110, 0x1e0ffff0, 1, 250 * COIN);
         
-        const uint256 checkHash("00000748c41291fbc42a0fcffbcb1ec9a559d74e091f40524adffd8f2dcba7f4mak");
-        //const uint256 checkHash("000001b272c8b0558fff38d94cb05f821d4f67b47bad407826e231a5553c64a3");
+        const uint256 checkHash("00000748c41291fbc42a0fcffbcb1ec9a559d74e091f40524adffd8f2dcba7f4");
 
         // To mine new genesis block, change the 'false' to 'true', and change hashGenesisBlock to "0x001"
         hashGenesisBlock = checkHash;
@@ -336,20 +328,20 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("209.182.216.144", "209.182.216.144")); // AXIV fn
-        vSeeds.push_back(CDNSSeedData("209.182.216.187", "209.182.216.187")); // AXIV fn
+        vSeeds.push_back(CDNSSeedData("209.182.216.144", "209.182.216.144")); // axiv fn
+        vSeeds.push_back(CDNSSeedData("209.182.216.187", "209.182.216.187")); // axiv fn
         vSeeds.push_back(CDNSSeedData("198.13.50.121", "198.13.50.121"));     //rasalghul
         vSeeds.push_back(CDNSSeedData("104.238.183.75", "104.238.183.75"));   //rasalghul
 
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet AXIV addresses start with 'x' or 'y'
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet AXIV script addresses start with '8' or '9'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet axiv addresses start with 'x' or 'y'
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet axiv script addresses start with '8' or '9'
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 239);     // Testnet private keys start with '9' or 'c' (Bitcoin defaults)
-        // Testnet AXIV BIP32 pubkeys start with 'DRKV'
+        // Testnet axiv BIP32 pubkeys start with 'DRKV'
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x3a)(0x80)(0x61)(0xa0).convert_to_container<std::vector<unsigned char> >();
-        // Testnet AXIV BIP32 prvkeys start with 'DRKP'
+        // Testnet axiv BIP32 prvkeys start with 'DRKP'
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x3a)(0x80)(0x58)(0x37).convert_to_container<std::vector<unsigned char> >();
-        // Testnet AXIV BIP44 coin type is '1' (All coin's testnet default)
+        // Testnet axiv BIP44 coin type is '1' (All coin's testnet default)
         base58Prefixes[EXT_COIN_TYPE] = boost::assign::list_of(0x80)(0x00)(0x00)(0x01).convert_to_container<std::vector<unsigned char> >();
 
         convertSeed6(vFixedSeeds, pnSeed6_test, ARRAYLEN(pnSeed6_test));

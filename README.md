@@ -9,7 +9,7 @@ AXIV is a cutting edge cryptocurrency, with many features not available in most 
   technology used to secure the network and provide the above features, each Masternode is secured
   with a collateral of 20K AXIV. Each Supernode secured with 10K AXIV burn.
 
-More information at [AXIVtoken.io](http://www.AXIVtoken.io)
+More information at [axivtoken.io](http://www.axivtoken.io)
 
 ### Coin Specs
 <table>
@@ -21,7 +21,7 @@ More information at [AXIVtoken.io](http://www.AXIVtoken.io)
 <tr><td>Premine</td><td>1,105,940 AXIV*</td></tr>
 </table>
 
-*800,000 AXIV of the Premine is to be burned for creation of Supernodes.  As of Block [23575](http://AXIVtoken.io:8181/block/d1c76ba65be8748cc350f44884b8a084fc9f9de9dfd03dccf147cfd1d4388781) nearly 300,000 AXIV has been burned for the creation of Supernodes.
+*800,000 AXIV of the Premine is to be burned for creation of Supernodes.  As of Block [23575](http://axivtoken.io:8181/block/d1c76ba65be8748cc350f44884b8a084fc9f9de9dfd03dccf147cfd1d4388781) nearly 300,000 AXIV has been burned for the creation of Supernodes.
 
 ### Reward Distribution
 
@@ -33,7 +33,7 @@ More information at [AXIVtoken.io](http://www.AXIVtoken.io)
 <tr><td>3-200</td><td>30 AXIV</td><td rowspan=1>Initial Mining</td><td rowspan=1> Approx 1 Days</td></tr>
 <tr><th colspan=4>PoS Phase</th></tr>
 <tr><th>Block Height</th><th colspan=3>Reward Amount</th></tr>
-<tr><td>201-Infinite</td><td colspan=3>Variable based on <a href="https://AXIV.org/knowledge-base/see-saw-rewards-mechanism/">SeeSaw Reward Mechanism</a></td></tr>
+<tr><td>201-Infinite</td><td colspan=3>Variable based on <a href="https://axiv.org/knowledge-base/see-saw-rewards-mechanism/">SeeSaw Reward Mechanism</a></td></tr>
 </table>
 
 ### PoW Rewards Breakdown

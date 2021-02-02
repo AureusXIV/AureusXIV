@@ -46,7 +46,7 @@ related to the DNS seed operation.
 If these expectations cannot be satisfied the operator should
 discontinue providing services and contact the active AXIV
 Core development team as well as posting on the
-[AXIV Forum](https://forum.AXIV.org).
+[AXIV Forum](https://forum.axiv.org).
 
 Behavior outside of these expectations may be reasonable in some
 situations but should be discussed in public in advance.

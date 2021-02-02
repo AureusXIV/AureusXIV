@@ -1,6 +1,6 @@
 Mac OS X Build Instructions and Notes
 ====================================
-This guide will show you how to build AXIVd (headless client) for OSX.
+This guide will show you how to build axivd (headless client) for OSX.
 
 Notes
 -----
@@ -40,11 +40,11 @@ Instructions: Homebrew
 
         brew install autoconf automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf qt5 zmq libevent
 
-### Building `AXIVd`
+### Building `axivd`
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone https://github.com/AXIVteam/AXIV.git
+        git clone https://github.com/axivteam/AXIV.git
         cd AXIV
 
 2.  Make the Homebrew OpenSSL headers visible to the configure script  (do ```brew info openssl``` to find out why this is necessary, or if you use Homebrew with installation folders different from the default).
@@ -52,7 +52,7 @@ Instructions: Homebrew
         export LDFLAGS+=-L/usr/local/opt/openssl/lib
         export CPPFLAGS+=-I/usr/local/opt/openssl/include
         
-3.  Build AXIVd:
+3.  Build axivd:
 
         ./autogen.sh
         ./configure --with-gui=qt5
@@ -62,7 +62,7 @@ Instructions: Homebrew
 
         make check
 
-5.  (Optional) You can also install AXIVd to your path:
+5.  (Optional) You can also install axivd to your path:
 
         make install
 
@@ -74,7 +74,7 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 1. Make sure you installed everything through homebrew mentioned above
 2. Do a proper ./configure --with-gui=qt5 --enable-debug
 3. In Qt Creator do "New Project" -> Import Project -> Import Existing Project
-4. Enter "AXIV-qt" as project name, enter src/qt as location
+4. Enter "axiv-qt" as project name, enter src/qt as location
 5. Leave the file selection as it is
 6. Confirm the "summary page"
 7. In the "Projects" tab select "Manage Kits..."
@@ -84,11 +84,11 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 
 Creating a release build
 ------------------------
-You can ignore this section if you are building `AXIVd` for your own use.
+You can ignore this section if you are building `axivd` for your own use.
 
-AXIVd/AXIV-cli binaries are not included in the AXIV-Qt.app bundle.
+axivd/axiv-cli binaries are not included in the axiv-Qt.app bundle.
 
-If you are building `AXIVd` or `AXIV-qt` for others, your build machine should be set up
+If you are building `axivd` or `axiv-qt` for others, your build machine should be set up
 as follows for maximum compatibility:
 
 All dependencies should be compiled with these flags:
@@ -103,14 +103,14 @@ bundle is packaged and signed to create the .dmg disk image that is distributed.
 Running
 -------
 
-It's now available at `./AXIVd`, provided that you are still in the `src`
+It's now available at `./axivd`, provided that you are still in the `src`
 directory. We have to first create the RPC configuration file, though.
 
-Run `./AXIVd` to get the filename where it should be put, or just try these
+Run `./axivd` to get the filename where it should be put, or just try these
 commands:
 
-    echo -e "rpcuser=AXIVrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/AXIV/AXIV.conf"
-    chmod 600 "/Users/${USER}/Library/Application Support/AXIV/AXIV.conf"
+    echo -e "rpcuser=axivrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/AXIV/axiv.conf"
+    chmod 600 "/Users/${USER}/Library/Application Support/AXIV/axiv.conf"
 
 The next time you run it, it will start downloading the blockchain, but it won't
 output anything while it's doing this. This process may take several hours;
@@ -121,6 +121,6 @@ you can monitor its process by looking at the debug.log file, like this:
 Other commands:
 -------
 
-    ./AXIVd -daemon # to start the AXIV daemon.
-    ./AXIV-cli --help  # for a list of command-line options.
-    ./AXIV-cli help    # When the daemon is running, to get a list of RPC commands
+    ./axivd -daemon # to start the axiv daemon.
+    ./axiv-cli --help  # for a list of command-line options.
+    ./axiv-cli help    # When the daemon is running, to get a list of RPC commands

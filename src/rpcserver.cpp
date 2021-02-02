@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2017 The PIVX developers
-// Copyright (c) 2018 The VITAE developers
+// Copyright (c) 2018 The AXIV developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,12 +11,12 @@
 #include "base58.h"
 #include "init.h"
 #include "main.h"
-#include "wallet.h"
 #include "random.h"
 #include "sync.h"
 #include "ui_interface.h"
 #include "util.h"
 #include "utilstrencodings.h"
+
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
@@ -349,56 +349,46 @@ static const CRPCCommand vRPCCommands[] =
         {"hidden", "invalidateblock", &invalidateblock, true, true, false},
         {"hidden", "reconsiderblock", &reconsiderblock, true, true, false},
         {"hidden", "setmocktime", &setmocktime, true, false, false},
+
         /* AXIV features */
-        {"fundamentalnode", "listfundamentalnodes", &listfundamentalnodes, true, true, false},
-        {"fundamentalnode", "getfundamentalnodecount", &getfundamentalnodecount, true, true, false},
-        {"fundamentalnode", "createfundamentalnodebroadcast", &createfundamentalnodebroadcast, true, true, false},
-        {"fundamentalnode", "decodefundamentalnodebroadcast", &decodefundamentalnodebroadcast, true, true, false},
-        {"fundamentalnode", "relayfundamentalnodebroadcast", &relayfundamentalnodebroadcast, true, true, false},
-        {"fundamentalnode", "fundamentalnodecurrent", &fundamentalnodecurrent, true, true, false},
-        {"fundamentalnode", "fundamentalnodedebug", &fundamentalnodedebug, true, true, false},
-        {"fundamentalnode", "startfundamentalnode", &startfundamentalnode, true, true, false},
-        {"fundamentalnode", "createfundamentalnodekey", &createfundamentalnodekey, true, true, false},
-        {"fundamentalnode", "getfundamentalnodeoutputs", &getfundamentalnodeoutputs, true, true, false},
-        {"fundamentalnode", "listfundamentalnodeconf", &listfundamentalnodeconf, true, true, false},
-        {"fundamentalnode", "getfundamentalnodestatus", &getfundamentalnodestatus, true, true, false},
-        {"fundamentalnode", "getfundamentalnodewinners", &getfundamentalnodewinners, true, true, false},
-        {"fundamentalnode", "getfundamentalnodescores", &getfundamentalnodescores, true, true, false},
-        {"fundamentalnode", "fnsync", &fnsync, true, true, false},
-
-
-/*
-        {"budget", "fnbudget", &fnbudget, true, true, false},
-        {"budget", "preparebudget", &preparebudget, true, true, false},
-        {"budget", "submitbudget", &submitbudget, true, true, false},
-        {"budget", "fnbudgetvote", &fnbudgetvote, true, true, false},
-        {"budget", "getbudgetvotes", &getbudgetvotes, true, true, false},
-        {"budget", "getnextsuperblock", &getnextsuperblock, true, true, false},
-        {"budget", "getbudgetprojection", &getbudgetprojection, true, true, false},
-        {"budget", "getbudgetinfo", &getbudgetinfo, true, true, false},
-        {"budget", "fnbudgetrawvote", &fnbudgetrawvote, true, true, false},
-        {"budget", "fnfinalbudget", &fnfinalbudget, true, true, false},
-        {"budget", "checkbudgets", &checkbudgets, true, true, false},
-*/
-
-        {"masternode", "listmasternodes", &listmasternodes, true, true, false },
-        {"masternode", "getmasternodecount", &getmasternodecount, true, true, false },
-        {"masternode", "createmasternodebroadcast", &createmasternodebroadcast, true, true, false },
-        {"masternode", "decodemasternodebroadcast", &decodemasternodebroadcast, true, true, false },
-        {"masternode", "relaymasternodebroadcast", &relaymasternodebroadcast, true, true, false },
-        {"masternode", "masternodecurrent", &masternodecurrent, true, true, false },
-        {"masternode", "startmasternode", &startmasternode, true, true, false },
-        {"masternode", "createmasternodekey", &createmasternodekey, true, true, false },
-        {"masternode", "getmasternodeoutputs", &getmasternodeoutputs, true, true, false },
-        {"masternode", "listmasternodeconf", &listmasternodeconf, true, true, false },
-        {"masternode", "getmasternodestatus", &getmasternodestatus, true, true, false },
-        {"masternode", "getmasternodewinners", &getmasternodewinners, true, true, false },
-        {"masternode", "getmasternodescores", &getmasternodescores, true, true, false },
-        {"masternode", "mnsync", &mnsync, true, true, false },
-
-        {"AXIV", "spork", &spork, true, true, false},
-        {"AXIV", "makekeypair", &makekeypair, true, true, false},
+        {"axiv", "fundamentalnode", &fundamentalnode, true, true, false},
+        {"axiv", "listfundamentalnodes", &listfundamentalnodes, true, true, false},
+        {"axiv", "getfundamentalnodecount", &getfundamentalnodecount, true, true, false},
+        {"axiv", "fundamentalnodeconnect", &fundamentalnodeconnect, true, true, false},
+        {"axiv", "createfundamentalnodebroadcast", &createfundamentalnodebroadcast, true, true, false},
+        {"axiv", "decodefundamentalnodebroadcast", &decodefundamentalnodebroadcast, true, true, false},
+        {"axiv", "relayfundamentalnodebroadcast", &relayfundamentalnodebroadcast, true, true, false},
+        {"axiv", "fundamentalnodecurrent", &fundamentalnodecurrent, true, true, false},
+        {"axiv", "fundamentalnodedebug", &fundamentalnodedebug, true, true, false},
+        {"axiv", "startfundamentalnode", &startfundamentalnode, true, true, false},
+        {"axiv", "createfundamentalnodekey", &createfundamentalnodekey, true, true, false},
+        {"axiv", "getfundamentalnodeoutputs", &getfundamentalnodeoutputs, true, true, false},
+        {"axiv", "listfundamentalnodeconf", &listfundamentalnodeconf, true, true, false},
+        {"axiv", "getfundamentalnodestatus", &getfundamentalnodestatus, true, true, false},
+        {"axiv", "getfundamentalnodewinners", &getfundamentalnodewinners, true, true, false},
+        {"axiv", "getfundamentalnodescores", &getfundamentalnodescores, true, true, false},
+        {"axiv", "fnbudget", &fnbudget, true, true, false},
+        {"axiv", "preparebudget", &preparebudget, true, true, false},
+        {"axiv", "submitbudget", &submitbudget, true, true, false},
+        {"axiv", "fnbudgetvote", &fnbudgetvote, true, true, false},
+        {"axiv", "getbudgetvotes", &getbudgetvotes, true, true, false},
+        {"axiv", "getnextsuperblock", &getnextsuperblock, true, true, false},
+        {"axiv", "getbudgetprojection", &getbudgetprojection, true, true, false},
+        {"axiv", "getbudgetinfo", &getbudgetinfo, true, true, false},
+        {"axiv", "fnbudgetrawvote", &fnbudgetrawvote, true, true, false},
+        {"axiv", "fnfinalbudget", &fnfinalbudget, true, true, false},
+        {"axiv", "checkbudgets", &checkbudgets, true, true, false},
+        {"axiv", "fnsync", &fnsync, true, true, false},
+        {"axiv", "spork", &spork, true, true, false},
+        {"axiv", "getpoolinfo", &getpoolinfo, true, true, false},
+        {"axiv", "makekeypair", &makekeypair, true, true, false},
+        {"axiv", "mnspork", &mnspork, true, true, false},
+        {"axiv", "masternode", &masternode, true, true, false},
+        {"axiv", "masternodelist", &masternodelist, true, true, false},
+        {"axiv", "getmasternodestatus", &getmasternodestatus, true, true, false},
 #ifdef ENABLE_WALLET
+        {"axiv", "obfuscation", &obfuscation, false, false, true}, /* not threadSafe because of SendMoney */
+
         /* Wallet */
         {"wallet", "addmultisigaddress", &addmultisigaddress, true, false, true},
         {"wallet", "autocombinerewards", &autocombinerewards, false, false, true},
@@ -610,7 +600,7 @@ std::vector<std::string> CRPCTable::listCommands() const
 
 std::string HelpExampleCli(string methodname, string args)
 {
-    return "> AXIV-cli " + methodname + " " + args + "\n";
+    return "> axiv-cli " + methodname + " " + args + "\n";
 }
 
 std::string HelpExampleRpc(string methodname, string args)

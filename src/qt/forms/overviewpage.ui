@@ -388,7 +388,7 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="QLabel" name="labelVITPercent">
+                        <widget class="QLabel" name="labelAXIVPercent">
                          <property name="text">
                           <string notr="true">0 %</string>
                          </property>
@@ -888,11 +888,6 @@
                   </item>
                   <item>
                    <widget class="QListView" name="listTransactions">
-                   <property name="font">
-                          <font>
-                           <family>Andale Mono</family>
-                          </font>
-                         </property>
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -900,7 +895,7 @@
                      </size>
                     </property>
                     <property name="styleSheet">
-                     <string notr="true">QListView { background: transparent;}</string>
+                     <string notr="true">QListView { background: transparent; }</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -913,9 +908,6 @@
                     </property>
                     <property name="selectionMode">
                      <enum>QAbstractItemView::NoSelection</enum>
-                    </property>
-                    <property name="spacing">
-                     <number>6</number>
                     </property>
                    </widget>
                   </item>

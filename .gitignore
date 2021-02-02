@@ -106,7 +106,7 @@ src/qt/test/moc*.cpp
 *.qm
 Makefile
 axiv-qt
-AXIV-Qt.app
+VITAE-Qt.app
 background.tiff*
 
 # Unit-tests
@@ -156,3 +156,6 @@ cmake-build-debug
 axiv-qt.pro
 src/config/axiv-config.h
 src/config/axiv-config.h.in
+
+.DS_Store
+*.autosave

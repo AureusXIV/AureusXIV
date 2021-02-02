@@ -1,6 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
     <qresource prefix="/icons">
-        <file alias="blank">res/icons/blank.svg</file>
         <file alias="bitcoin">res/icons/bitcoin.png</file>
         <file alias="address-book">res/icons/address-book.svg</file>
         <file alias="quit">res/icons/quit.png</file>
@@ -12,7 +11,7 @@
         <file alias="connect_3">res/icons/connect3_16.svg</file>
         <file alias="connect_4">res/icons/connect4_16.svg</file>
         <file alias="transaction_0">res/icons/transaction0.png</file>
-        <file alias="transaction_confirmed">res/icons/transaction2.svg</file>
+        <file alias="transaction_confirmed">res/icons/transaction2.png</file>
         <file alias="transaction_conflicted">res/icons/transaction_conflicted.png</file>
         <file alias="transaction_1">res/icons/clock1.png</file>
         <file alias="transaction_2">res/icons/clock2.png</file>
@@ -23,7 +22,7 @@
         <file alias="eye_minus">res/icons/eye_minus.png</file>
         <file alias="eye_plus">res/icons/eye_plus.png</file>
         <file alias="options">res/icons/configure.png</file>
-        <file alias="receiving_addresses">res/icons/receive.svg</file>
+        <file alias="receiving_addresses">res/icons/receive.png</file>
         <file alias="receiving_addresses_dark">res/icons/receive.svg</file>
         <file alias="privacy">res/icons/privacy.png</file>
         <file alias="editpaste">res/icons/editpaste.svg</file>
@@ -70,10 +69,10 @@
         <file alias="axiv_logo_horizontal">res/images/axiv_logo_horizontal.png</file>
         <file alias="downArrow">res/images/downArrow.svg</file>
         <file alias="upArrow">res/images/upArrow.svg</file>
-        <file alias="downArrow_small">res/images/downArrow.svg</file>
-        <file alias="downArrow_small_white">res/images/downArrow.svg</file>
-        <file alias="upArrow_small">res/images/upArrow.svg</file>
-        <file alias="upArrow_small_white">res/images/upArrow.svg</file>
+        <file alias="downArrow_small">res/images/downArrow_small_dark.png</file>
+        <file alias="downArrow_small_white">res/images/downArrow_small.png</file>
+        <file alias="upArrow_small">res/images/upArrow_small_dark.png</file>
+        <file alias="upArrow_small_white">res/images/upArrow_small.png</file>
         <file alias="leftArrow_small">res/images/leftArrow_small_dark.png</file>
         <file alias="rightArrow_small">res/images/rightArrow_small_dark.png</file>
         <file alias="qtreeview_selected">res/images/qtreeview_selected.png</file>
@@ -125,3 +124,5 @@
          <file alias="AndaleMono">res/fonts/Andale-Mono.ttf</file>
      </qresource>
 </RCC>
+
+

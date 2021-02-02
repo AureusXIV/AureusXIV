@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2017 The PIVX developers
-// Copyright (c) 2018 The VITAE developers
+// Copyright (c) 2018 The AXIV developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,11 +11,11 @@
 #include "init.h"
 #include "main.h"
 #include "fundamentalnode-sync.h"
-#include "masternode-sync.h"
 #include "net.h"
 #include "netbase.h"
 #include "rpcserver.h"
 #include "spork.h"
+#include "mn-spork.h"
 #include "timedata.h"
 #include "util.h"
 #ifdef ENABLE_WALLET
@@ -58,7 +58,7 @@ UniValue getinfo(const UniValue& params, bool fHelp)
             "  \"version\": xxxxx,           (numeric) the server version\n"
             "  \"protocolversion\": xxxxx,   (numeric) the protocol version\n"
             "  \"walletversion\": xxxxx,     (numeric) the wallet version\n"
-            "  \"balance\": xxxxxxx,         (numeric) the total AXIV balance of the wallet\n"
+            "  \"balance\": xxxxxxx,         (numeric) the total axiv balance of the wallet (excluding zerocoins)\n"
             "  \"blocks\": xxxxxx,           (numeric) the current number of blocks processed in the server\n"
             "  \"timeoffset\": xxxxx,        (numeric) the time offset\n"
             "  \"connections\": xxxxx,       (numeric) the number of connections\n"
@@ -69,8 +69,8 @@ UniValue getinfo(const UniValue& params, bool fHelp)
             "  \"keypoololdest\": xxxxxx,    (numeric) the timestamp (seconds since GMT epoch) of the oldest pre-generated key in the key pool\n"
             "  \"keypoolsize\": xxxx,        (numeric) how many new keys are pre-generated\n"
             "  \"unlocked_until\": ttt,      (numeric) the timestamp in seconds since epoch (midnight Jan 1 1970 GMT) that the wallet is unlocked for transfers, or 0 if the wallet is locked\n"
-            "  \"paytxfee\": x.xxxx,         (numeric) the transaction fee set in AXIV/kb\n"
-            "  \"relayfee\": x.xxxx,         (numeric) minimum relay fee for non-free transactions in AXIV/kb\n"
+            "  \"paytxfee\": x.xxxx,         (numeric) the transaction fee set in axiv/kb\n"
+            "  \"relayfee\": x.xxxx,         (numeric) minimum relay fee for non-free transactions in axiv/kb\n"
             "  \"staking status\": true|false,  (boolean) if the wallet is staking or not\n"
             "  \"errors\": \"...\"           (string) any error messages\n"
             "}\n"
@@ -110,6 +110,7 @@ UniValue getinfo(const UniValue& params, bool fHelp)
     }
 
     obj.push_back(Pair("moneysupply",ValueFromAmount(chainActive.Tip()->nMoneySupply)));
+
 #ifdef ENABLE_WALLET
     if (pwalletMain) {
         obj.push_back(Pair("keypoololdest", pwalletMain->GetOldestKeyPoolTime()));
@@ -201,67 +202,6 @@ UniValue fnsync(const UniValue& params, bool fHelp)
     return "failure";
 }
 
-UniValue mnsync(const UniValue& params, bool fHelp)
-{
-    std::string strMode;
-    if (params.size() == 1)
-        strMode = params[0].get_str();
-
-    if (fHelp || params.size() != 1 || (strMode != "status" && strMode != "reset")) {
-        throw std::runtime_error(
-                "mnsync \"status|reset\"\n"
-                "\nReturns the sync status or resets sync.\n"
-
-                "\nArguments:\n"
-                "1. \"mode\"    (string, required) either 'status' or 'reset'\n"
-
-                "\nResult ('status' mode):\n"
-                "{\n"
-                "  \"IsBlockchainSynced\": true|false,    (boolean) 'true' if blockchain is synced\n"
-                "  \"lastMasternodeList\": xxxx,        (numeric) Timestamp of last MN list message\n"
-                "  \"lastMasternodeWinner\": xxxx,      (numeric) Timestamp of last MN winner message\n"
-                "  \"lastFailure\": xxxx,           (numeric) Timestamp of last failed sync\n"
-                "  \"nCountFailures\": n,           (numeric) Number of failed syncs (total)\n"
-                "  \"sumMasternodeList\": n,        (numeric) Number of MN list messages (total)\n"
-                "  \"sumMasternodeWinner\": n,      (numeric) Number of MN winner messages (total)\n"
-                "  \"countMasternodeList\": n,      (numeric) Number of MN list messages (local)\n"
-                "  \"countMasternodeWinner\": n,    (numeric) Number of MN winner messages (local)\n"
-                "  \"RequestedMasternodeAssets\": n, (numeric) Status code of last sync phase\n"
-                "  \"RequestedMasternodeAttempt\": n, (numeric) Status code of last sync attempt\n"
-                "}\n"
-
-                "\nResult ('reset' mode):\n"
-                "\"status\"     (string) 'success'\n"
-
-                "\nExamples:\n" +
-                HelpExampleCli("mnsync", "\"status\"") + HelpExampleRpc("mnsync", "\"status\""));
-    }
-
-    if (strMode == "status") {
-        UniValue obj(UniValue::VOBJ);
-
-        obj.push_back(Pair("IsBlockchainSynced", masternodeSync.IsBlockchainSynced()));
-        obj.push_back(Pair("lastMasternodeList", masternodeSync.lastMasternodeList));
-        obj.push_back(Pair("lastMasternodeWinner", masternodeSync.lastMasternodeWinner));
-        obj.push_back(Pair("lastFailure", masternodeSync.lastFailure));
-        obj.push_back(Pair("nCountFailures", masternodeSync.nCountFailures));
-        obj.push_back(Pair("sumMasternodeList", masternodeSync.sumMasternodeList));
-        obj.push_back(Pair("sumMasternodeWinner", masternodeSync.sumMasternodeWinner));
-        obj.push_back(Pair("countMasternodeList", masternodeSync.countMasternodeList));
-        obj.push_back(Pair("countMasternodeWinner", masternodeSync.countMasternodeWinner));
-        obj.push_back(Pair("RequestedMasternodeAssets", masternodeSync.RequestedMasternodeAssets));
-        obj.push_back(Pair("RequestedMasternodeAttempt", masternodeSync.RequestedMasternodeAttempt));
-
-        return obj;
-    }
-
-    if (strMode == "reset") {
-        masternodeSync.Reset();
-        return "success";
-    }
-    return "failure";
-}
-
 #ifdef ENABLE_WALLET
 class DescribeAddressVisitor : public boost::static_visitor<UniValue>
 {
@@ -316,19 +256,21 @@ UniValue spork(const UniValue& params, bool fHelp)
 {
     if (params.size() == 1 && params[0].get_str() == "show") {
         UniValue ret(UniValue::VOBJ);
-        for (const auto& sporkDef : sporkDefs) {
-            ret.push_back(Pair(sporkDef.name, sporkManager.GetSporkValue(sporkDef.sporkId)));
+        for (int nSporkID = SPORK_START; nSporkID <= SPORK_END; nSporkID++) {
+            if (sporkManager.GetSporkNameByID(nSporkID) != "Unknown")
+                ret.push_back(Pair(sporkManager.GetSporkNameByID(nSporkID), GetSporkValue(nSporkID)));
         }
         return ret;
     } else if (params.size() == 1 && params[0].get_str() == "active") {
         UniValue ret(UniValue::VOBJ);
-        for (const auto& sporkDef : sporkDefs) {
-            ret.push_back(Pair(sporkDef.name, sporkManager.IsSporkActive(sporkDef.sporkId)));
+        for (int nSporkID = SPORK_START; nSporkID <= SPORK_END; nSporkID++) {
+            if (sporkManager.GetSporkNameByID(nSporkID) != "Unknown")
+                ret.push_back(Pair(sporkManager.GetSporkNameByID(nSporkID), IsSporkActive(nSporkID)));
         }
         return ret;
     } else if (params.size() == 2) {
-        SporkId nSporkID = sporkManager.GetSporkIDByName(params[0].get_str());
-        if (nSporkID == SPORK_INVALID) {
+        int nSporkID = sporkManager.GetSporkIDByName(params[0].get_str());
+        if (nSporkID == -1) {
             return "Invalid spork name";
         }
 
@@ -371,20 +313,59 @@ UniValue spork(const UniValue& params, bool fHelp)
         HelpExampleCli("spork", "show") + HelpExampleRpc("spork", "show"));
 }
 
+UniValue mnspork(const UniValue& params, bool fHelp)
+{
+    if(params.size() == 1 && params[0].get_str() == "show"){
+        std::map<int, CMNSporkMessage>::iterator it = mapMNSporksActive.begin();
+
+        //Object ret;
+                UniValue ret(UniValue::VOBJ);
+        while(it != mapMNSporksActive.end()) {
+            ret.push_back(Pair(mn_sporkManager.GetMNSporkNameByID(it->second.nMNSporkID), it->second.nValue));
+            it++;
+        }
+        return ret;
+    } else if (params.size() == 2){
+        int nMNSporkID = mn_sporkManager.GetMNSporkIDByName(params[0].get_str());
+        if(nMNSporkID == -1){
+            return "Invalid spork name";
+        }
+
+        // SPORK VALUE
+        int64_t nValue = stoi(params[1].get_str());
+                //TODO: Add core method.
+
+        //broadcast new spork
+        if(mn_sporkManager.UpdateMNSpork(nMNSporkID, nValue)){
+            return "success";
+        } else {
+            return "failure";
+
+        }
+
+    }
+
+    throw runtime_error(
+        "mnspork <name> [<value>]\n"
+        "<name> is the corresponding spork name, or 'show' to show all current spork settings"
+        "<value> is a epoch datetime to enable or disable mnspork"
+        + HelpRequiringPassphrase());
+}
+
 UniValue validateaddress(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "validateaddress \"AXIVaddress\"\n"
-            "\nReturn information about the given AXIV address.\n"
+            "validateaddress \"axivaddress\"\n"
+            "\nReturn information about the given axiv address.\n"
 
             "\nArguments:\n"
-            "1. \"AXIVaddress\"     (string, required) The AXIV address to validate\n"
+            "1. \"axivaddress\"     (string, required) The axiv address to validate\n"
 
             "\nResult:\n"
             "{\n"
             "  \"isvalid\" : true|false,         (boolean) If the address is valid or not. If not, this is the only property returned.\n"
-            "  \"address\" : \"AXIVaddress\", (string) The AXIV address validated\n"
+            "  \"address\" : \"axivaddress\", (string) The axiv address validated\n"
             "  \"ismine\" : true|false,          (boolean) If the address is yours or not\n"
             "  \"isscript\" : true|false,        (boolean) If the key is a script\n"
             "  \"pubkey\" : \"publickeyhex\",    (string) The hex value of the raw public key\n"
@@ -495,9 +476,9 @@ UniValue createmultisig(const UniValue& params, bool fHelp)
 
             "\nArguments:\n"
             "1. nrequired      (numeric, required) The number of required signatures out of the n keys or addresses.\n"
-            "2. \"keys\"       (string, required) A json array of keys which are AXIV addresses or hex-encoded public keys\n"
+            "2. \"keys\"       (string, required) A json array of keys which are axiv addresses or hex-encoded public keys\n"
             "     [\n"
-            "       \"key\"    (string) AXIV address or hex-encoded public key\n"
+            "       \"key\"    (string) axiv address or hex-encoded public key\n"
             "       ,...\n"
             "     ]\n"
 
@@ -529,11 +510,11 @@ UniValue verifymessage(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 3)
         throw runtime_error(
-            "verifymessage \"AXIVaddress\" \"signature\" \"message\"\n"
+            "verifymessage \"axivaddress\" \"signature\" \"message\"\n"
             "\nVerify a signed message\n"
 
             "\nArguments:\n"
-            "1. \"AXIVaddress\"  (string, required) The AXIV address to use for the signature.\n"
+            "1. \"axivaddress\"  (string, required) The axiv address to use for the signature.\n"
             "2. \"signature\"       (string, required) The signature provided by the signer in base 64 encoding (see signmessage).\n"
             "3. \"message\"         (string, required) The message that was signed.\n"
 

@@ -32,7 +32,7 @@
   <string>AXIV-Qt</string>
 
   <key>CFBundleIdentifier</key>
-  <string>io.axiv.AXIV-Qt</string>
+  <string>io.axiv.Axiv-Qt</string>
 
   <key>CFBundleURLTypes</key>
   <array>
@@ -40,7 +40,7 @@
       <key>CFBundleTypeRole</key>
       <string>Editor</string>
       <key>CFBundleURLName</key>
-      <string>io.axiv.AXIVPayment</string>
+      <string>io.axiv.AxivPayment</string>
       <key>CFBundleURLSchemes</key>
       <array>
         <string>axiv</string>
@@ -54,7 +54,7 @@
       <key>UTTypeIdentifier</key>
       <string>io.axiv.paymentrequest</string>
       <key>UTTypeDescription</key>
-      <string>AXIV payment request</string>
+      <string>Axiv payment request</string>
       <key>UTTypeConformsTo</key>
       <array>
         <string>public.data</string>

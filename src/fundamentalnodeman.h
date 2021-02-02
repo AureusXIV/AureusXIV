@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2017 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -17,18 +17,19 @@
 #define FUNDAMENTALNODES_DUMP_SECONDS (15 * 60)
 #define FUNDAMENTALNODES_DSEG_SECONDS (3 * 60 * 60)
 
+using namespace std;
 
 class CFundamentalnodeMan;
 
-extern CFundamentalnodeMan fnodeman;
+extern CFundamentalnodeMan mnodeman;
 void DumpFundamentalnodes();
 
-/** Access to the FN database (fncache.dat)
+/** Access to the MN database (mncache.dat)
  */
 class CFundamentalnodeDB
 {
 private:
-    boost::filesystem::path pathFN;
+    boost::filesystem::path pathMN;
     std::string strMagicMessage;
 
 public:
@@ -43,8 +44,8 @@ public:
     };
 
     CFundamentalnodeDB();
-    bool Write(const CFundamentalnodeMan& fnodemanToSave);
-    ReadResult Read(CFundamentalnodeMan& fnodemanToLoad, bool fDryRun = false);
+    bool Write(const CFundamentalnodeMan& mnodemanToSave);
+    ReadResult Read(CFundamentalnodeMan& mnodemanToLoad, bool fDryRun = false);
 };
 
 class CFundamentalnodeMan
@@ -56,7 +57,7 @@ private:
     // critical section to protect the inner data structures specifically on messaging
     mutable CCriticalSection cs_process_message;
 
-    // map to hold all FNs
+    // map to hold all MNs
     std::vector<CFundamentalnode> vFundamentalnodes;
     // who's asked for the Fundamentalnode list and the last time
     std::map<CNetAddr, int64_t> mAskedUsForFundamentalnodeList;
@@ -67,9 +68,9 @@ private:
 
 public:
     // Keep track of all broadcasts I've seen
-    std::map<uint256, CFundamentalnodeBroadcast> mapSeenFundamentalnodeBroadcast;
+    map<uint256, CFundamentalnodeBroadcast> mapSeenFundamentalnodeBroadcast;
     // Keep track of all pings I've seen
-    std::map<uint256, CFundamentalnodePing> mapSeenFundamentalnodePing;
+    map<uint256, CFundamentalnodePing> mapSeenFundamentalnodePing;
 
     // keep track of dsq count to prevent fundamentalnodes from gaming obfuscation queue
     int64_t nDsqCount;
@@ -94,10 +95,10 @@ public:
     CFundamentalnodeMan(CFundamentalnodeMan& other);
 
     /// Add an entry
-    bool Add(CFundamentalnode& fn);
+    bool Add(CFundamentalnode& mn);
 
-    /// Ask (source) node for fnb
-    void AskForFN(CNode* pnode, CTxIn& vin);
+    /// Ask (source) node for mnb
+    void AskForMN(CNode* pnode, CTxIn& vin);
 
     /// Check all Fundamentalnodes
     void Check();
@@ -134,7 +135,7 @@ public:
         return vFundamentalnodes;
     }
 
-    std::vector<std::pair<int, CFundamentalnode> > GetFundamentalnodeRanks(int64_t nBlockHeight, int minProtocol = 0);
+    std::vector<pair<int, CFundamentalnode> > GetFundamentalnodeRanks(int64_t nBlockHeight, int minProtocol = 0);
     int GetFundamentalnodeRank(const CTxIn& vin, int64_t nBlockHeight, int minProtocol = 0, bool fOnlyActive = true);
     CFundamentalnode* GetFundamentalnodeByRank(int nRank, int64_t nBlockHeight, int minProtocol = 0, bool fOnlyActive = true);
 
@@ -152,10 +153,10 @@ public:
 
     void Remove(CTxIn vin);
 
-    int GetEstimatedFundamentalnodes(int nBlock);
+    int GetEstimatedMasternodes(int nBlock);
 
     /// Update fundamentalnode list and maps using provided CFundamentalnodeBroadcast
-    void UpdateFundamentalnodeList(CFundamentalnodeBroadcast fnb);
+    void UpdateFundamentalnodeList(CFundamentalnodeBroadcast mnb);
 };
 
 #endif

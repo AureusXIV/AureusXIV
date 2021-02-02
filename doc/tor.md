@@ -38,12 +38,12 @@ outgoing connections be anonymized, but more is possible.
 An example how to start the client if the Tor proxy is running on local host on
 port 9050 and only allows .onion nodes to connect:
 ```
-./AXIVd -onion=127.0.0.1:9050 -onlynet=tor -listen=0 -addnode=dnetzj6l4cvo2fxy.onion:989
+./axivd -onion=127.0.0.1:9050 -onlynet=tor -listen=0 -addnode=dnetzj6l4cvo2fxy.onion:989
 ```
 
 In a typical situation, this suffices to run behind a Tor proxy:
 ```
-./AXIVd -proxy=127.0.0.1:9050
+./axivd -proxy=127.0.0.1:9050
 ```
 
 Run a AXIV hidden server
@@ -59,7 +59,7 @@ SOCKSPolicy accept 127.0.0.1/8
 Log notice file /var/log/tor/notices.log
 ControlPort 9051
 HiddenServiceDir /var/lib/tor/dnet/
-HiddenServicePort 989 127.0.0.1:10135
+HiddenServicePort 989 127.0.0.1:51472
 HiddenServiceStatistics 0
 ORPort 9001
 LongLivedPorts 989
@@ -69,12 +69,12 @@ NumEntryGuards 8
 ```
 
 The directory can be different of course, but (both) port numbers should be equal to
-your AXIVd's P2P listen port (10135 by default).
+your axivd's P2P listen port (51472 by default).
 ```
--externalip=X   You can tell AXIV about its publicly reachable address using
+-externalip=X   You can tell axiv about its publicly reachable address using
                 this option, and this can be a .onion address. Given the above
                 configuration, you can find your onion address in
-                /var/lib/tor/AXIV-service/hostname. Onion addresses are given
+                /var/lib/tor/axiv-service/hostname. Onion addresses are given
                 preference for your node to advertize itself with, for connections
                 coming from unroutable addresses (such as 127.0.0.1, where the
                 Tor proxy typically runs).
@@ -92,22 +92,22 @@ your AXIVd's P2P listen port (10135 by default).
 
 In a typical situation, where you're only reachable via Tor, this should suffice:
 ```
-./AXIVd -proxy=127.0.0.1:9050 -externalip=dnetzj6l4cvo2fxy.onion:989 -listen
+./axivd -proxy=127.0.0.1:9050 -externalip=dnetzj6l4cvo2fxy.onion:989 -listen
 ```
 
 (obviously, replace the Onion address with your own). If you don't care too much
 about hiding your node, and want to be reachable on IPv4 as well, additionally
 specify:
 ```
-./AXIVd ... -discover
+./axivd ... -discover
 ```
 
-and open port 10135 on your firewall (or use -upnp).
+and open port 51472 on your firewall (or use -upnp).
 
 If you only want to use Tor to reach onion addresses, but not use it as a proxy
 for normal IPv4/IPv6 communication, use:
 ```
-./AXIVd -onion=127.0.0.1:9050 -externalip=dnetzj6l4cvo2fxy.onion:989 -discover
+./axivd -onion=127.0.0.1:9050 -externalip=dnetzj6l4cvo2fxy.onion:989 -discover
 ```
 
 List of known AXIV Tor relays

@@ -176,7 +176,7 @@
         <translation>Bekræft, og tegnebogen krypteres.</translation>
     </message>
     <message>
-        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your VITs from being stolen by malware infecting your computer.</source>
+        <source>AXIV will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AXIVs from being stolen by malware infecting your computer.</source>
         <translation>AXIV vil lukke ned for at færdiggøre kryptograferingsprocesserne. Husk at kryptering alene ikke sikrer mod tyveri af mønterne fra malware eller virus på computeren.</translation>
     </message>
     <message>
@@ -239,7 +239,7 @@
         <translation>BIP 38 kryptografering</translation>
     </message>
     <message>
-        <source>Enter a AXIV Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
+        <source>Enter a Axiv Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
         <translation>Indtast den AXIV adresse De ønsker at kryptografere ved hjælp af BIP 38. Indtast et kodeord i den midterste boks. Klik på krypter for at generere den kryptograferede private nøgle.</translation>
     </message>
     <message>
@@ -606,7 +606,7 @@
         <translation>Send mønter til en AXIV adresse</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and AXIV: URIs)</source>
+        <source>Request payments (generates QR codes and vitae: URIs)</source>
         <translation>Anmod om betaling (genrerer QR kode og AXIV URL)</translation>
     </message>
     <message>
@@ -813,8 +813,8 @@ Adresse: %4
         <translation>Tekstmærke</translation>
     </message>
     <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (AXIV.conf).</source>
-        <translation>Ikke alle transaktioner vil blive vist. For at vise alle transaktioner må De sætte "txindex=1" i konfigurationsfilen (AXIV.conf).</translation>
+        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (vitae.conf).</source>
+        <translation>Ikke alle transaktioner vil blive vist. For at vise alle transaktioner må De sætte "txindex=1" i konfigurationsfilen (vitae.conf).</translation>
     </message>
 </context>
 <context>
@@ -1369,8 +1369,8 @@ Adresse: %4
 To Add: enter percentage to give and AXIV address to add to the MultiSend vector.
 To Delete: Enter address to delete and press delete.
 MultiSend will not be activated unless you have clicked Activate</source>
-        <translation>Multisend tillader at De automatisk kan sende op til 100% af Deres belønninger fra såvel indskud som masternodebelønninger til en liste over andre AXIV adressater når den er tilstrækkelig stor.
-For at tilføje: Indtast procentsatsen De ønsker at overføre samt den AXIV adresse som skal modtage via Multisendsystemet.
+        <translation>Multisend tillader at De automatisk kan sende op til 100% af Deres belønninger fra såvel indskud som masternodebelønninger til en liste over andre AXIV adressater når den er tilstrækkelig stor. 
+For at tilføje: Indtast procentsatsen De ønsker at overføre samt den AXIV adresse som skal modtage via Multisendsystemet. 
 For at fjerne: Indtast adressen som skal slettes og klik på slet. 
 Multisend vil ikke fungere med mindre systemet er aktiveret.</translation>
     </message>
@@ -1667,9 +1667,9 @@ Kontroller adressen og prøv igen.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/AXIV-project/AXIV-project-translations</source>
+https://www.transifex.com/vitae-project/vitae-project-translations</source>
         <translation>Det valgte sprog mangler, eller oversættelsen er mangelfuld. Hjælp ved at bidrage med oversættelser her:
-https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
+https://www.transifex.com/vitae-project/vitae-project-translations</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1894,7 +1894,7 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
         <translation>Ugyldig betalingsadresse: %1</translation>
     </message>
     <message>
-        <source>Cannot start AXIV: click-to-pay handler</source>
+        <source>Cannot start vitae: click-to-pay handler</source>
         <translation>Kan ikke starte AXIV "klik for at betale" systemet</translation>
     </message>
     <message>
@@ -2745,12 +2745,12 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
         <translation>Bekræftelsestid</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 uVITs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uVITs in fee,&lt;br /&gt;while "at least" pays 1000 uVITs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Hvis den brugerfastsatte gebyrbetaling er sat til 1000 uVITs og transaktionen kun fylder 250 bytes, så vil "pr. kilobyte" kun udbetale 250 uAXIV i gebyr, &lt;br /&gt; mens "mindst" udbetaler 1000 uVITs. For transaktioner større end en kilobyte betales i begge tilfælde i forhold til antallet af kilobytes </translation>
+        <source>If the custom fee is set to 1000 uAXIVs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAXIVs in fee,&lt;br /&gt;while "at least" pays 1000 uAXIVs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>Hvis den brugerfastsatte gebyrbetaling er sat til 1000 uAXIVs og transaktionen kun fylder 250 bytes, så vil "pr. kilobyte" kun udbetale 250 uAXIV i gebyr, &lt;br /&gt; mens "mindst" udbetaler 1000 uAXIVs. For transaktioner større end en kilobyte betales i begge tilfælde i forhold til antallet af kilobytes </translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 uVITs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uVITs in fee,&lt;br /&gt;while "total at least" pays 1000 uVITs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Hvis den brugerfastsatte gebyrbetaling er sat til 1000 uVITs og transaktionen kun fylder 250 bytes, så vil "pr. kilobyte" kun udbetale 250 uAXIV i gebyr, &lt;br /&gt; mens "Total-mindst" udbetaler 1000 uVITs. For transaktioner større end en kilobyte betales i begge tilfælde i forhold til antallet af kilobytes </translation>
+        <source>If the custom fee is set to 1000 uAXIVs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAXIVs in fee,&lt;br /&gt;while "total at least" pays 1000 uAXIVs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>Hvis den brugerfastsatte gebyrbetaling er sat til 1000 uAXIVs og transaktionen kun fylder 250 bytes, så vil "pr. kilobyte" kun udbetale 250 uAXIV i gebyr, &lt;br /&gt; mens "Total-mindst" udbetaler 1000 uAXIVs. For transaktioner større end en kilobyte betales i begge tilfælde i forhold til antallet af kilobytes </translation>
     </message>
     <message>
         <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for AXIV transactions than the network can process.</source>
@@ -3722,7 +3722,7 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
     </message>
     <message>
         <source>SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 AXIV.</source>
-        <translation>SwiftTx understøtter ikke afsendelse af så store beløb endnu. Transaktioner er for tiden begrænsede til %1VIT.</translation>
+        <translation>SwiftTx understøtter ikke afsendelse af så store beløb endnu. Transaktioner er for tiden begrænsede til %1AXIV.</translation>
     </message>
 </context>
 <context>
@@ -3765,14 +3765,14 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
     </message>
 </context>
 <context>
-    <name>ZAXIVControlDialog</name>
+    <name>ZAxivControlDialog</name>
     <message>
         <source>0</source>
         <translation>0</translation>
     </message>
     </context>
 <context>
-    <name>AXIV-core</name>
+    <name>vitae-core</name>
     <message>
         <source>(1 = keep tx meta data e.g. account owner and payment request information, 2 = drop tx meta data)</source>
         <translation>(1 = beholdtx metadata. For eksempel information om kontoejer og betalngsanmodninger, 2 = drop TX metadata)</translation>
@@ -3963,10 +3963,10 @@ https://www.transifex.com/AXIV-project/AXIV-project-translations</translation>
         <translation>Dette produkt anvender software udviklet i OpenSSL projektet til brug i OpenSSL værktøjssættet &lt;https://www.openssl.org/&gt; og kryptosoftware skrevet afEric Young og UPnP software skrevet af Thomas Bernard.</translation>
     </message>
     <message>
-        <source>To use AXIVd, or the -server option to AXIV-qt, you must set an rpcpassword in the configuration file:
+        <source>To use vitaed, or the -server option to vitae-qt, you must set an rpcpassword in the configuration file:
 %s
 It is recommended you use the following random password:
-rpcuser=AXIVrpc
+rpcuser=vitaerpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
@@ -3974,10 +3974,10 @@ If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
 for example: alertnotify=echo %%s | mail -s "AXIV Alert" admin@foo.com
 </source>
-        <translation>For at bruge AXIVd eller -server muligheden sammen med AXIV-qt skal der angives et rpc kodeord i konfigurationsfilen:
+        <translation>For at bruge vitaed eller -server muligheden sammen med vitae-qt skal der angives et rpc kodeord i konfigurationsfilen:
 %s
 De anbefales at benytte følgende tilfældige kodeord
-Rpcuser=AXIVrpc
+Rpcuser=vitaerpc
 rpcpasswrd=%s
 (Det er ikke nødvendigt at huske dette kodeord)
 Brugernavn og kodeord MÅ IKKE VÆRE ENS!
@@ -4047,8 +4047,8 @@ For eksempel: alertnotify=Echo %% | mail - s "AXIV ALARM!" e-mail@administrator.
         <translation>Der skal angives en masternodeprivkey i konfigurationen. For mere information, se i dokumentationen.</translation>
     </message>
     <message>
-        <source>(10135 could be used only on mainnet)</source>
-        <translation>(10135 kunne kun bruges på hovednettet)</translation>
+        <source>(51472 could be used only on mainnet)</source>
+        <translation>(51472 kunne kun bruges på hovednettet)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -4059,8 +4059,8 @@ For eksempel: alertnotify=Echo %% | mail - s "AXIV ALARM!" e-mail@administrator.
         <translation>(default: 1)</translation>
     </message>
     <message>
-        <source>(must be 10135 for mainnet)</source>
-        <translation>(skal være 10135 for hovednettet)</translation>
+        <source>(must be 51472 for mainnet)</source>
+        <translation>(skal være 51472 for hovednettet)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>

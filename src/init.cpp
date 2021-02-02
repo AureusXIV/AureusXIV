@@ -16,7 +16,6 @@
 #include "amount.h"
 #include "checkpoints.h"
 #include "compat/sanity.h"
-#include "fs.h"
 #include "httpserver.h"
 #include "httprpc.h"
 #include "invalid.h"
@@ -28,12 +27,11 @@
 #include "fundamentalnodeman.h"
 
 #include "activemasternode.h"
+#include "masternode-pos.h"
 #include "masternodeconfig.h"
 #include "masternodeman.h"
-#include "obfuscation.h"
 
 #include "miner.h"
-#include "messagesigner.h"
 #include "net.h"
 #include "rpcserver.h"
 #include "script/standard.h"
@@ -199,7 +197,7 @@ void PrepareShutdown()
     /// for example if the data directory was found to be locked.
     /// Be sure that anything that writes files or flushes caches only does this if the respective
     /// module was initialized.
-    RenameThread("AXIV-shutoff");
+    RenameThread("axiv-shutoff");
     mempool.AddTransactionsUpdated(1);
     StopHTTPRPC();
     StopREST();
@@ -365,7 +363,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-blocknotify=<cmd>", _("Execute command when the best block changes (%s in cmd is replaced by block hash)"));
     strUsage += HelpMessageOpt("-blocksizenotify=<cmd>", _("Execute command when the best block changes and its size is over (%s in cmd is replaced by block hash, %d with the block size)"));
     strUsage += HelpMessageOpt("-checkblocks=<n>", strprintf(_("How many blocks to check at startup (default: %u, 0 = all)"), 500));
-    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), "AXIV.conf"));
+    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), "axiv.conf"));
     if (mode == HMM_BITCOIND) {
 #if !defined(WIN32)
         strUsage += HelpMessageOpt("-daemon", _("Run in the background as a daemon and accept commands"));
@@ -378,10 +376,10 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-maxorphantx=<n>", strprintf(_("Keep at most <n> unconnectable transactions in memory (default: %u)"), DEFAULT_MAX_ORPHAN_TRANSACTIONS));
     strUsage += HelpMessageOpt("-par=<n>", strprintf(_("Set the number of script verification threads (%u to %d, 0 = auto, <0 = leave that many cores free, default: %d)"), -(int)boost::thread::hardware_concurrency(), MAX_SCRIPTCHECK_THREADS, DEFAULT_SCRIPTCHECK_THREADS));
 #ifndef WIN32
-    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), "AXIVd.pid"));
+    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), "axivd.pid"));
 #endif
     strUsage += HelpMessageOpt("-reindex", _("Rebuild block chain index from current blk000??.dat files") + " " + _("on startup"));
-    strUsage += HelpMessageOpt("-reindexmoneysupply", _("Reindex the VITAE and zVITAE money supply statistics") + " " + _("on startup"));
+    strUsage += HelpMessageOpt("-reindexmoneysupply", _("Reindex the AXIV and zAXIV money supply statistics") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-resync", _("Delete blockchain folders and resync from scratch") + " " + _("on startup"));
 #if !defined(WIN32)
     strUsage += HelpMessageOpt("-sysperms", _("Create new files with system default permissions, instead of umask 077 (only effective with disabled wallet functionality)"));
@@ -409,7 +407,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-onlynet=<net>", _("Only connect to nodes in network <net> (ipv4, ipv6 or onion)"));
     strUsage += HelpMessageOpt("-permitbaremultisig", strprintf(_("Relay non-P2SH multisig (default: %u)"), 1));
     strUsage += HelpMessageOpt("-peerbloomfilters", strprintf(_("Support filtering of blocks and transaction with bloom filters (default: %u)"), DEFAULT_PEERBLOOMFILTERS));
-    strUsage += HelpMessageOpt("-port=<port>", strprintf(_("Listen for connections on <port> (default: %u or testnet: %u)"), 10135, 10133));
+    strUsage += HelpMessageOpt("-port=<port>", strprintf(_("Listen for connections on <port> (default: %u or testnet: %u)"), 10135, 51474));
     strUsage += HelpMessageOpt("-proxy=<ip:port>", _("Connect through SOCKS5 proxy"));
     strUsage += HelpMessageOpt("-proxyrandomize", strprintf(_("Randomize credentials for every proxy connection. This enables Tor stream isolation (default: %u)"), 1));
     strUsage += HelpMessageOpt("-seednode=<ip>", _("Connect to a node to retrieve peer addresses, and disconnect"));
@@ -480,7 +478,7 @@ std::string HelpMessage(HelpMessageMode mode)
         strUsage += HelpMessageOpt("-stopafterblockimport", strprintf(_("Stop running after importing blocks from disk (default: %u)"), 0));
         strUsage += HelpMessageOpt("-sporkkey=<privkey>", _("Enable spork administration functionality with the appropriate private key."));
     }
-    string debugCategories = "addrman, alert, bench, coindb, db, lock, rand, rpc, selectcoins, tor, mempool, net, proxy, AXIV, (obfuscation, swiftx, fundamentalnode, mnpayments, mnbudget, zero)"; // Don't translate these and qt below
+    string debugCategories = "addrman, alert, bench, coindb, db, lock, rand, rpc, selectcoins, tor, mempool, net, proxy, axiv, (obfuscation, swiftx, fundamentalnode, mnpayments, mnbudget, zero)"; // Don't translate these and qt below
     if (mode == HMM_BITCOIN_QT)
         debugCategories += ", qt";
     strUsage += HelpMessageOpt("-debug=<category>", strprintf(_("Output debugging information (default: %u, supplying <category> is optional)"), 0) + ". " +
@@ -516,7 +514,7 @@ std::string HelpMessage(HelpMessageMode mode)
 #ifdef ENABLE_WALLET
     strUsage += HelpMessageGroup(_("Staking options:"));
     strUsage += HelpMessageOpt("-staking=<n>", strprintf(_("Enable staking functionality (0-1, default: %u)"), 1));
-    strUsage += HelpMessageOpt("-vitstake=<n>", strprintf(_("Enable or disable staking functionality for VIT inputs (0-1, default: %u)"), 1));
+    strUsage += HelpMessageOpt("-vitstake=<n>", strprintf(_("Enable or disable staking functionality for AXIV inputs (0-1, default: %u)"), 1));
     strUsage += HelpMessageOpt("-reservebalance=<amt>", _("Keep the specified amount available for spending at all times (default: 0)"));
     if (GetBoolArg("-help-debug", false)) {
         strUsage += HelpMessageOpt("-printstakemodifier", _("Display the stake modifier calculations in the debug.log file."));
@@ -624,7 +622,7 @@ struct CImportingNow {
 
 void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 {
-    RenameThread("AXIV-loadblk");
+    RenameThread("axiv-loadblk");
 
     // -reindex
     if (fReindex) {
@@ -649,12 +647,12 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
     }
 
     // hardcoded $DATADIR/bootstrap.dat
-    boost::filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
-    if (boost::filesystem::exists(pathBootstrap)) {
+    filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
+    if (filesystem::exists(pathBootstrap)) {
         FILE* file = fopen(pathBootstrap.string().c_str(), "rb");
         if (file) {
             CImportingNow imp;
-            boost::filesystem::path pathBootstrapOld = GetDataDir() / "bootstrap.dat.old";
+            filesystem::path pathBootstrapOld = GetDataDir() / "bootstrap.dat.old";
             LogPrintf("Importing bootstrap.dat...\n");
             LoadExternalBlockFile(file);
             RenameOver(pathBootstrap, pathBootstrapOld);
@@ -714,7 +712,7 @@ bool AppInitServers(boost::thread_group& threadGroup)
     return true;
 }
 
-/** Initialize AXIV.
+/** Initialize axiv.
  *  @pre Parameters should be parsed and config file should be read.
  */
 bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
@@ -1061,15 +1059,15 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 // ********************************************************* Step 5: Backup wallet and verify wallet database integrity
 #ifdef ENABLE_WALLET
     if (!fDisableWallet) {
-        boost::filesystem::path backupDir = GetDataDir() / "backups";
-        if (!boost::filesystem::exists(backupDir)) {
+        filesystem::path backupDir = GetDataDir() / "backups";
+        if (!filesystem::exists(backupDir)) {
             // Always create backup folder to not confuse the operating system's file browser
-            boost::filesystem::create_directories(backupDir);
+            filesystem::create_directories(backupDir);
         }
         nWalletBackups = GetArg("-createwalletbackups", 10);
         nWalletBackups = std::max(0, std::min(10, nWalletBackups));
         if (nWalletBackups > 0) {
-            if (boost::filesystem::exists(backupDir)) {
+            if (filesystem::exists(backupDir)) {
                 // Create backup of the wallet
                 std::string dateTimeStr = DateTimeStrFormat(".%Y-%m-%d-%H-%M", GetTime());
                 std::string backupPathStr = backupDir.string();
@@ -1132,25 +1130,24 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         if (GetBoolArg("-resync", false)) {
             uiInterface.InitMessage(_("Preparing for resync..."));
             // Delete the local blockchain folders to force a resync from scratch to get a consitent blockchain-state
-
-            boost::filesystem::path blocksDir = GetDataDir() / "blocks";
-            boost::filesystem::path chainstateDir = GetDataDir() / "chainstate";
-            boost::filesystem::path sporksDir = GetDataDir() / "sporks";
+            filesystem::path blocksDir = GetDataDir() / "blocks";
+            filesystem::path chainstateDir = GetDataDir() / "chainstate";
+            filesystem::path sporksDir = GetDataDir() / "sporks";
 
             LogPrintf("Deleting blockchain folders blocks, chainstate, sporks\n");
             // We delete in 4 individual steps in case one of the folder is missing already
             try {
-                if (boost::filesystem::exists(blocksDir)){
+                if (filesystem::exists(blocksDir)){
                     boost::filesystem::remove_all(blocksDir);
                     LogPrintf("-resync: folder deleted: %s\n", blocksDir.string().c_str());
                 }
 
-                if (boost::filesystem::exists(chainstateDir)){
+                if (filesystem::exists(chainstateDir)){
                     boost::filesystem::remove_all(chainstateDir);
                     LogPrintf("-resync: folder deleted: %s\n", chainstateDir.string().c_str());
                 }
 
-                if (boost::filesystem::exists(sporksDir)){
+                if (filesystem::exists(sporksDir)){
                     boost::filesystem::remove_all(sporksDir);
                     LogPrintf("-resync: folder deleted: %s\n", sporksDir.string().c_str());
                 }
@@ -1187,7 +1184,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                 return false;
         }
 
-        if (boost::filesystem::exists(GetDataDir() / strWalletFile)) {
+        if (filesystem::exists(GetDataDir() / strWalletFile)) {
             CDBEnv::VerifyResult r = bitdb.Verify(strWalletFile, CWalletDB::Recover);
             if (r == CDBEnv::RECOVER_OK) {
                 string msg = strprintf(_("Warning: wallet.dat corrupt, data salvaged!"
@@ -1332,19 +1329,19 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     fReindex = GetBoolArg("-reindex", false);
 
     // Upgrading to 0.8; hard-link the old blknnnn.dat files into /blocks/
-    boost::filesystem::path blocksDir = GetDataDir() / "blocks";
-    if (!boost::filesystem::exists(blocksDir)) {
-        boost::filesystem::create_directories(blocksDir);
+    filesystem::path blocksDir = GetDataDir() / "blocks";
+    if (!filesystem::exists(blocksDir)) {
+        filesystem::create_directories(blocksDir);
         bool linked = false;
         for (unsigned int i = 1; i < 10000; i++) {
-            boost::filesystem::path source = GetDataDir() / strprintf("blk%04u.dat", i);
+            filesystem::path source = GetDataDir() / strprintf("blk%04u.dat", i);
             if (!filesystem::exists(source)) break;
-            boost::filesystem::path dest = blocksDir / strprintf("blk%05u.dat", i - 1);
+            filesystem::path dest = blocksDir / strprintf("blk%05u.dat", i - 1);
             try {
-                boost::filesystem::create_hard_link(source, dest);
+                filesystem::create_hard_link(source, dest);
                 LogPrintf("Hardlinked %s -> %s\n", source.string(), dest.string());
                 linked = true;
-            } catch (const boost::filesystem::filesystem_error& e) {
+            } catch (const filesystem::filesystem_error& e) {
                 // Note: hardlink creation failing is not a disaster, it just means
                 // blocks will get re-downloaded from peers.
                 LogPrintf("Error hardlinking blk%04u.dat : %s\n", i, e.what());
@@ -1387,7 +1384,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                 delete pblocktree;
                 delete pSporkDB;
 
-                //AXIV specific: spork DB's
+                //AXIV specific: zerocoin and spork DB's
                 pSporkDB = new CSporkDB(0, false, false);
 
                 pblocktree = new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
@@ -1400,7 +1397,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
                 // AXIV: load previous sessions sporks if we have them.
                 uiInterface.InitMessage(_("Loading sporks..."));
-                sporkManager.LoadSporksFromDB();
+                LoadSporksFromDB();
 
                 uiInterface.InitMessage(_("Loading block index..."));
                 string strBlockIndexError = "";
@@ -1433,7 +1430,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
                 // Recalculate money supply
                 if (GetBoolArg("-reindexmoneysupply", false)) {
-                    RecalculateVITSupply(1);
+                    RecalculateAXIVSupply(1);
                 }
 
                 uiInterface.InitMessage(_("Verifying blocks..."));
@@ -1613,7 +1610,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
             }
         }
         fVerifyingBlocks = false;
-        
+
+        //Inititalize zAXIVWallet
+        uiInterface.InitMessage(_("Syncing zAXIV wallet..."));
     }  // (!fDisableWallet)
 #else  // ENABLE_WALLET
     LogPrintf("No wallet compiled in!\n");
@@ -1643,12 +1642,12 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
             MilliSleep(10);
     }
 
-    // ********************************************************* Step 10: setup layer 2 data
+    // ********************************************************* Step 10: setup ObfuScation
 
     uiInterface.InitMessage(_("Loading fundamentalnode cache..."));
 
     CFundamentalnodeDB mndb;
-    CFundamentalnodeDB::ReadResult readResult = mndb.Read(fnodeman);
+    CFundamentalnodeDB::ReadResult readResult = mndb.Read(mnodeman);
     if (readResult == CFundamentalnodeDB::FileError)
         LogPrintf("Missing fundamentalnode cache file - fncache.dat, will try to recreate\n");
     else if (readResult != CFundamentalnodeDB::Ok) {
@@ -1662,7 +1661,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 	uiInterface.InitMessage(_("Loading masternode cache..."));
 
     CMasternodeDB mn_db;
-    CMasternodeDB::ReadResult read_Result = mn_db.Read(mnodeman);
+    CMasternodeDB::ReadResult read_Result = mn_db.Read(m_nodeman);
     if (readResult == CMasternodeDB::FileError)
         LogPrintf("Missing fundamentalnode cache file - mncache.dat, will try to recreate\n");
     else if (readResult != CMasternodeDB::Ok) {
@@ -1695,13 +1694,13 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     uiInterface.InitMessage(_("Loading fundamentalnode payment cache..."));
 
-    CFundamentalnodePaymentDB fnpayments;
-    CFundamentalnodePaymentDB::ReadResult readResult3 = fnpayments.Read(fundamentalnodePayments);
+    CFundamentalnodePaymentDB mnpayments;
+    CFundamentalnodePaymentDB::ReadResult readResult3 = mnpayments.Read(fundamentalnodePayments);
 
     if (readResult3 == CFundamentalnodePaymentDB::FileError)
-        LogPrintf("Missing fundamentalnode payment cache - fnpayments.dat, will try to recreate\n");
+        LogPrintf("Missing fundamentalnode payment cache - mnpayments.dat, will try to recreate\n");
     else if (readResult3 != CFundamentalnodePaymentDB::Ok) {
-        LogPrintf("Error reading fnpayments.dat: ");
+        LogPrintf("Error reading mnpayments.dat: ");
         if (readResult3 == CFundamentalnodePaymentDB::IncorrectFormat)
             LogPrintf("magic is ok but data has invalid format, will try to recreate\n");
         else
@@ -1716,7 +1715,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     }
 
     if (fFundamentalNode) {
-        LogPrintf("IS FUNDAMENTAL NODE\n");
+        LogPrintf("IS FUNDAMNENTAL NODE\n");
         strFundamentalNodeAddr = GetArg("-fundamentalnodeaddr", "");
 
         LogPrintf(" addr %s\n", strFundamentalNodeAddr.c_str());
@@ -1735,7 +1734,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
             CKey key;
             CPubKey pubkey;
 
-            if (!CMessageSigner::GetKeysFromSecret(strFundamentalNodePrivKey, key, pubkey)) {
+            if (!obfuScationSigner.SetKey(strFundamentalNodePrivKey, errorMessage, key, pubkey)) {
                 return InitError(_("Invalid fundamentalnodeprivkey. Please see documenation."));
             }
 
@@ -1743,7 +1742,8 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
         } else {
             return InitError(_("You must specify a fundamentalnodeprivkey in the configuration. Please see documentation for help."));
-        }    }
+        }
+    }
 
     //TODO
     /*
@@ -1774,7 +1774,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
             CKey key;
             CPubKey pubkey;
 
-            if (!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, key, pubkey)) {
+            if (!obfuScationSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey)) {
                 return InitError(_("Invalid masternodeprivkey. Please see documenation."));
             }
 
@@ -1788,7 +1788,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     uiInterface.InitMessage(_("Loading masternode cache..."));
 
         CMasternodeDB mn_db;
-        CMasternodeDB::ReadResult readResult4 = mn_db.Read(mnodeman);
+        CMasternodeDB::ReadResult readResult4 = mn_db.Read(m_nodeman);
         if (readResult4 == CMasternodeDB::FileError)
             LogPrintf("Missing Masternode cache file - mncache.dat, will try to recreate\n");
         else if (readResult4 != CMasternodeDB::Ok)
@@ -1821,7 +1821,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                 CKey key;
                 CPubKey pubkey;
 
-                if(!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, key, pubkey))
+                if(!obfuScationSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey))
                 {
                     return InitError(_("Invalid masternodeprivkey. Please see documenation."));
                 }
@@ -1869,6 +1869,10 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         }
     }
 
+
+// XX42 Remove/refactor code below. Until then provide safe defaults
+    nAnonymizeAxivAmount = 2;
+
     fEnableSwiftTX = GetBoolArg("-enableswifttx", fEnableSwiftTX);
     nSwiftTXDepth = GetArg("-swifttxdepth", nSwiftTXDepth);
     nSwiftTXDepth = std::min(std::max(nSwiftTXDepth, 0), 60);
@@ -1881,6 +1885,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     LogPrintf("fLiteMode %d\n", fLiteMode);
     LogPrintf("nSwiftTXDepth %d\n", nSwiftTXDepth);
+    LogPrintf("Anonymize AXIV Amount %d\n", nAnonymizeAxivAmount);
     LogPrintf("Budget Mode %s\n", strBudgetMode.c_str());
 
     /* Denominations
@@ -1889,8 +1894,8 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
        is convertable to another.
 
        For example:
-       1PIV+1000 == (.1PIV+100)*10
-       10PIV+10000 == (1PIV+1000)*10
+       1AXIV+1000 == (.1AXIV+100)*10
+       10AXIV+10000 == (1AXIV+1000)*10
     */
     obfuScationDenominations.push_back((10000 * COIN) + 10000000);
     obfuScationDenominations.push_back((1000 * COIN) + 1000000);
@@ -1898,10 +1903,15 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     obfuScationDenominations.push_back((10 * COIN) + 10000);
     obfuScationDenominations.push_back((1 * COIN) + 1000);
     obfuScationDenominations.push_back((.1 * COIN) + 100);
+    /* Disabled till we need them
+    obfuScationDenominations.push_back( (.01      * COIN)+10 );
+    obfuScationDenominations.push_back( (.001     * COIN)+1 );
+    */
 
     obfuScationPool.InitCollateralAddress();
 
     threadGroup.create_thread(boost::bind(&ThreadCheckObfuScationPool));
+    threadGroup.create_thread(boost::bind(&ThreadBitPool));
 
     // ********************************************************* Step 11: start node
 

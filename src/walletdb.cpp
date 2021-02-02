@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2017 The PIVX developers
-// Copyright (c) 2018 The VITAE developers
+// Copyright (c) 2018 The AXIV developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -853,7 +853,7 @@ DBErrors CWalletDB::ZapWalletTx(CWallet* pwallet, vector<CWalletTx>& vWtx)
 void ThreadFlushWalletDB(const string& strFile)
 {
     // Make this thread recognisable as the wallet flushing thread
-    RenameThread("AXIV-wallet");
+    RenameThread("axiv-wallet");
 
     static bool fOneThread;
     if (fOneThread)
@@ -911,10 +911,10 @@ void NotifyBacked(const CWallet& wallet, bool fSuccess, string strMessage)
     wallet.NotifyWalletBacked(fSuccess, strMessage);
 }
 
-bool BackupWallet(const CWallet& wallet, const boost::filesystem::path& strDest, bool fEnableCustom)
+bool BackupWallet(const CWallet& wallet, const filesystem::path& strDest, bool fEnableCustom)
 {
-    boost::filesystem::path pathCustom;
-    boost::filesystem::path pathWithFile;
+    filesystem::path pathCustom;
+    filesystem::path pathWithFile;
     if (!wallet.fFileBacked) {
         return false;
     } else if(fEnableCustom) {
@@ -927,8 +927,8 @@ bool BackupWallet(const CWallet& wallet, const boost::filesystem::path& strDest,
                 pathCustom = pathWithFile.parent_path();
             }
             try {
-                boost::filesystem::create_directories(pathCustom);
-            } catch(const boost::filesystem::filesystem_error& e) {
+                filesystem::create_directories(pathCustom);
+            } catch(const filesystem::filesystem_error& e) {
                 NotifyBacked(wallet, false, strprintf("%s\n", e.what()));
                 pathCustom = "";
             }
@@ -945,8 +945,8 @@ bool BackupWallet(const CWallet& wallet, const boost::filesystem::path& strDest,
                 bitdb.mapFileUseCount.erase(wallet.strWalletFile);
 
                 // Copy wallet.dat
-                boost::filesystem::path pathDest(strDest);
-                boost::filesystem::path pathSrc = GetDataDir() / wallet.strWalletFile;
+                filesystem::path pathDest(strDest);
+                filesystem::path pathSrc = GetDataDir() / wallet.strWalletFile;
                 if (is_directory(pathDest)) {
                     if(!exists(pathDest)) create_directory(pathDest);
                     pathDest /= wallet.strWalletFile;
@@ -957,14 +957,14 @@ bool BackupWallet(const CWallet& wallet, const boost::filesystem::path& strDest,
                     int nThreshold = GetArg("-custombackupthreshold", DEFAULT_CUSTOMBACKUPTHRESHOLD);
                     if (nThreshold > 0) {
 
-                        typedef std::multimap<std::time_t, boost::filesystem::path> folder_set_t;
+                        typedef std::multimap<std::time_t, filesystem::path> folder_set_t;
                         folder_set_t folderSet;
-                        boost::filesystem::directory_iterator end_iter;
+                        filesystem::directory_iterator end_iter;
 
                         pathCustom.make_preferred();
                         // Build map of backup files for current(!) wallet sorted by last write time
 
-                        boost::filesystem::path currentFile;
+                        filesystem::path currentFile;
                         for (filesystem::directory_iterator dir_iter(pathCustom); dir_iter != end_iter; ++dir_iter) {
                             // Only check regular files
                             if (filesystem::is_regular_file(dir_iter->status())) {
@@ -995,10 +995,10 @@ bool BackupWallet(const CWallet& wallet, const boost::filesystem::path& strDest,
                             try {
                                 auto entry = folderSet.find(oldestBackup);
                                 if (entry != folderSet.end()) {
-                                    boost::filesystem::remove(entry->second);
+                                    filesystem::remove(entry->second);
                                     LogPrintf("Old backup deleted: %s\n", (*entry).second);
                                 }
-                            } catch (const boost::filesystem::filesystem_error& error) {
+                            } catch (const filesystem::filesystem_error& error) {
                                 string strMessage = strprintf("Failed to delete backup %s\n", error.what());
                                 LogPrint(nullptr, strMessage.data());
                                 NotifyBacked(wallet, false, strMessage);
@@ -1016,13 +1016,13 @@ bool BackupWallet(const CWallet& wallet, const boost::filesystem::path& strDest,
     return false;
 }
 
-bool AttemptBackupWallet(const CWallet& wallet, const boost::filesystem::path& pathSrc, const boost::filesystem::path& pathDest)
+bool AttemptBackupWallet(const CWallet& wallet, const filesystem::path& pathSrc, const filesystem::path& pathDest)
 {
     bool retStatus;
     string strMessage;
     try {
 #if BOOST_VERSION >= 105800 /* BOOST_LIB_VERSION 1_58 */
-        boost::filesystem::copy_file(pathSrc.c_str(), pathDest, boost::filesystem::copy_option::overwrite_if_exists);
+        filesystem::copy_file(pathSrc.c_str(), pathDest, filesystem::copy_option::overwrite_if_exists);
 #else
         std::ifstream src(pathSrc.c_str(),  std::ios::binary | std::ios::in);
         std::ofstream dst(pathDest.c_str(), std::ios::binary | std::ios::out | std::ios::trunc);
@@ -1034,7 +1034,7 @@ bool AttemptBackupWallet(const CWallet& wallet, const boost::filesystem::path& p
         strMessage = strprintf("copied wallet.dat to %s\n", pathDest.string());
         LogPrint(nullptr, strMessage.data());
         retStatus = true;
-    } catch (const boost::filesystem::filesystem_error& e) {
+    } catch (const filesystem::filesystem_error& e) {
         retStatus = false;
         strMessage = strprintf("%s\n", e.what());
         LogPrint(nullptr, strMessage.data());

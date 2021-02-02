@@ -11,6 +11,7 @@
 
 #include "bitcoinunits.h"
 #include "guiutil.h"
+#include "obfuscation.h"
 #include "optionsmodel.h"
 
 #include "main.h" // for MAX_SCRIPTCHECK_THREADS
@@ -72,7 +73,6 @@ OptionsDialog::OptionsDialog(QWidget* parent, bool enableWallet) : QDialog(paren
     ui->spinBoxStakeSplitThreshold->setAttribute(Qt::WA_MacShowFocusRect, 0);
     ui->coinControlFeatures->setAttribute(Qt::WA_MacShowFocusRect, 0);
     //ui->showMasternodesTab->setAttribute(Qt::WA_MacShowFocusRect, 0);
-    ui->spendZeroConfChange->setAttribute(Qt::WA_MacShowFocusRect, 0);
 
     ui->mapPortUpnp->setAttribute(Qt::WA_MacShowFocusRect, 0);
     ui->allowIncoming->setAttribute(Qt::WA_MacShowFocusRect, 0);
@@ -182,8 +182,6 @@ void OptionsDialog::setModel(OptionsModel* model)
     /* Main */
     connect(ui->databaseCache, SIGNAL(valueChanged(int)), this, SLOT(showRestartWarning()));
     connect(ui->threadsScriptVerif, SIGNAL(valueChanged(int)), this, SLOT(showRestartWarning()));
-    /* Wallet */
-    connect(ui->spendZeroConfChange, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
     /* Network */
     connect(ui->allowIncoming, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
     connect(ui->connectSocks, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
@@ -203,7 +201,6 @@ void OptionsDialog::setMapper()
     mapper->addMapping(ui->databaseCache, OptionsModel::DatabaseCache);
 
     /* Wallet */
-    mapper->addMapping(ui->spendZeroConfChange, OptionsModel::SpendZeroConfChange);
     mapper->addMapping(ui->coinControlFeatures, OptionsModel::CoinControlFeatures);
     mapper->addMapping(ui->spinBoxStakeSplitThreshold, OptionsModel::StakeSplitThreshold);
 
@@ -271,6 +268,7 @@ void OptionsDialog::on_resetButton_clicked()
 void OptionsDialog::on_okButton_clicked()
 {
     mapper->submit();
+    obfuScationPool.cachedNumBlocks = std::numeric_limits<int>::max();
     pwalletMain->MarkDirty();
     accept();
 }
@@ -302,11 +300,10 @@ void OptionsDialog::clearStatusLabel()
 void OptionsDialog::doProxyIpChecks(QValidatedLineEdit* pUiProxyIp, QLineEdit* pUiProxyPort)
 {
     const std::string strAddrProxy = pUiProxyIp->text().toStdString();
-    const int nProxyPort = pUiProxyPort->text().toInt();
-    CService addrProxy(LookupNumeric(strAddrProxy.c_str(), nProxyPort));
+    CService addrProxy;
 
     // Check for a valid IPv4 / IPv6 address
-    if (!(fProxyIpValid = addrProxy.IsValid())) {
+    if (!(fProxyIpValid = LookupNumeric(strAddrProxy.c_str(), addrProxy))) {
         disableOkButton();
         pUiProxyIp->setValid(false);
         ui->statusLabel->setStyleSheet("QLabel { color: red; }");

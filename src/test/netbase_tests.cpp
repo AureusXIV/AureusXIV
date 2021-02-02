@@ -1,6 +1,6 @@
 // Copyright (c) 2012-2014 The Bitcoin Core developers
 // Copyright (c) 2014-2015 The Dash Core developers
-// Copyright (c) 2015-2017 The VITAE developers
+// Copyright (c) 2015-2017 The AXIV developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -78,7 +78,9 @@ BOOST_AUTO_TEST_CASE(netbase_splithost)
 
 bool static TestParse(string src, string canon)
 {
-    CService addr(LookupNumeric(src.c_str(), 65535));
+    CService addr;
+    if (!LookupNumeric(src.c_str(), addr, 65535))
+        return canon == "";
     return canon == addr.ToString();
 }
 

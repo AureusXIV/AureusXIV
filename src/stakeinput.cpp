@@ -7,32 +7,32 @@
 #include "stakeinput.h"
 #include "wallet.h"
 
-
-bool CAXIVStake::SetInput(CTransaction txPrev, unsigned int n)
+//!AXIV Stake
+bool CAxivStake::SetInput(CTransaction txPrev, unsigned int n)
 {
     this->txFrom = txPrev;
     this->nPosition = n;
     return true;
 }
 
-bool CAXIVStake::GetTxFrom(CTransaction& tx)
+bool CAxivStake::GetTxFrom(CTransaction& tx)
 {
     tx = txFrom;
     return true;
 }
 
-bool CAXIVStake::CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut)
+bool CAxivStake::CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut)
 {
     txIn = CTxIn(txFrom.GetHash(), nPosition);
     return true;
 }
 
-CAmount CAXIVStake::GetValue()
+CAmount CAxivStake::GetValue()
 {
     return txFrom.vout[nPosition].nValue;
 }
 
-bool CAXIVStake::CreateTxOuts(CWallet* pwallet, vector<CTxOut>& vout, CAmount nTotal)
+bool CAxivStake::CreateTxOuts(CWallet* pwallet, vector<CTxOut>& vout, CAmount nTotal)
 {
     vector<valtype> vSolutions;
     txnouttype whichType;
@@ -67,7 +67,7 @@ bool CAXIVStake::CreateTxOuts(CWallet* pwallet, vector<CTxOut>& vout, CAmount nT
     return true;
 }
 
-bool CAXIVStake::GetModifier(uint64_t& nStakeModifier)
+bool CAxivStake::GetModifier(uint64_t& nStakeModifier)
 {
     int nStakeModifierHeight = 0;
     int64_t nStakeModifierTime = 0;
@@ -81,7 +81,7 @@ bool CAXIVStake::GetModifier(uint64_t& nStakeModifier)
     return true;
 }
 
-CDataStream CAXIVStake::GetUniqueness()
+CDataStream CAxivStake::GetUniqueness()
 {
     //The unique identifier for a PIV stake is the outpoint
     CDataStream ss(SER_NETWORK, 0);
@@ -90,7 +90,7 @@ CDataStream CAXIVStake::GetUniqueness()
 }
 
 //The block that the UTXO was added to the chain
-CBlockIndex* CAXIVStake::GetIndexFrom()
+CBlockIndex* CAxivStake::GetIndexFrom()
 {
     uint256 hashBlock = 0;
     CTransaction tx;

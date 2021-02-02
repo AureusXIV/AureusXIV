@@ -18,10 +18,10 @@ Enable or disable run on the test network instead of the real *axiv* network.
 \fBproxy=\fR\fI'127.0.0.1:9050'\fR
 Connect via a socks4 proxy.
 .TP
-\fBaddnode=\fR\fI'10.0.0.2:10135'\fR
+\fBaddnode=\fR\fI'10.0.0.2:51472'\fR
 Use as many *addnode=* settings as you like to connect to specific peers.
 .TP
-\fBconnect=\fR\fI'10.0.0.1:10135'\fR
+\fBconnect=\fR\fI'10.0.0.1:51472'\fR
 Use as many *connect=* settings as you like to connect ONLY to specific peers.
 .TP
 \fRmaxconnections=\fR\fI'value'\fR
@@ -59,16 +59,16 @@ Acceptable ciphers (default: TLSv1+HIGH:\:!SSLv2:\:!aNULL:\:!eNULL:\:!AH:\:!3DES
 .SH MISCELLANEOUS OPTIONS
 .TP
 \fBgen=\fR[\fI'0'\fR|\fI'1'\fR]
-Enable or disable attempt to generate VITs.
+Enable or disable attempt to generate AXIVs.
 .TP
 \fB4way=\fR[\fI'0'\fR|\fI'1'\fR]
-Enable or disable use SSE instructions to try to generate VITs faster.
+Enable or disable use SSE instructions to try to generate AXIVs faster.
 .TP
 \fBkeypool=\fR\fI'100'\fR
 Pre-generate this many public/private key pairs, so wallet backups will be valid for both prior transactions and several dozen future transactions.
 .TP
 \fBpaytxfee=\fR\fI'0.00'\fR
-Pay an optional transaction fee every time you send VITs. Transactions with fees are more likely than free transactions to be included in generated blocks, so may be validated sooner.
+Pay an optional transaction fee every time you send AXIVs. Transactions with fees are more likely than free transactions to be included in generated blocks, so may be validated sooner.
 .TP
 \fBallowreceivebyip=\fR\fI'1'\fR
 Allow direct connections for the 'pay via IP address' feature.

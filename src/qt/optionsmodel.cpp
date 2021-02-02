@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The VITAE developers
+// Copyright (c) 2015-2017 The AXIV developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -77,6 +77,11 @@ void OptionsModel::Init()
     if (!settings.contains("fCoinControlFeatures"))
         settings.setValue("fCoinControlFeatures", false);
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
+    
+    if (!settings.contains("nAnonymizeAxivAmount"))
+        settings.setValue("nAnonymizeAxivAmount", 1000);
+
+    nAnonymizeAxivAmount = settings.value("nAnonymizeAxivAmount").toLongLong();
 
     if (!settings.contains("fShowFundamentalnodesTab"))
         settings.setValue("fShowFundamentalnodesTab", fundamentalnodeConfig.getCount());
@@ -141,6 +146,9 @@ void OptionsModel::Init()
     if (!SoftSetArg("-lang", settings.value("language").toString().toStdString()))
         addOverriddenOption("-lang");
 
+    if (settings.contains("nAnonymizeAxivAmount"))
+        SoftSetArg("-anonymizeaxivamount", settings.value("nAnonymizeAxivAmount").toString().toStdString());
+
     language = settings.value("language").toString();
 }
 
@@ -150,7 +158,7 @@ void OptionsModel::Reset()
 
     // Remove all entries from our QSettings object
     settings.clear();
-    resetSettings = true; // Needed in AXIV.cpp during shotdown to also remove the window positions
+    resetSettings = true; // Needed in axiv.cpp during shotdown to also remove the window positions
 
     // default setting for OptionsModel::StartAtStartup - disabled
     if (GUIUtil::GetStartOnSystemStartup())
@@ -196,8 +204,6 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
         }
 
 #ifdef ENABLE_WALLET
-        case SpendZeroConfChange:
-            return settings.value("bSpendZeroConfChange");
         case ShowFundamentalnodesTab:
             return settings.value("fShowFundamentalnodesTab");
 	    case ShowMasternodesTab:
@@ -227,6 +233,8 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
             return settings.value("nThreadsScriptVerif");
         case HideZeroBalances:
             return settings.value("fHideZeroBalances");
+        case AnonymizeAxivAmount:
+            return QVariant(nAnonymizeAxivAmount);
         case Listen:
             return settings.value("fListen");
         default:
@@ -289,12 +297,6 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
             }
         } break;
 #ifdef ENABLE_WALLET
-        case SpendZeroConfChange:
-            if (settings.value("bSpendZeroConfChange") != value) {
-                settings.setValue("bSpendZeroConfChange", value);
-                setRestartRequired(true);
-            }
-            break;
         case ShowFundamentalnodesTab:
             if (settings.value("fShowFundamentalnodesTab") != value) {
                 settings.setValue("fShowFundamentalnodesTab", value);
@@ -344,6 +346,12 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
             fHideZeroBalances = value.toBool();
             settings.setValue("fHideZeroBalances", fHideZeroBalances);
             emit hideZeroBalancesChanged(fHideZeroBalances);
+            break;
+
+        case AnonymizeAxivAmount:
+            nAnonymizeAxivAmount = value.toInt();
+            settings.setValue("nAnonymizeAxivAmount", nAnonymizeAxivAmount);
+            emit anonymizeAxivAmountChanged(nAnonymizeAxivAmount);
             break;
         case CoinControlFeatures:
             fCoinControlFeatures = value.toBool();

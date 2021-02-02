@@ -136,7 +136,7 @@
              <item row="6" column="0">
               <widget class="QLabel" name="label_3">
                <property name="toolTip">
-                <string>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the AXIV network.</string>
+                <string>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the AureusXIV network.</string>
                </property>
                <property name="text">
                 <string>&amp;Message:</string>
@@ -159,7 +159,7 @@
              <item row="6" column="2">
               <widget class="QLineEdit" name="reqMessage">
                <property name="toolTip">
-                <string>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the AXIV network.</string>
+                <string>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the AureusXIV network.</string>
                </property>
               </widget>
              </item>
@@ -232,16 +232,16 @@
               <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
                 <widget class="QPushButton" name="receiveButton">
+                <property name="font">
+                <font>
+                    <family>Andale Mono</family>
+                </font>
+                </property>
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <family>Andale Mono</family>
-                  </font>
                  </property>
                  <property name="text">
                   <string>&amp;Request payment</string>
@@ -250,16 +250,16 @@
                </item>
                <item>
                 <widget class="QPushButton" name="clearButton">
+                <property name="font">
+                <font>
+                    <family>Andale Mono</family>
+                </font>
+                </property>
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <family>Andale Mono</family>
-                  </font>
                  </property>
                  <property name="toolTip">
                   <string>Clear all fields of the form.</string>
@@ -348,29 +348,11 @@
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="PlaceholderText">
-                 <brush brushstyle="NoBrush">
-                  <color alpha="128">
-                   <red>51</red>
-                   <green>51</green>
-                   <blue>51</blue>
-                  </color>
-                 </brush>
-                </colorrole>
                </active>
                <inactive>
                 <colorrole role="Text">
                  <brush brushstyle="SolidPattern">
                   <color alpha="255">
-                   <red>51</red>
-                   <green>51</green>
-                   <blue>51</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-                <colorrole role="PlaceholderText">
-                 <brush brushstyle="NoBrush">
-                  <color alpha="128">
                    <red>51</red>
                    <green>51</green>
                    <blue>51</blue>
@@ -388,30 +370,13 @@
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="PlaceholderText">
-                 <brush brushstyle="NoBrush">
-                  <color alpha="128">
-                   <red>51</red>
-                   <green>51</green>
-                   <blue>51</blue>
-                  </color>
-                 </brush>
-                </colorrole>
                </disabled>
               </palette>
-             </property>
-             <property name="font">
-              <font>
-               <family>Andale Mono</family>
-              </font>
              </property>
              <property name="contextMenuPolicy">
               <enum>Qt::CustomContextMenu</enum>
              </property>
              <property name="tabKeyNavigation">
-              <bool>false</bool>
-             </property>
-             <property name="showGrid">
               <bool>false</bool>
              </property>
              <property name="sortingEnabled">
@@ -423,13 +388,13 @@
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
               <widget class="QPushButton" name="showRequestButton">
+                 <property name="font">
+                <font>
+                    <family>Andale Mono</family>
+                </font>
+                </property>
                <property name="enabled">
                 <bool>false</bool>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Andale Mono</family>
-                </font>
                </property>
                <property name="toolTip">
                 <string>Show the selected request (does the same as double clicking an entry)</string>
@@ -444,13 +409,13 @@
              </item>
              <item>
               <widget class="QPushButton" name="removeRequestButton">
+              <property name="font">
+                <font>
+                    <family>Andale Mono</family>
+                </font>
+                </property>
                <property name="enabled">
                 <bool>false</bool>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Andale Mono</family>
-                </font>
                </property>
                <property name="toolTip">
                 <string>Remove the selected entries from the list</string>
@@ -508,7 +473,7 @@
   <tabstop>removeRequestButton</tabstop>
  </tabstops>
  <resources>
-  <include location="../axiv.qrc"/>
+  <include location="../aureusxiv.qrc"/>
  </resources>
  <connections/>
 </ui>

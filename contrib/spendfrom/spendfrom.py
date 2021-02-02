@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Use the raw transactions API to spend VITs received on particular addresses,
+# Use the raw transactions API to spend AXIVs received on particular addresses,
 # and send any change back to that same address.
 #
 # Example usage:
@@ -221,9 +221,9 @@ def main():
 
     parser = optparse.OptionParser(usage="%prog [options]")
     parser.add_option("--from", dest="fromaddresses", default=None,
-                      help="addresses to get VITs from")
+                      help="addresses to get AXIVs from")
     parser.add_option("--to", dest="to", default=None,
-                      help="address to get send VITs to")
+                      help="address to get send AXIVs to")
     parser.add_option("--amount", dest="amount", default=None,
                       help="amount to send")
     parser.add_option("--fee", dest="fee", default="0.0",

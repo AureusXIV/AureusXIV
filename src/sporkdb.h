@@ -1,11 +1,13 @@
-// Copyright (c) 2017-2019 The PIVX developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2017 The PIVX developers
+// Copyright (c) 2018 The AXIV developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef PIVX_CSPORKDB_H
-#define PIVX_CSPORKDB_H
+#ifndef AXIV_CSPORKDB_H
+#define AXIV_CSPORKDB_H
 
-#include "fs.h"
+#include <boost/filesystem/path.hpp>
 #include "leveldbwrapper.h"
 #include "spork.h"
 
@@ -19,10 +21,10 @@ private:
     void operator=(const CSporkDB&);
 
 public:
-    bool WriteSpork(const SporkId nSporkId, const CSporkMessage& spork);
-    bool ReadSpork(const SporkId nSporkId, CSporkMessage& spork);
-    bool SporkExists(const SporkId nSporkId);
+    bool WriteSpork(const int nSporkId, const CSporkMessage& spork);
+    bool ReadSpork(const int nSporkId, CSporkMessage& spork);
+    bool SporkExists(const int nSporkId);
 };
 
 
-#endif //PIVX_CSPORKDB_H
+#endif //AXIV_CSPORKDB_H
