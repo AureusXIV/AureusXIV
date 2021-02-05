@@ -280,7 +280,7 @@ public:
     bool IsValidNetAddr();
 
     /// Is the input associated with collateral public key? (and there is 10000 PIV - checking if valid fundamentalnode)
-    bool IsInputAssociatedWithPubkey() const;
+    bool IsInputAssociatedWithPubkey(CTransaction &txVin, uint256 &hash) const;
 };
 
 
