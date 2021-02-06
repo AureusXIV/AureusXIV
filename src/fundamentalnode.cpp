@@ -131,7 +131,9 @@ std::string CFundamentalnode::GetStrMessage() const
 //
 bool CFundamentalnode::UpdateFromNewBroadcast(CFundamentalnodeBroadcast& fnb)
 {
+    LogPrintf("300 test\n");
     if (fnb.sigTime > sigTime) {
+        LogPrintf("301 test\n");
         pubKeyFundamentalnode = fnb.pubKeyFundamentalnode;
         pubKeyCollateralAddress = fnb.pubKeyCollateralAddress;
         sigTime = fnb.sigTime;
@@ -140,13 +142,17 @@ bool CFundamentalnode::UpdateFromNewBroadcast(CFundamentalnodeBroadcast& fnb)
         addr = fnb.addr;
         lastTimeChecked = 0;
         int nDoS = 0;
+        LogPrintf("302 test\n");
         if (fnb.lastPing == CFundamentalnodePing() || (fnb.lastPing != CFundamentalnodePing() && fnb.lastPing.CheckAndUpdate(nDoS, false))) {
+            LogPrintf("303 test\n");
             lastPing = fnb.lastPing;
             fnodeman.mapSeenFundamentalnodePing.insert(std::make_pair(lastPing.GetHash(), lastPing));
         }
         return true;
+        LogPrintf("304 test\n");
     }
     return false;
+    LogPrintf("305 test\n");
 }
 
 //
@@ -496,42 +502,45 @@ bool CFundamentalnodeBroadcast::CheckDefaultPort(std::string strService, std::st
 
 bool CFundamentalnodeBroadcast::CheckAndUpdate(int& nDos)
 {
+    LogPrintf("400 test\n");
     // make sure signature isn't in the future (past is OK)
     if (sigTime > GetAdjustedTime() + 60 * 60) {
-        LogPrint("fundamentalnode","fnb - Signature rejected, too far into the future %s\n", vin.prevout.hash.ToString());
+        LogPrint("fundamentalnode","mnb - Signature rejected, too far into the future %s\n", vin.prevout.hash.ToString());
         nDos = 1;
         return false;
     }
-
+    LogPrintf("401 test\n");
     // incorrect ping or its sigTime
     if(lastPing == CFundamentalnodePing() || !lastPing.CheckAndUpdate(nDos, false, true))
         return false;
-
+    LogPrintf("402 test\n");
     if (protocolVersion < fundamentalnodePayments.GetMinFundamentalnodePaymentsProto()) {
-        LogPrint("fundamentalnode","fnb - ignoring outdated Fundamentalnode %s protocol version %d\n", vin.prevout.hash.ToString(), protocolVersion);
+        LogPrintf("403 test\n");
+        LogPrint("fundamentalnode","mnb - ignoring outdated Fundamentalnode %s protocol version %d\n", vin.prevout.hash.ToString(), protocolVersion);
         return false;
     }
-
+    LogPrintf("404 test\n");
     CScript pubkeyScript;
     pubkeyScript = GetScriptForDestination(pubKeyCollateralAddress.GetID());
-
+    LogPrintf("405 test\n");
     if (pubkeyScript.size() != 25) {
-        LogPrint("fundamentalnode","fnb - pubkey the wrong size\n");
+        LogPrintf("406 test\n");
+        LogPrint("fundamentalnode","mnb - pubkey the wrong size\n");
         nDos = 100;
         return false;
     }
-
+    LogPrintf("407 test\n");
     CScript pubkeyScript2;
     pubkeyScript2 = GetScriptForDestination(pubKeyFundamentalnode.GetID());
-
+    LogPrintf("408 test\n");
     if (pubkeyScript2.size() != 25) {
-        LogPrint("fundamentalnode","fnb - pubkey2 the wrong size\n");
+        LogPrint("fundamentalnode","mnb - pubkey2 the wrong size\n");
         nDos = 100;
         return false;
     }
-
+    LogPrintf("409 test\n");
     if (!vin.scriptSig.empty()) {
-        LogPrint("fundamentalnode","fnb - Ignore Not Empty ScriptSig %s\n", vin.prevout.hash.ToString());
+        LogPrint("fundamentalnode","mnb - Ignore Not Empty ScriptSig %s\n", vin.prevout.hash.ToString());
         return false;
     }
 
@@ -542,39 +551,41 @@ bool CFundamentalnodeBroadcast::CheckAndUpdate(int& nDos)
         nDos = protocolVersion < MIN_PEER_FNANNOUNCE ? 0 : 100;
         return error("%s : Got bad Fundamentalnode address signature", __func__);
     }
-
+    LogPrintf("412 test\n");
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
-        if (addr.GetPort() != 10135) return false;
-    } else if (addr.GetPort() == 10135)
+        if (addr.GetPort() != 8765) return false;
+    } else if (addr.GetPort() == 8765)
         return false;
-
-    //search existing Fundamentalnode list, this is where we update existing Fundamentalnodes with new fnb broadcasts
-    CFundamentalnode* pfn = fnodeman.Find(vin);
-
+    LogPrintf("413 test\n");
+    //search existing Fundamentalnode list, this is where we update existing Fundamentalnodes with new mnb broadcasts
+    CFundamentalnode* pmn = mnodeman.Find(vin);
+    LogPrintf("414 test\n");
     // no such fundamentalnode, nothing to update
-    if (pfn == NULL) return true;
-
+    if (pmn == NULL) return true;
+    LogPrintf("415 test\n");
     // this broadcast is older or equal than the one that we already have - it's bad and should never happen
     // unless someone is doing something fishy
-    // (mapSeenFundamentalnodeBroadcast in CFundamentalnodeMan::ProcessMessage should filter legit duplicates)
-    if(pfn->sigTime >= sigTime) {
-        return error("%s : Bad sigTime %d for Fundamentalnode %20s %105s (existing broadcast is at %d)",
-                     __func__, sigTime, addr.ToString(), vin.ToString(), pfn->sigTime);
+    // (mapSeenMasternodeBroadcast in CMasternodeMan::ProcessMessage should filter legit duplicates)
+    if(pmn->sigTime >= sigTime) {
+        LogPrintf("416 test\n");
+        return error("CFundamentalnodeBroadcast::CheckAndUpdate - Bad sigTime %d for Fundamentalnode %20s %105s (existing broadcast is at %d)\n",
+                     sigTime, addr.ToString(), vin.ToString(), pmn->sigTime);
     }
-
+    LogPrintf("417 test\n");
     // fundamentalnode is not enabled yet/already, nothing to update
     if (!pfn->IsEnabled()) return true;
 
     // fn.pubkey = pubkey, IsVinAssociatedWithPubkey is validated once below,
     //   after that they just need to match
-    if (pfn->pubKeyCollateralAddress == pubKeyCollateralAddress && !pfn->IsBroadcastedWithin(FUNDAMENTALNODE_MIN_FNB_SECONDS)) {
+    if (pmn->pubKeyCollateralAddress == pubKeyCollateralAddress && !pmn->IsBroadcastedWithin(FUNDAMENTALNODE_MIN_MNB_SECONDS)) {
         //take the newest entry
-        LogPrint("fundamentalnode","fnb - Got updated entry for %s\n", vin.prevout.hash.ToString());
-        if (pfn->UpdateFromNewBroadcast((*this))) {
-            pfn->Check();
-            if (pfn->IsEnabled()) Relay();
+        LogPrint("fundamentalnode","mnb - Got updated entry for %s\n", vin.prevout.hash.ToString());
+        if (pmn->UpdateFromNewBroadcast((*this))) {
+            pmn->Check();
+            if (pmn->IsEnabled()) Relay();
         }
         fundamentalnodeSync.AddedFundamentalnodeList(GetHash());
+        LogPrintf("419 test\n");
     }
 
     return true;
@@ -728,82 +739,93 @@ std::string CFundamentalnodePing::GetStrMessage() const
 
 bool CFundamentalnodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled, bool fCheckSigTimeOnly)
 {
+    LogPrintf("200 test\n");
     if (sigTime > GetAdjustedTime() + 60 * 60) {
         LogPrint("fundamentalnode","CFundamentalnodePing::CheckAndUpdate - Signature rejected, too far into the future %s\n", vin.prevout.hash.ToString());
         nDos = 1;
         return false;
     }
-
+    LogPrintf("201 test\n");
     if (sigTime <= GetAdjustedTime() - 60 * 60) {
         LogPrint("fundamentalnode","CFundamentalnodePing::CheckAndUpdate - Signature rejected, too far into the past %s - %d %d \n", vin.prevout.hash.ToString(), sigTime, GetAdjustedTime());
         nDos = 1;
         return false;
     }
-
-    // see if we have this Fundamentalnode
-    CFundamentalnode* pfn = fnodeman.Find(vin);
-    const bool isFundamentalnodeFound = (pfn != nullptr);
-    const bool isSignatureValid = (isFundamentalnodeFound && CheckSignature(pfn->pubKeyFundamentalnode));
-
+    LogPrintf("202 test\n");
     if(fCheckSigTimeOnly) {
-        if (isFundamentalnodeFound && !isSignatureValid) {
-            nDos = 33;
-            return false;
-        }
+        CFundamentalnode* pmn = mnodeman.Find(vin);
+        if(pmn) return VerifySignature(pmn->pubKeyFundamentalnode, nDos);
         return true;
     }
 
     LogPrint("fundamentalnode", "CFundamentalnodePing::CheckAndUpdate - New Ping - %s - %s - %lli\n", GetHash().ToString(), blockHash.ToString(), sigTime);
 
-    if (isFundamentalnodeFound && pfn->protocolVersion >= fundamentalnodePayments.GetMinFundamentalnodePaymentsProto()) {
-        if (fRequireEnabled && !pfn->IsAvailableState()) return false;
-        // LogPrint("fundamentalnode","fnping - Found corresponding fn for vin: %s\n", vin.ToString());
+    // see if we have this Fundamentalnode
+    LogPrintf("203 test\n");
+    CFundamentalnode* pmn = mnodeman.Find(vin);
+    LogPrintf("204 test\n");
+    if (pmn != NULL && pmn->protocolVersion >= fundamentalnodePayments.GetMinFundamentalnodePaymentsProto()) {
+        LogPrintf("204 test\n");
+        if (fRequireEnabled && !pmn->IsAvailableState()) return false;
+        LogPrintf("205 test\n");
+        // LogPrint("fundamentalnode","mnping - Found corresponding mn for vin: %s\n", vin.ToString());
         // update only if there is no known ping for this fundamentalnode or
-        // last ping was more then FUNDAMENTALNODE_MIN_FNP_SECONDS-60 ago comparing to this one
-        if (!pfn->IsPingedWithin(FUNDAMENTALNODE_MIN_FNP_SECONDS - 60, sigTime)) {
-            if (!isSignatureValid) {
-                nDos = 33;
+        // last ping was more then FUNDAMENTALNODE_MIN_MNP_SECONDS-60 ago comparing to this one
+        if (!pmn->IsPingedWithin(FUNDAMENTALNODE_MIN_MNP_SECONDS - 60, sigTime)) {
+            LogPrintf("206 test\n");
+            if (!VerifySignature(pmn->pubKeyFundamentalnode, nDos))
                 return false;
-            }
-
+            LogPrintf("207 test\n");
             BlockMap::iterator mi = mapBlockIndex.find(blockHash);
+            LogPrintf("208 test\n");
             if (mi != mapBlockIndex.end() && (*mi).second) {
+                LogPrintf("209 test\n");
                 if ((*mi).second->nHeight < chainActive.Height() - 24) {
+                    LogPrintf("210 test\n");
                     LogPrint("fundamentalnode","CFundamentalnodePing::CheckAndUpdate - Fundamentalnode %s block hash %s is too old\n", vin.prevout.hash.ToString(), blockHash.ToString());
-                    // Do nothing here (no Fundamentalnode update, no fnping relay)
-                    // Let this node to be visible but fail to accept fnping
+                    // Do nothing here (no Fundamentalnode update, no mnping relay)
+                    // Let this node to be visible but fail to accept mnping
 
                     return false;
                 }
             } else {
+                LogPrintf("211 test\n");
                 if (fDebug) LogPrint("fundamentalnode","CFundamentalnodePing::CheckAndUpdate - Fundamentalnode %s block hash %s is unknown\n", vin.prevout.hash.ToString(), blockHash.ToString());
                 // maybe we stuck so we shouldn't ban this node, just fail to accept it
                 // TODO: or should we also request this block?
 
                 return false;
             }
-
-            pfn->lastPing = *this;
-
-            //fnodeman.mapSeenFundamentalnodeBroadcast.lastPing is probably outdated, so we'll update it
-            CFundamentalnodeBroadcast fnb(*pfn);
-            uint256 hash = fnb.GetHash();
-            if (fnodeman.mapSeenFundamentalnodeBroadcast.count(hash)) {
-                fnodeman.mapSeenFundamentalnodeBroadcast[hash].lastPing = *this;
+            LogPrintf("212 test\n");
+            pmn->lastPing = *this;
+            LogPrintf("213 test\n");
+            //mnodeman.mapSeenFundamentalnodeBroadcast.lastPing is probably outdated, so we'll update it
+            CFundamentalnodeBroadcast mnb(*pmn);
+            LogPrintf("214 test\n");
+            uint256 hash = mnb.GetHash();
+            LogPrintf("215 test\n");
+            if (mnodeman.mapSeenFundamentalnodeBroadcast.count(hash)) {
+                LogPrintf("216 test\n");
+                mnodeman.mapSeenFundamentalnodeBroadcast[hash].lastPing = *this;
+                LogPrintf("217 test\n");
             }
-
-            pfn->Check(true);
-            if (!pfn->IsEnabled()) return false;
+            LogPrintf("218 test\n");
+            pmn->Check(true);
+            if (!pmn->IsEnabled()) return false;
+            LogPrintf("219 test\n");
 
             LogPrint("fundamentalnode", "CFundamentalnodePing::CheckAndUpdate - Fundamentalnode ping accepted, vin: %s\n", vin.prevout.hash.ToString());
 
+            LogPrintf("220 test\n");
             Relay();
             return true;
         }
+        LogPrintf("221 test\n");
         LogPrint("fundamentalnode", "CFundamentalnodePing::CheckAndUpdate - Fundamentalnode ping arrived too early, vin: %s\n", vin.prevout.hash.ToString());
         //nDos = 1; //disable, this is happening frequently and causing banned peers
         return false;
     }
+    LogPrintf("222 test\n");
     LogPrint("fundamentalnode", "CFundamentalnodePing::CheckAndUpdate - Couldn't find compatible Fundamentalnode entry, vin: %s\n", vin.prevout.hash.ToString());
 
     return false;
