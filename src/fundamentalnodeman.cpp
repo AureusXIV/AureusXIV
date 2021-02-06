@@ -748,9 +748,12 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
             return;
         }
 
+        uint256 hashBlock = 0;
+        CTransaction tx;
+
         // make sure the vout that was signed is related to the transaction that spawned the Fundamentalnode
         //  - this is expensive, so it's only done once per Fundamentalnode
-        if (!fnb.IsInputAssociatedWithPubkey()) {
+        if (!fnb.IsInputAssociatedWithPubkey(tx, hashBlock)) {
             LogPrintf("CFundamentalnodeMan::ProcessMessage() : fnb - Got mismatched pubkey and vin\n");
             Misbehaving(pfrom->GetId(), 33);
             return;
@@ -970,7 +973,11 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
         mapSeenDsee.insert(std::make_pair(vin.prevout, pubkey));
         // make sure the vout that was signed is related to the transaction that spawned the Fundamentalnode
         //  - this is expensive, so it's only done once per Fundamentalnode
-        if (!pfn->IsInputAssociatedWithPubkey()) {
+
+        uint256 hashBlock = 0;
+        CTransaction tx;
+
+        if (!pfn->IsInputAssociatedWithPubkey(tx, hashBlock)) {
             LogPrintf("CFundamentalnodeMan::ProcessMessage() : obsee - Got mismatched pubkey and vin\n");
             Misbehaving(pfrom->GetId(), 100);
             return;
@@ -983,16 +990,16 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
         //  - this is checked later by .check() in many places and by ThreadCheckObfuScationPool()
 
         CValidationState state;
-        CMutableTransaction tx = CMutableTransaction();
+        /*CMutableTransaction tx = CMutableTransaction();
         CTxOut vout = CTxOut(9999.99 * COIN, obfuScationPool.collateralPubKey);
         tx.vin.push_back(vin);
-        tx.vout.push_back(vout);
+        tx.vout.push_back(vout);*/
 
         bool fAcceptable = false;
         {
             TRY_LOCK(cs_main, lockMain);
             if (!lockMain) return;
-            fAcceptable = AcceptableInputs(mempool, state, CTransaction(tx), false, NULL);
+            fAcceptable = AcceptableFundamentalTxn(mempool, state, tx);
         }
 
         if (fAcceptable) {

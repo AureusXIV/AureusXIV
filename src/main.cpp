@@ -1186,7 +1186,9 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         if (nFees > (FUNDAMENTALNODE_AMOUNT - FN_MAGIC_AMOUNT - 0.1*COIN)){
 
             nFees = nFees - FUNDAMENTALNODE_AMOUNT + FN_MAGIC_AMOUNT;
-        LogPrintf("Fn is true , and nFees = %d \n", nFees);}
+            LogPrintf("Fn is true , and nFees = %d \n", nFees);
+            fRejectInsaneFee = false;
+        }
 
         double dPriority = 0;
         view.GetPriority(tx, chainActive.Height());
@@ -1240,7 +1242,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
                 nFees, ::minRelayTxFee.GetFee(nSize) * 10000);
 
         //Reject Insane Fees
-        if(nFees > ::minRelayTxFee.GetFee(nSize) * 20000)
+        if(fRejectInsaneFee && nFees > ::minRelayTxFee.GetFee(nSize) * 20000)
             return error("AcceptToMemoryPool: : insane fees %s, %d > %d",
                          hash.ToString(),
                          nFees, ::minRelayTxFee.GetFee(nSize) * 20000);

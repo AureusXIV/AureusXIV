@@ -330,13 +330,10 @@ bool CFundamentalnode::IsValidNetAddr()
            (IsReachable(addr) && addr.IsRoutable());
 }
 
-bool CFundamentalnode::IsInputAssociatedWithPubkey() const
+bool CFundamentalnode::IsInputAssociatedWithPubkey(CTransaction &txVin, uint256 &hash) const
 {
     CScript payee;
     payee = GetScriptForDestination(pubKeyCollateralAddress.GetID());
-
-    CTransaction txVin;
-    uint256 hash;
     if(GetTransaction(vin.prevout.hash, txVin, hash, true)) {
         for (CTxOut out : txVin.vout) {
             if (out.nValue == FN_MAGIC_AMOUNT && out.scriptPubKey == payee) return true;
