@@ -330,12 +330,12 @@ bool CFundamentalnode::IsValidNetAddr()
            (IsReachable(addr) && addr.IsRoutable());
 }
 
-bool CFundamentalnode::IsInputAssociatedWithPubkey(CTransaction &txVin, uint256 &hash) const
+bool CFundamentalnode::IsInputAssociatedWithPubkey(CTxIn& vin, CPubKey& pubkey, CTransaction &Tx, uint256 &hashBlock) const
 {
     CScript payee;
-    payee = GetScriptForDestination(pubKeyCollateralAddress.GetID());
-    if(GetTransaction(vin.prevout.hash, txVin, hash, true)) {
-        for (CTxOut out : txVin.vout) {
+    payee = GetScriptForDestination(pubkey.GetID());
+    if(GetTransaction(vin.prevout.hash, Tx, hashBlock, true)) {
+        for (CTxOut out : Tx.vout) {
             if (out.nValue == FN_MAGIC_AMOUNT && out.scriptPubKey == payee) return true;
         }
     }
@@ -756,8 +756,7 @@ bool CFundamentalnodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled, bool 
     LogPrint("fundamentalnode", "CFundamentalnodePing::CheckAndUpdate - New Ping - %s - %s - %lli\n", GetHash().ToString(), blockHash.ToString(), sigTime);
 
     if (isFundamentalnodeFound && pfn->protocolVersion >= fundamentalnodePayments.GetMinFundamentalnodePaymentsProto()) {
-        if (fRequireEnabled && !pfn->IsEnabled()) return false;
-
+        if (fRequireEnabled && !pfn->IsAvailableState()) return false;
         // LogPrint("fundamentalnode","fnping - Found corresponding fn for vin: %s\n", vin.ToString());
         // update only if there is no known ping for this fundamentalnode or
         // last ping was more then FUNDAMENTALNODE_MIN_FNP_SECONDS-60 ago comparing to this one

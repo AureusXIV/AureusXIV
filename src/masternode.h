@@ -262,6 +262,11 @@ public:
         return activeState == MASTERNODE_ENABLED;
     }
 
+    bool IsAvailableState()
+    {
+        return activeState == MASTERNODE_ENABLED || activeState == MASTERNODE_PRE_ENABLED;
+    }
+
     int GetMasternodeInputAge()
     {
         if (chainActive.Tip() == NULL) return 0;

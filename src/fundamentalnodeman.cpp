@@ -202,7 +202,7 @@ bool CFundamentalnodeMan::Add(CFundamentalnode& fn)
 {
     LOCK(cs);
 
-    if (!fn.IsEnabled())
+    if (!fn.IsAvailableState())
         return false;
 
     CFundamentalnode* pfn = Find(fn.vin);
@@ -753,7 +753,7 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
 
         // make sure the vout that was signed is related to the transaction that spawned the Fundamentalnode
         //  - this is expensive, so it's only done once per Fundamentalnode
-        if (!fnb.IsInputAssociatedWithPubkey(tx, hashBlock)) {
+        if (!fnb.IsInputAssociatedWithPubkey(fnb.vin, fnb.pubKeyCollateralAddress, tx, hashBlock)) {
             LogPrintf("CFundamentalnodeMan::ProcessMessage() : fnb - Got mismatched pubkey and vin\n");
             Misbehaving(pfrom->GetId(), 33);
             return;
@@ -771,9 +771,7 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
             if (nDoS > 0)
                 Misbehaving(pfrom->GetId(), nDoS);
         }
-    }
-
-    else if (strCommand == "fnp") { //Fundamentalnode Ping
+    } else if (strCommand == "fnp") { //Fundamentalnode Ping
         CFundamentalnodePing fnp;
         vRecv >> fnp;
 
@@ -823,7 +821,6 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
             }
         } //else, asking for a specific node which is ok
 
-
         int nInvCount = 0;
 
         for (CFundamentalnode& fn : vFundamentalnodes) {
@@ -852,12 +849,12 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
             LogPrint("fundamentalnode", "obseg - Sent %d Fundamentalnode entries to peer %i\n", nInvCount, pfrom->GetId());
         }
     }
-        /*
-         * IT'S SAFE TO REMOVE THIS IN FURTHER VERSIONS
-         * AFTER MIGRATION TO V12 IS DONE
-         */
+    /*
+     * IT'S SAFE TO REMOVE THIS IN FURTHER VERSIONS
+     * AFTER MIGRATION TO V12 IS DONE
+     */
 
-        // Light version for OLD MASSTERNODES - fake pings, no self-activation
+    // Light version for OLD MASSTERNODES - fake pings, no self-activation
     else if (strCommand == "obsee") { //ObfuScation Election Entry
 
         CTxIn vin;
@@ -977,12 +974,11 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
         uint256 hashBlock = 0;
         CTransaction tx;
 
-        if (!pfn->IsInputAssociatedWithPubkey(tx, hashBlock)) {
+        if (!pfn->IsInputAssociatedWithPubkey(vin, pubkey, tx, hashBlock)) {
             LogPrintf("CFundamentalnodeMan::ProcessMessage() : obsee - Got mismatched pubkey and vin\n");
             Misbehaving(pfrom->GetId(), 100);
             return;
         }
-
 
         LogPrint("fundamentalnode", "obsee - Got NEW OLD Fundamentalnode entry %s\n", vin.prevout.hash.ToString());
 
@@ -1063,9 +1059,7 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
                     Misbehaving(pfrom->GetId(), nDoS);
             }
         }
-    }
-
-    else if (strCommand == "obseep") { //ObfuScation Election Entry Ping
+    } else if (strCommand == "obseep") { //ObfuScation Election Entry Ping
 
         CTxIn vin;
         std::vector<unsigned char> vchSig;

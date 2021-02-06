@@ -262,6 +262,11 @@ public:
         return activeState == FUNDAMENTALNODE_ENABLED;
     }
 
+    bool IsAvailableState()
+    {
+        return activeState == FUNDAMENTALNODE_ENABLED || activeState == FUNDAMENTALNODE_PRE_ENABLED;
+    }
+
     int GetFundamentalnodeInputAge()
     {
         if (chainActive.Tip() == NULL) return 0;
@@ -280,7 +285,7 @@ public:
     bool IsValidNetAddr();
 
     /// Is the input associated with collateral public key? (and there is 10000 PIV - checking if valid fundamentalnode)
-    bool IsInputAssociatedWithPubkey(CTransaction &txVin, uint256 &hash) const;
+    bool IsInputAssociatedWithPubkey(CTxIn& vin, CPubKey& pubkey, CTransaction& Tx , uint256& hashBlock) const;
 };
 
 
