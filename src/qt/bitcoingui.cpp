@@ -306,7 +306,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     QActionGroup* tabGroup = new QActionGroup(this);
     // tabGroup.setFont(QFont(font, 28 * Andale-Mono));
     overviewAction = new QAction(QIcon(":/icons/blank"), tr("&Overview"), this);
-    overviewAction->setStatusTip(tr("Send coins to a AXIV addresses"));
+    overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
     overviewAction->setFont(GUIUtil::primaryFont());
