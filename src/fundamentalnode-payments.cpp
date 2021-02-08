@@ -245,6 +245,11 @@ bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight)
         MasternodePayments = false; //
         if(fDebug) LogPrintf("CheckBlock() : Masternode payment enforcement is off\n");
     }
+    
+    if(block.vtx.size() < 2) {
+        MasternodePayments = false; //
+        if(fDebug) LogPrintf("CheckBlock() : There is no masternode payment\n");
+    }
 
     if(MasternodePayments)
     {
