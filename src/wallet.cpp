@@ -1622,7 +1622,7 @@ bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& 
 
     // Find possible candidates (remove delegated)
     std::vector<COutput> vPossibleCoins;
-    AvailableCoins(vPossibleCoins, true, NULL, false, ONLY_10000, false, 1);
+    AvailableCoins(vPossibleCoins, true, NULL, false, ONLY_20000, false, 1);
 
     if (vPossibleCoins.empty()) {
         LogPrintf("CWallet::GetMasternodeVinAndKeys -- Could not locate any valid masternode vin\n");
@@ -1695,6 +1695,8 @@ void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const
                     if (found && fFundamentalNode) found = pcoin->vout[i].nValue != FN_MAGIC_AMOUNT; // do not use Hot MN funds
                 } else if (nCoinType == ONLY_10000) {
                     found = pcoin->vout[i].nValue == FN_MAGIC_AMOUNT;
+                } else if (nCoinType == ONLY_20000) {
+                    found = pcoin->vout[i].nValue == MASTERNODEAMOUNT;
                 } else {
                     found = true;
                 }
@@ -1713,6 +1715,8 @@ void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const
                     continue;
 
                 if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000)
+                    continue;
+                if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_20000)
                     continue;
                 if (pcoin->vout[i].nValue <= 0 && !fIncludeZeroValue)
                     continue;
