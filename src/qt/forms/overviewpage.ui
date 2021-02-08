@@ -647,7 +647,7 @@
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Locked AXIV or Fundamentalnode collaterals. These are excluded from zAXIV minting.</string>
+                          <string>Locked AXIV or Fundamentalnode collaterals.</string>
                          </property>
                          <property name="text">
                           <string>Locked:</string>
@@ -666,7 +666,7 @@
                           <cursorShape>IBeamCursor</cursorShape>
                          </property>
                          <property name="toolTip">
-                          <string>Locked AXIV or Fundamentalnode collaterals. These are excluded from zAXIV minting.</string>
+                          <string>Locked AXIV or Fundamentalnode collaterals.</string>
                          </property>
                          <property name="text">
                           <string notr="true">0.000 000 00 AXIV</string>
