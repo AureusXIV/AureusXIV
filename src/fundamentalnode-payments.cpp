@@ -475,7 +475,7 @@ void CFundamentalnodePayments::FillBlockPayeeFundamentalnode(CMutableTransaction
     //txNew.vout[0].nValue = blockValue;
 
     if (hasPayment) {
-        if(hasMnPayment){
+        if(IsMasternode && hasMnPayment){
             if (fProofOfStake) {
                 /**For Proof Of Stake vout[0] must be null
                  * Stake reward can be split into many different outputs, so we must
@@ -542,8 +542,7 @@ void CFundamentalnodePayments::FillBlockPayeeFundamentalnode(CMutableTransaction
             LogPrint("fundamentalnode","Fundamentalnode payment of %s to %s\n", FormatMoney(fundamentalnodePayment).c_str(), address2.ToString().c_str());
         }
     } else {
-
-        if(hasMnPayment){
+        if(IsMasternode && hasMnPayment){
             if (fProofOfStake) {
                 /**For Proof Of Stake vout[0] must be null
                  * Stake reward can be split into many different outputs, so we must
@@ -774,7 +773,7 @@ bool CFundamentalnodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
         bool found = false;
         for (CTxOut out : txNew.vout) {
             if (payee.scriptPubKey == out.scriptPubKey) {
-                if(out.nValue == requiredFundamentalnodePayment)
+                if(out.nValue >= requiredFundamentalnodePayment)
                     found = true;
                 else
                     LogPrintf("%s : Fundamentalnode payment value (%s) different from required value (%s).\n",
