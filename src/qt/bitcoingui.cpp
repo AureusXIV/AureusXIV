@@ -309,7 +309,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
-    overviewAction->setFont(QFont("Andale Mono"));
+    overviewAction->setFont(GUIUtil::primaryFont());
     
    
 
@@ -324,7 +324,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     sendCoinsAction->setStatusTip(tr("Send coins to a AXIV address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
-    sendCoinsAction->setFont(QFont("Andale Mono"));
+    sendCoinsAction->setFont(GUIUtil::primaryFont());
     //sendCoinsAction->setIconSize(QSize(1, 1));
     // sendCoinsAction->setTextAlignment(Qt::AlignLeft);
     //sendCoinsAction.setStyleSheet("qproperty-alignment: AlignBottom AlignRight;");
@@ -339,7 +339,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and AXIV: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
-    receiveCoinsAction->setFont(QFont("Andale Mono"));
+    receiveCoinsAction->setFont(GUIUtil::primaryFont());
 #ifdef Q_OS_MAC
     receiveCoinsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_3));
 #else
@@ -351,7 +351,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
-    historyAction->setFont(QFont("Andale Mono"));
+    historyAction->setFont(GUIUtil::primaryFont());
 #ifdef Q_OS_MAC
     historyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_4));
 #else
@@ -365,10 +365,10 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 
     if (settings.value("fShowMasternodesTab").toBool()) {
         masternodeAction = new QAction(QIcon(":/icons/blank"), tr("&Nodes"), this);
-        masternodeAction->setStatusTip(tr("Browse Masternodes & Fundamentalnodes"));
+        masternodeAction->setStatusTip(tr("Browse Masternodes & Fundamental Nodes"));
         masternodeAction->setToolTip(masternodeAction->statusTip());
         masternodeAction->setCheckable(true);
-        masternodeAction->setFont(QFont("Andale Mono"));
+        masternodeAction->setFont(GUIUtil::primaryFont());
 #ifdef Q_OS_MAC
         masternodeAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_6));
 #else
