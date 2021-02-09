@@ -1714,9 +1714,7 @@ void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const
                 if (mine == ISMINE_WATCH_ONLY && nWatchonlyConfig == 1)
                     continue;
 
-                if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000)
-                    continue;
-                if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_20000)
+                if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000 && nCoinType != ONLY_20000)
                     continue;
                 if (pcoin->vout[i].nValue <= 0 && !fIncludeZeroValue)
                     continue;
