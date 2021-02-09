@@ -1696,7 +1696,7 @@ void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const
                 } else if (nCoinType == ONLY_10000) {
                     found = pcoin->vout[i].nValue == FN_MAGIC_AMOUNT;
                 } else if (nCoinType == ONLY_20000) {
-                    found = pcoin->vout[i].nValue == MASTERNODEAMOUNT;
+                    found = pcoin->vout[i].nValue == MASTERNODEAMOUNT * COIN;
                 } else {
                     found = true;
                 }
