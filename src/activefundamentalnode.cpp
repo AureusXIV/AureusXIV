@@ -193,37 +193,6 @@ bool CActiveFundamentalnode::SendFundamentalnodePing(std::string& errorMessage)
 
         fnp.Relay();
 
-        /*
-         * IT'S SAFE TO REMOVE THIS IN FURTHER VERSIONS
-         * AFTER MIGRATION TO V12 IS DONE
-         */
-
-        // for migration purposes ping our node on old fundamentalnodes network too
-        std::string retErrorMessage;
-        std::vector<unsigned char> vchFundamentalNodeSignature;
-        int64_t fundamentalNodeSignatureTime = GetAdjustedTime();
-
-        std::string strMessage = service.ToString() + std::to_string(fundamentalNodeSignatureTime) + std::to_string(false);
-
-        if (!CMessageSigner::SignMessage(strMessage, vchFundamentalNodeSignature, keyFundamentalnode)) {
-            errorMessage = "dseep sign message failed.";
-            return false;
-        }
-
-        if (!CMessageSigner::VerifyMessage(pubKeyFundamentalnode, vchFundamentalNodeSignature, strMessage, retErrorMessage)) {
-            errorMessage = "dseep verify message failed: " + retErrorMessage;
-            return false;
-        }
-
-        LogPrint("fundamentalnode", "dseep - relaying from active fn, %s \n", vin.ToString().c_str());
-        LOCK(cs_vNodes);
-        for (CNode* pnode : vNodes)
-            pnode->PushMessage("obseep", vin, vchFundamentalNodeSignature, fundamentalNodeSignatureTime, false);
-
-        /*
-         * END OF "REMOVE"
-         */
-
         return true;
     } else {
         // Seems like we are trying to send a ping while the Fundamentalnode is not registered in the network
@@ -293,44 +262,6 @@ bool CActiveFundamentalnode::CreateBroadcast(CTxIn vin, CService service, CKey k
         fnb = CFundamentalnodeBroadcast();
         return false;
     }
-
-    /*
-     * IT'S SAFE TO REMOVE THIS IN FURTHER VERSIONS
-     * AFTER MIGRATION TO V12 IS DONE
-     */
-
-    // for migration purposes inject our node in old fundamentalnodes' list too
-    std::string retErrorMessage;
-    std::vector<unsigned char> vchFundamentalNodeSignature;
-    int64_t fundamentalNodeSignatureTime = GetAdjustedTime();
-    std::string donationAddress = "";
-    int donationPercantage = 0;
-
-    std::string vchPubKey(pubKeyCollateralAddress.begin(), pubKeyCollateralAddress.end());
-    std::string vchPubKey2(pubKeyFundamentalnode.begin(), pubKeyFundamentalnode.end());
-
-    std::string strMessage = service.ToString() + std::to_string(fundamentalNodeSignatureTime) + vchPubKey + vchPubKey2 + std::to_string(PROTOCOL_VERSION) + donationAddress + std::to_string(donationPercantage);
-
-    if (!CMessageSigner::SignMessage(strMessage, vchFundamentalNodeSignature, keyCollateralAddress)) {
-        errorMessage = "dsee sign message failed.";
-        LogPrintf("CActiveFundamentalnode::Register() - Error: %s\n", errorMessage.c_str());
-        return false;
-    }
-
-    if (!CMessageSigner::VerifyMessage(pubKeyCollateralAddress, vchFundamentalNodeSignature, strMessage, retErrorMessage)) {
-        errorMessage = "dsee verify message failed: " + retErrorMessage;
-        LogPrintf("CActiveFundamentalnode::Register() - Error: %s\n", errorMessage.c_str());
-        return false;
-    }
-
-    LOCK(cs_vNodes);
-    for (CNode* pnode : vNodes)
-        pnode->PushMessage("obsee", vin, service, vchFundamentalNodeSignature, fundamentalNodeSignatureTime, pubKeyCollateralAddress, pubKeyFundamentalnode, -1, -1, fundamentalNodeSignatureTime, PROTOCOL_VERSION, donationAddress, donationPercantage);
-
-    /*
-     * END OF "REMOVE"
-     */
-
     return true;
 }
 
