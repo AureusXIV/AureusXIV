@@ -724,21 +724,23 @@ void CFundamentalnodeMan::ProcessFundamentalnodeConnections()
 
 void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
+    LogPrintf("origin test %s\n", strCommand);
     if (fLiteMode) return; //disable all Obfuscation/Fundamentalnode related functionality
     if (!fundamentalnodeSync.IsBlockchainSynced()) return;
 
     LOCK(cs_process_message);
-
+    LogPrintf("1 test %s\n", strCommand);
     if (strCommand == "fnb") { //Fundamentalnode Broadcast
         CFundamentalnodeBroadcast fnb;
         vRecv >> fnb;
+        LogPrintf("2 test\n");
 
         if (mapSeenFundamentalnodeBroadcast.count(fnb.GetHash())) { //seen
             fundamentalnodeSync.AddedFundamentalnodeList(fnb.GetHash());
             return;
         }
         mapSeenFundamentalnodeBroadcast.insert(std::make_pair(fnb.GetHash(), fnb));
-
+        LogPrintf("3 test\n");
         int nDoS = 0;
         if (!fnb.CheckAndUpdate(nDoS)) {
             if (nDoS > 0)
@@ -750,7 +752,7 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
 
         uint256 hashBlock = 0;
         CTransaction tx;
-
+        LogPrintf("4 test\n");
         // make sure the vout that was signed is related to the transaction that spawned the Fundamentalnode
         //  - this is expensive, so it's only done once per Fundamentalnode
         if (!fnb.IsInputAssociatedWithPubkey(fnb.vin, fnb.pubKeyCollateralAddress, tx, hashBlock)) {
@@ -758,7 +760,7 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
             Misbehaving(pfrom->GetId(), 33);
             return;
         }
-
+        LogPrintf("5 test\n");
         // make sure it's still unspent
         //  - this is checked later by .check() in many places and by ThreadCheckObfuScationPool()
         if (fnb.CheckInputsAndAdd(nDoS)) {
@@ -774,7 +776,7 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
     } else if (strCommand == "fnp") { //Fundamentalnode Ping
         CFundamentalnodePing fnp;
         vRecv >> fnp;
-
+        LogPrintf("6 test\n");
         LogPrint("fundamentalnode", "fnp - Fundamentalnode ping, vin: %s\n", fnp.vin.prevout.hash.ToString());
 
         if (mapSeenFundamentalnodePing.count(fnp.GetHash())) return; //seen
@@ -792,13 +794,13 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
             // if it's known, don't ask for the fnb, just return
             if (pfn != NULL) return;
         }
-
+        LogPrintf("7 test\n");
         // something significant is broken or fn is unknown,
         // we might have to ask for a fundamentalnode entry once
         AskForFN(pfrom, fnp.vin);
-
+        LogPrintf("7 test\n");
     } else if (strCommand == "obseg") { //Get Fundamentalnode list or specific entry
-
+        LogPrintf("8 test\n");
         CTxIn vin;
         vRecv >> vin;
 
@@ -822,7 +824,7 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
         } //else, asking for a specific node which is ok
 
         int nInvCount = 0;
-
+        LogPrintf("9 test\n");
         for (CFundamentalnode& fn : vFundamentalnodes) {
             if (fn.addr.IsRFC1918()) continue; //local network
 
@@ -843,12 +845,13 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
                 }
             }
         }
-
+        LogPrintf("10 test\n");
         if (vin == CTxIn()) {
             pfrom->PushMessage("ssc", FUNDAMENTALNODE_SYNC_LIST, nInvCount);
             LogPrint("fundamentalnode", "obseg - Sent %d Fundamentalnode entries to peer %i\n", nInvCount, pfrom->GetId());
         }
     }
+    LogPrintf("11 test\n");
 }
 
 void CFundamentalnodeMan::Remove(CTxIn vin)
