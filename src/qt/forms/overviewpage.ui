@@ -86,10 +86,40 @@
             <number>0</number>
            </property>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_Header" stretch="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_Header" stretch="1,0,1">
              <property name="spacing">
               <number>6</number>
              </property>
+             <item>
+              <widget class="QLabel" name="labelOverviewHeaderLeft">
+               <property name="minimumSize">
+                <size>
+                 <width>464</width>
+                 <height>60</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>60</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Andale Mono</family>
+                 <pointsize>20</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>OVERVIEW</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
              <item>
               <spacer name="horizontalSpacer_Header">
                <property name="orientation">
@@ -102,6 +132,33 @@
                 </size>
                </property>
               </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelOverviewHeaderRight">
+               <property name="minimumSize">
+                <size>
+                 <width>464</width>
+                 <height>60</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>60</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>14</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -173,7 +230,7 @@
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout_5">
                      <item>
-                      <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,0">
+                      <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,0,0">
                        <item>
                         <widget class="QLabel" name="label_5z">
                          <property name="minimumSize">
@@ -191,10 +248,17 @@
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Combined Balance (including unconfirmed and immature coins)</string>
+                          <string>Balance Summary (including unconfirmed and immature coins)</string>
                          </property>
                          <property name="text">
-                          <string>Balance</string>
+                          <string>AXIV Balance</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="labelVITPercent">
+                         <property name="text">
+                          <string notr="true">0 %</string>
                          </property>
                         </widget>
                        </item>
@@ -229,7 +293,7 @@
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>40</width>
+                           <width>30</width>
                            <height>20</height>
                           </size>
                          </property>
@@ -238,179 +302,7 @@
                       </layout>
                      </item>
                      <item>
-                      <layout class="QGridLayout" name="gridLayout_3">
-                       <property name="spacing">
-                        <number>12</number>
-                       </property>
-                       <item row="2" column="3">
-                        <spacer name="horizontalSpacer_2">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="1" column="1">
-                        <widget class="QLabel" name="labelBalancez">
-                         <property name="font">
-                          <font>
-                           <family>Andale Mono</family>
-                           <weight>50</weight>
-                           <bold>false</bold>
-                          </font>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>IBeamCursor</cursorShape>
-                         </property>
-                         <property name="toolTip">
-                          <string>Your current spendable balance</string>
-                         </property>
-                         <property name="text">
-                          <string notr="true">0.000 000 00 AXIV</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                         </property>
-                         <property name="textInteractionFlags">
-                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="0">
-                        <widget class="QLabel" name="labelBalanceTextz">
-                         <property name="font">
-                          <font>
-                           <family>Andale Mono</family>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Available:</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="1">
-                        <widget class="QLabel" name="labelTotalz">
-                         <property name="font">
-                          <font>
-                           <family>Andale Mono</family>
-                           <weight>50</weight>
-                           <bold>false</bold>
-                          </font>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>IBeamCursor</cursorShape>
-                         </property>
-                         <property name="toolTip">
-                          <string>Total Balance, including all unavailable coins.</string>
-                         </property>
-                         <property name="text">
-                          <string notr="true">0.000 000 00 AXIV</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                         </property>
-                         <property name="textInteractionFlags">
-                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="0">
-                        <widget class="QLabel" name="labelTotalTextz">
-                         <property name="font">
-                          <font>
-                           <family>Andale Mono</family>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Total:</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </item>
-                     <item>
-                      <spacer name="verticalSpacer_1">
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>20</width>
-                         <height>40</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QFrame" name="frame_Balances">
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::StyledPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Raised</enum>
-                    </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_4">
-                     <item>
-                      <layout class="QHBoxLayout" name="horizontalLayout_4">
-                       <item>
-                        <widget class="QLabel" name="label_5">
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Andale Mono</family>
-                           <pointsize>12</pointsize>
-                           <weight>50</weight>
-                           <bold>false</bold>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>AXIV Balance</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLabel" name="labelVITPercent">
-                         <property name="text">
-                          <string notr="true">0 %</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <spacer name="horizontalSpacer_3">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                      </layout>
-                     </item>
-                     <item>
-                      <widget class="Line" name="line_Balance">
+                      <widget class="Line" name="line_CombinedBalance">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -428,6 +320,18 @@
                        </property>
                       </widget>
                      </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QFrame" name="frame_Balances">
+                    <property name="frameShape">
+                     <enum>QFrame::StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Raised</enum>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_4">
                      <item>
                       <layout class="QGridLayout" name="gridLayout">
                        <property name="spacing">
@@ -435,6 +339,11 @@
                        </property>
                        <item row="0" column="1">
                         <widget class="QLabel" name="labelSpendable">
+                         <property name="font">
+                          <font>
+                           <pointsize>14</pointsize>
+                          </font>
+                         </property>
                          <property name="text">
                           <string>Spendable:</string>
                          </property>
@@ -445,6 +354,11 @@
                        </item>
                        <item row="0" column="2">
                         <widget class="QLabel" name="labelWatchonly">
+                         <property name="font">
+                          <font>
+                           <pointsize>14</pointsize>
+                          </font>
+                         </property>
                          <property name="text">
                           <string>Watch-only:</string>
                          </property>
@@ -458,6 +372,9 @@
                          <property name="font">
                           <font>
                            <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="text">
@@ -469,8 +386,10 @@
                         <widget class="QLabel" name="labelBalance">
                          <property name="font">
                           <font>
-                           <weight>75</weight>
-                           <bold>true</bold>
+                           <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -494,8 +413,10 @@
                         <widget class="QLabel" name="labelWatchAvailable">
                          <property name="font">
                           <font>
-                           <weight>75</weight>
-                           <bold>true</bold>
+                           <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -520,6 +441,9 @@
                          <property name="font">
                           <font>
                            <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="text">
@@ -531,8 +455,10 @@
                         <widget class="QLabel" name="labelUnconfirmed">
                          <property name="font">
                           <font>
-                           <weight>75</weight>
-                           <bold>true</bold>
+                           <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -556,8 +482,10 @@
                         <widget class="QLabel" name="labelWatchPending">
                          <property name="font">
                           <font>
-                           <weight>75</weight>
-                           <bold>true</bold>
+                           <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -582,6 +510,7 @@
                          <property name="font">
                           <font>
                            <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
                           </font>
                          </property>
                          <property name="text">
@@ -593,8 +522,10 @@
                         <widget class="QLabel" name="labelImmature">
                          <property name="font">
                           <font>
-                           <weight>75</weight>
-                           <bold>true</bold>
+                           <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -618,8 +549,10 @@
                         <widget class="QLabel" name="labelWatchImmature">
                          <property name="font">
                           <font>
-                           <weight>75</weight>
-                           <bold>true</bold>
+                           <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -644,6 +577,7 @@
                          <property name="font">
                           <font>
                            <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
                           </font>
                          </property>
                          <property name="toolTip">
@@ -658,8 +592,10 @@
                         <widget class="QLabel" name="labelLockedBalance">
                          <property name="font">
                           <font>
-                           <weight>75</weight>
-                           <bold>true</bold>
+                           <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -683,8 +619,10 @@
                         <widget class="QLabel" name="labelWatchLocked">
                          <property name="font">
                           <font>
-                           <weight>75</weight>
-                           <bold>true</bold>
+                           <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>50</weight>
+                           <bold>false</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -709,6 +647,9 @@
                          <property name="font">
                           <font>
                            <family>Andale Mono</family>
+                           <pointsize>14</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
                           </font>
                          </property>
                          <property name="toolTip">
@@ -724,8 +665,9 @@
                          <property name="font">
                           <font>
                            <family>Andale Mono</family>
-                           <weight>50</weight>
-                           <bold>false</bold>
+                           <pointsize>14</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -750,8 +692,9 @@
                          <property name="font">
                           <font>
                            <family>Andale Mono</family>
-                           <weight>50</weight>
-                           <bold>false</bold>
+                           <pointsize>14</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
                           </font>
                          </property>
                          <property name="cursor">
@@ -823,7 +766,7 @@
                  <property name="frameShadow">
                   <enum>QFrame::Raised</enum>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_1" stretch="0,0,0,0">
+                 <layout class="QVBoxLayout" name="verticalLayout_1" stretch="0,0,0,0,0">
                   <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_2">
                     <item>
@@ -887,20 +830,39 @@
                    </layout>
                   </item>
                   <item>
+                   <widget class="Line" name="line">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>1</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>1</height>
+                     </size>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QListView" name="listTransactions">
-                   <property name="font">
-                          <font>
-                           <family>Andale Mono</family>
-                          </font>
-                         </property>
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
                       <height>0</height>
                      </size>
                     </property>
+                    <property name="font">
+                     <font>
+                      <family>Andale Mono</family>
+                     </font>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">QListView { background: transparent;}</string>
+                     <string notr="true">QListView { background: transparent; }</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -913,9 +875,6 @@
                     </property>
                     <property name="selectionMode">
                      <enum>QAbstractItemView::NoSelection</enum>
-                    </property>
-                    <property name="spacing">
-                     <number>6</number>
                     </property>
                    </widget>
                   </item>
