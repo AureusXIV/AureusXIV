@@ -233,7 +233,7 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
     progressBar = new GUIUtil::ProgressBar();
     progressBar->setAlignment(Qt::AlignCenter);
     progressBar->setFont(QFont("Andale Mono"));
-    progressBar->setFixedHeight(24);
+   // progressBar->setFixedHeight(13);
     progressBar->setVisible(true);
 
     // Override style sheet for progress bar for styles that have a segmented progress bar,
@@ -243,6 +243,9 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
     if (curStyle == "QWindowsStyle" || curStyle == "QWindowsXPStyle") {
         //progressBar->setStyleSheet("QProgressBar { background-color: #F8F8F8; border: 1px solid grey; border-radius: 7px; padding: 1px; text-align: center; } QProgressBar::chunk { background: QLinearGradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #00CCFF, stop: 1 #33CCFF); border-radius: 7px; margin: 0px; }");
     }
+
+           // progressBar->setStyleSheet("QProgressBar { border: 0; text-align: center; background: rgb(0, 0, 0); border-radius:8px; } QProgressBar::chunk { background: #fff; border-radius: 5px; }");
+
 
     statusBar()->addWidget(progressBarLabel);
     statusBar()->addWidget(progressBar);
