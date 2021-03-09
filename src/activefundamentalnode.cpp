@@ -178,10 +178,12 @@ bool CActiveFundamentalnode::SendFundamentalnodePing(std::string& errorMessage)
     // Update lastPing for our fundamentalnode in Fundamentalnode list
     CFundamentalnode* pfn = fnodeman.Find(vin);
     if (pfn != NULL) {
+        // remove this to test if this is why the nodes are failling, it seems this is blocking the nodes from relaying the messages, probably cause some under lying work, but this should show if that is the case
+        /*
         if (pfn->IsPingedWithin(FUNDAMENTALNODE_PING_SECONDS, fnp.sigTime)) {
             errorMessage = "Too early to send Fundamentalnode Ping";
             return false;
-        }
+        }*/
 
         pfn->lastPing = fnp;
         fnodeman.mapSeenFundamentalnodePing.insert(std::make_pair(fnp.GetHash(), fnp));
