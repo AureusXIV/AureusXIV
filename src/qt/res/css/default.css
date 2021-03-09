@@ -189,27 +189,19 @@ QMessageBox {
 background-color:#fff;
 }
 
-QProgressBar {
-color: #2d303a;
-border: 0;
-    border-radius: 10px;
-background-color:transparent;
-padding-left:0px;
-padding-right:0px;
+QProgressBar{
+border: none;  
+text-align: center;
 background:#606a84;
-margin:4px;padding:6px;
-padding:0;
-border-radius:8px;
-font-size:9px;
-height:5px;
-}
+border-radius:6px;
+margin:2px;
+height:12px;
+} 
 
 QProgressBar::chunk {
 background-color: #f9ffdc;
-/* width: 20px; */
-/* border-radius:10px; */
-border-radius:8px;
-}
+border-radius:5px;
+} 
 
 QLabel#progressBarLabel {
 background-color:transparent;
