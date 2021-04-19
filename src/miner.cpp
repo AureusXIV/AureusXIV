@@ -416,10 +416,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         if (!fProofOfStake) {
             pblock->vtx[0] = txNew;
             pblocktemplate->vTxFees[0] = -nFees;
-            
-            if(Params().NetworkID() == CBaseChainParams::TESTNET) {
-                pblock->vtx[0].vin[0].scriptSig = CScript() << nHeight << OP_0;
-            }
+            pblock->vtx[0].vin[0].scriptSig = CScript() << nHeight << OP_0;
         }
 
         // Fill in header
