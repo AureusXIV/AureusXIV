@@ -1670,16 +1670,6 @@
               <number>3</number>
              </property>
              <item>
-              <widget class="QCheckBox" name="checkzAXIV">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Anonymized AXIV</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QCheckBox" name="checkSwiftTX">
                <property name="enabled">
                 <bool>true</bool>
