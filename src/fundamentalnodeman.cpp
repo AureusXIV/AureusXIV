@@ -927,8 +927,8 @@ void CFundamentalnodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, 
         }
 
         if (Params().NetworkID() == CBaseChainParams::MAIN) {
-            if (addr.GetPort() != 8765) return;
-        } else if (addr.GetPort() == 8765)
+            if (addr.GetPort() != 10135) return;
+        } else if (addr.GetPort() == 10135)
             return;
 
         //search existing Fundamentalnode list, this is where we update existing Fundamentalnodes with new obsee broadcasts

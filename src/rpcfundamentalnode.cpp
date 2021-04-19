@@ -1148,7 +1148,7 @@ UniValue fundamentalnodeconnect(const UniValue& params, bool fHelp)
                 "1. \"address\"     (string, required) IP or net address to connect to\n"
 
                 "\nExamples:\n" +
-                HelpExampleCli("fundamentalnodeconnect", "\"192.168.0.6:8765\"") + HelpExampleRpc("fundamentalnodeconnect", "\"192.168.0.6:8765\""));
+                HelpExampleCli("fundamentalnodeconnect", "\"192.168.0.6:10135\"") + HelpExampleRpc("fundamentalnodeconnect", "\"192.168.0.6:10135\""));
 
     std::string strAddress = params[0].get_str();
 

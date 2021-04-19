@@ -527,8 +527,8 @@ bool CFundamentalnodeBroadcast::CheckAndUpdate(int& nDos)
     }
 
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
-        if (addr.GetPort() != 8765) return false;
-    } else if (addr.GetPort() == 8765)
+        if (addr.GetPort() != 10135) return false;
+    } else if (addr.GetPort() == 10135)
         return false;
 
     //search existing Fundamentalnode list, this is where we update existing Fundamentalnodes with new mnb broadcasts

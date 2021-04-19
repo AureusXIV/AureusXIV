@@ -28,7 +28,7 @@ bool CFundamentalnodeConfig::read(std::string& strErr)
         if (configFile != NULL) {
             std::string strHeader = "# Fundamentalnode config file\n"
                                     "# Format: alias IP:port fundamentalnodeprivkey collateral_output_txid collateral_output_index\n"
-                                    "# Example: mn1 127.0.0.2:8765 93HaYBVUCYjEMeeH1Y4sBGLALQZE1Yc1K64xiqgX37tGBDQL8Xg 2bcd3c84c84f87eaa86e4e56834c92927a07f9e18718810b92e0d0324456a67c 0\n";
+                                    "# Example: mn1 127.0.0.2:10135 93HaYBVUCYjEMeeH1Y4sBGLALQZE1Yc1K64xiqgX37tGBDQL8Xg 2bcd3c84c84f87eaa86e4e56834c92927a07f9e18718810b92e0d0324456a67c 0\n";
             fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
             fclose(configFile);
         }
@@ -69,17 +69,17 @@ bool CFundamentalnodeConfig::read(std::string& strErr)
         }
 
         if (Params().NetworkID() == CBaseChainParams::MAIN) {
-            if (port != 8765) {
+            if (port != 10135) {
                 strErr = _("Invalid port detected in fundamentalnode.conf") + "\n" +
                          strprintf(_("Line: %d"), linenumber) + "\n\"" + line + "\"" + "\n" +
-                         _("(must be 8765 for mainnet)");
+                         _("(must be 10135 for mainnet)");
                 streamConfig.close();
                 return false;
             }
-        } else if (port == 8765) {
+        } else if (port == 10135) {
             strErr = _("Invalid port detected in fundamentalnode.conf") + "\n" +
                      strprintf(_("Line: %d"), linenumber) + "\n\"" + line + "\"" + "\n" +
-                     _("(8765 could be used only on mainnet)");
+                     _("(10135 could be used only on mainnet)");
             streamConfig.close();
             return false;
         }
