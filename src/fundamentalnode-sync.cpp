@@ -388,7 +388,7 @@ void CFundamentalnodeSync::Process()
                     return;
                 }
 
-                if (pnode->HasFulfilledRequest("busync")) continue;
+                if (pnode->HasFulfilledRequest("busync")) return;
                 pnode->FulfilledRequest("busync");
 
                 if (RequestedFundamentalnodeAttempt >= FUNDAMENTALNODE_SYNC_THRESHOLD * 3) return;
