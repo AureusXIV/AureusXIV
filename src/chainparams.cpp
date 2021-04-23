@@ -156,8 +156,8 @@ public:
         nBlockLastGoodCheckpoint = 891730; //Last valid accumulator checkpoint
         nBlockEnforceInvalidUTXO = 902850; //Start enforcing the invalid UTXO's
         nInvalidAmountFiltered = 268200*COIN; //Amount of invalid coins filtered through exchanges, that should be considered valid
-        nEnforceNewSporkKey = 1596240000; //!> Sporks signed after (GMT): August 1, 2020 12:00:00 AM must use the new spork key
-        nRejectOldSporkKey = 1604188800; //!> Fully reject old spork key after (GMT): November 1, 2020 12:00:00 AM
+        nEnforceNewSporkKey = 1619395199; //!> Sporks signed after (GMT): August 1, 2020 12:00:00 AM must use the new spork key
+        nRejectOldSporkKey = 1619481599; //!> Fully reject old spork key after (GMT): November 1, 2020 12:00:00 AM
         nStartMasternodePayments = 2000; // This will be the block when masternode payments will start
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
@@ -219,7 +219,7 @@ public:
         fHeadersFirstSyncingActive = false;
 
         nPoolMaxTransactions = 3;
-        strSporkKey = "0422508410667b7e99c33f186a8a59cfa4c19dfa21a9f8370af9af697fe8ebd3ab2038fc0075b24bf32b656fa67d6897512604542decc319abd20e2a9a033d5d5d";
+        strSporkKey = "04268236414364ec853930998d923469d765c43a3e6ebb762373b558b9734a2b187001c69b106af63349a723b3e9d0b94bbc33f1650a8a12117e054afed746bfcf";
         strSporkKeyOld = "0422508410667b7e99c33f186a8a59cfa4c19dfa21a9f8370af9af697fe8ebd3ab2038fc0075b24bf32b656fa67d6897512604542decc319abd20e2a9a033d5d5d";
         strObfuscationPoolDummyAddress = "VjVqgZbamLZ3KmEKBZZzmZgvtqDWw7jsrL";
         nStartFundamentalnodePayments = 1524487214;
