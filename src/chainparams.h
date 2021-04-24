@@ -106,6 +106,7 @@ public:
     /** Height or Time Based Activations **/
     int ModifierUpgradeBlock() const { return nModifierUpdateBlock; }
     int LAST_POW_BLOCK() const { return nLastPOWBlock; }
+    int NewTargetSpacingBlock() const { return nNewTargetSpacingBlock; }
     int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
     int START_MASTERNODE_PAYMENTS() const { return nStartMasternodePayments; }
@@ -126,6 +127,7 @@ protected:
     int nToCheckBlockUpgradeMajority;
     int64_t nTargetTimespan;
     int64_t nTargetSpacing;
+    int nNewTargetSpacingBlock;
     int nLastPOWBlock;
     int nStartMasternodePayments;
     int nBudgetCycleBlocks;

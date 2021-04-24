@@ -42,6 +42,9 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         if (Params().NetworkID() == CBaseChainParams::MAIN) {
             nTargetTimespan = 45 * 60;
         }
+        if(pindexLast->nHeight > Params().NewTargetSpacingBlock()) {
+                nTargetSpacing = 60;
+        }
 
         int64_t nActualSpacing = 0;
         if (pindexLast->nHeight != 0)
