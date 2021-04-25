@@ -1,5 +1,5 @@
 ---
-name: "axiv-osx-4.5"
+name: "axiv-osx-0.9"
 enable_cache: true
 suites:
 - "trusty"
@@ -28,7 +28,7 @@ packages:
 - "python-setuptools"
 - "fonts-tuffy"
 remotes:
-- "url": "https://github.com/axivteam/axiv.git"
+- "url": "https://github.com/axivproject/axiv.git"
   "dir": "axiv"
 files:
 - "MacOSX10.11.sdk.tar.gz"

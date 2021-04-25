@@ -7,7 +7,7 @@ architectures:
 packages:
 - "faketime"
 remotes:
-- "url": "https://github.com/axivteam/axiv-detached-sigs.git"
+- "url": "https://github.com/axivproject/axiv-detached-sigs.git"
   "dir": "signature"
 files:
 - "axiv-osx-unsigned.tar.gz"

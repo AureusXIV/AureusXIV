@@ -1,5 +1,5 @@
 ---
-name: "axiv-aarch64-4.5"
+name: "axiv-aarch64-0.9"
 enable_cache: true
 suites:
 - "xenial"
@@ -25,7 +25,7 @@ packages:
 - "python"
 reference_datetime: "2015-06-01 00:00:00"
 remotes:
-- "url": "https://github.com/axivteam/axiv.git"
+- "url": "https://github.com/axivproject/axiv.git"
   "dir": "axiv"
 files: []
 script: |

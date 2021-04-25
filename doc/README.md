@@ -42,7 +42,7 @@ The following are developer notes on how to build AXIV on your native platform. 
 
 Development
 ---------------------
-The AXIV repo's [root README](https://github.com/AXIVteam/AXIV/blob/master/README.md) contains relevant information on the development process and automated testing.
+The AXIV repo's [root README](https://github.com/axivproject/AXIV/blob/master/README.md) contains relevant information on the development process and automated testing.
 
 - [Developer Notes](developer-notes.md)
 - [Multiwallet Qt Development](multiwallet-qt.md)

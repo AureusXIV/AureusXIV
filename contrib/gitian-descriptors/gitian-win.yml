@@ -1,5 +1,5 @@
 ---
-name: "axiv-win-4.5"
+name: "axiv-win-0.9"
 enable_cache: true
 suites:
 - "trusty"
@@ -22,7 +22,7 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://github.com/axivteam/axiv.git"
+- "url": "https://github.com/axivproject/axiv.git"
   "dir": "axiv"
 files: []
 script: |
