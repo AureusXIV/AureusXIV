@@ -1,5 +1,5 @@
 ---
-name: "axiv-linux-4.5"
+name: "axiv-linux-0.9"
 enable_cache: true
 suites:
 - "trusty"
