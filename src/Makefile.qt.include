@@ -184,7 +184,7 @@ BITCOIN_QT_H = \
   qt/walletview.h \
   qt/winshutdownmonitor.h
 
-RES_ICONS = \
+RES_FONTS = \
   qt/res/fonts/Andale-Mono.ttf
 
 RES_ICONS = \

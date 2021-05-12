@@ -121,7 +121,4 @@
         <file alias="spinner-033">res/movies/spinner-001.png</file>
         <file alias="spinner-034">res/movies/spinner-002.png</file>
     </qresource>
-    <qresource prefix="/fonts">
-        <file alias="AndaleMono">res/fonts/Andale-Mono.ttf</file>
-    </qresource>
 </RCC>
