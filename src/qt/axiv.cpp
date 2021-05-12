@@ -46,6 +46,7 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QFontDatabase>
 #include <QLibraryInfo>
 #include <QLocale>
 #include <QMessageBox>
@@ -548,6 +549,7 @@ int main(int argc, char* argv[])
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 #endif
     BitcoinApplication app(argc, argv);
+    QFontDatabase::addApplicationFont(":/fonts/AndaleMono");
 
     // Register meta types used for QMetaObject::invokeMethod
     qRegisterMetaType<bool*>();
