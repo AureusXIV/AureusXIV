@@ -188,11 +188,8 @@ RES_FONTS = \
   qt/res/fonts/Andale-Mono.ttf
 
 RES_ICONS = \
-  qt/res/fonts/Andale-Mono.ttf
-
-RES_ICONS = \
   qt/res/icons/add.png \
-  qt/res/icons/address-book.svg \
+  qt/res/icons/address-book.png \
   qt/res/icons/bitcoin.ico \
   qt/res/icons/bitcoin.png \
   qt/res/icons/bitcoin_testnet.ico \
@@ -205,15 +202,15 @@ RES_ICONS = \
   qt/res/icons/clock4.png \
   qt/res/icons/clock5.png \
   qt/res/icons/configure.png \
-  qt/res/icons/connect0_16.svg \
-  qt/res/icons/connect1_16.svg \
-  qt/res/icons/connect2_16.svg \
-  qt/res/icons/connect3_16.svg \
-  qt/res/icons/connect4_16.svg \
+  qt/res/icons/connect0_16.png \
+  qt/res/icons/connect1_16.png \
+  qt/res/icons/connect2_16.png \
+  qt/res/icons/connect3_16.png \
+  qt/res/icons/connect4_16.png \
   qt/res/icons/debugwindow.png \
   qt/res/icons/edit.png \
   qt/res/icons/editcopy.png \
-  qt/res/icons/editpaste.svg \
+  qt/res/icons/editpaste.png \
   qt/res/icons/explorer.png \
   qt/res/icons/export.png \
   qt/res/icons/eye.png \
@@ -224,24 +221,24 @@ RES_ICONS = \
   qt/res/icons/key.png \
   qt/res/icons/lock_closed.png \
   qt/res/icons/lock_open.png \
-  qt/res/icons/fundamentalnodes.svg \
-  qt/res/icons/masternodes.svg \
+  qt/res/icons/fundamentalnodes.png \
+  qt/res/icons/masternodes.png \
   qt/res/icons/onion.png \
-  qt/res/icons/overview.svg \
+  qt/res/icons/overview.png \
   qt/res/icons/qrcode.png \
   qt/res/icons/quit.png \
-  qt/res/icons/receive.svg \
+  qt/res/icons/receive.png \
   qt/res/icons/receive_dark.png \
   qt/res/icons/privacy.png \
-  qt/res/icons/remove.svg \
-  qt/res/icons/send.svg \
+  qt/res/icons/remove.png \
+  qt/res/icons/send.png \
   qt/res/icons/send_dark.png \
-  qt/res/icons/staking_active.svg \
-  qt/res/icons/staking_inactive.svg \
-  qt/res/icons/synced.svg \
+  qt/res/icons/staking_active.png \
+  qt/res/icons/staking_inactive.png \
+  qt/res/icons/synced.png \
   qt/res/icons/trade.png \
   qt/res/icons/transaction0.png \
-  qt/res/icons/transaction2.svg \
+  qt/res/icons/transaction2.png \
   qt/res/icons/transaction_conflicted.png \
   qt/res/icons/tx_fundamentalnode.png \
   qt/res/icons/tx_inout.png \
@@ -324,7 +321,7 @@ BITCOIN_QT_CPP += \
 endif
 
 RES_IMAGES = \
-  qt/res/images/about.svg \
+  qt/res/images/about.png \
   qt/res/images/splash.png \
   qt/res/images/splash_testnet.png \
   qt/res/images/axiv_logo_horizontal.png \
@@ -344,7 +341,7 @@ RES_IMAGES = \
 RES_CSS = \
   qt/res/css/default.css
 
-RES_MOVIES = $(wildcard $(srcdir)/qt/res/movies/spinner-*.svg)
+RES_MOVIES = $(wildcard $(srcdir)/qt/res/movies/spinner-*.png)
 
 BITCOIN_RC = qt/res/axiv-qt-res.rc
 
