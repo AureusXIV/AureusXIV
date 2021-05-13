@@ -75,8 +75,8 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #elif defined(QT_QPA_PLATFORM_COCOA)
 Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #endif
-Q_IMPORT_PLUGIN(QSvgPlugin);
-Q_IMPORT_PLUGIN(QSvgIconPlugin);
+//Q_IMPORT_PLUGIN(QSvgPlugin);
+//Q_IMPORT_PLUGIN(QSvgIconPlugin);
 #endif
 #endif
 
