@@ -1,5 +1,5 @@
 ---
-name: "axiv-aarch64-0.9"
+name: "axiv-aarch64-1.0"
 enable_cache: true
 suites:
 - "xenial"
