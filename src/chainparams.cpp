@@ -146,7 +146,7 @@ public:
         nMinerThreads = 0;
         nTargetTimespan = 1 * 60 * 45; // AXIV: 45 minutes
         nTargetSpacing = 1 * 60;  // AXIV: 1 minute
-        nNewTargetSpacingBlock = 44000;
+        nNewTargetSpacingBlock = 9999999;
         nMaturity = 6;
         nMaxMoneyOut = 150000000 * COIN;
 
