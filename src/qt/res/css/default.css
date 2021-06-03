@@ -40,6 +40,7 @@ QStatusBar {
 background-color:#2d303a;
 background-color:rgba(0,0,0,0.1);
 min-height:50px;
+color:#a8ad99;
 }
 
 QWidget {
@@ -267,7 +268,7 @@ outline:0; /* Remove Annoying Focus Rectangle */
 
 QGroupBox {
 background-color:transparent;
-color:#333;
+color:#f9ffdc;
 }
 
 QToolTip {
@@ -359,7 +360,7 @@ letter-spacing:1px;
 
 QPushButton:hover {
 /* background-color: qlineargradient(y1:0, y2: 1, stop: 0 #ffffff, stop: 0.1 #ffffff, stop: 0.101 #f9ffdc, stop: 0.9 #f9ffdc, stop: 0.901 #ffffff, stop: 1 #ffffff); */
-background:transparent;
+background-color: #dee4c4;
 }
 
 QPushButton:focus {
@@ -370,7 +371,7 @@ QPushButton:focus {
 QPushButton:pressed {
 background-color: #f9ffdc;
 border:1px solid #000000;
-background-color: qlineargradient(y1:0, y2: 1, stop: 0 #00ff00, stop: 0.1 #00ff00, stop: 0.101 #f9ffdc, stop: 0.9 #f9ffdc, stop: 0.901 #00ff00, stop: 1 #00ff00);
+/* background-color: qlineargradient(y1:0, y2: 1, stop: 0 #00ff00, stop: 0.1 #00ff00, stop: 0.101 #f9ffdc, stop: 0.9 #f9ffdc, stop: 0.901 #00ff00, stop: 1 #00ff00); */
 }
 
 /* Special handling for statusbar-icons (which are partly QPushButtons) */
@@ -808,7 +809,7 @@ QTableView:focus {
 QTreeWidget { /* Tree Background */
 background-color:#fcfcfc;
 alternate-background-color:#f2f2f2;
-color:#333;
+color:#f9ffdc;
 }
 
 QScrollBar {
@@ -1047,7 +1048,8 @@ border:1px solid #9e9e9e;
 /**************************** SEND AND RECEIVE ADDRESSES DIALOG *****************************/
 
 QWidget#AddressBookPage {
-background-color:transparent;
+/* background-color:transparent; */
+background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop: 0 #484E5E, stop: 1 #2C2F38);
 }
 
 /* QWidget#AddressBookPage QPushButton#newAddress { /* New Address Button */
@@ -1188,7 +1190,7 @@ color: #f9ffdc;
 }
 
 QDialog#RPCConsole QTableView#peerWidget::item { /* Peers Table Items */
-color:#333;
+color:#f9ffdc;
 }
 
 QDialog#RPCConsole QPushButton#openDebugLogfileButton {
@@ -1903,16 +1905,16 @@ color:transparent;
 
 QDialog#CoinControlDialog .CoinControlTreeWidget#treeWidget { /* Coin Control Widget Container */
 outline:0;
-background-color:#ffffff;
-border:1px solid #333;
+background-color:transparent;
+border:0;
 }
 
 QDialog#CoinControlDialog .CoinControlTreeWidget#treeWidget::item {
 }
 
 QDialog#CoinControlDialog .CoinControlTreeWidget#treeWidget::item:selected { /* Coin Control Item (selected) */
-background-color: #f9ffdc;
-color:#fff;
+background-color: rgba(0,0,0,0.2);
+color:#f9ffdc;
 }
 
 QDialog#CoinControlDialog .CoinControlTreeWidget#treeWidget::item:checked { /* Coin Control Item (checked) */

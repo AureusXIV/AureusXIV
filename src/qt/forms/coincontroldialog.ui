@@ -443,6 +443,9 @@
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
      <property name="sortingEnabled">
       <bool>false</bool>
      </property>
@@ -467,21 +470,21 @@
      </column>
      <column>
       <property name="text">
-       <string>Received with label</string>
+       <string>Label</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Received with address</string>
+       <string>Address</string>
       </property>
      </column>
      <column>
       <property name="text">
-	<string>Type</string>
+       <string>Type</string>
       </property>
      </column>
      <column>
-      <property name="text">	 
+      <property name="text">
        <string>Date</string>
       </property>
      </column>
